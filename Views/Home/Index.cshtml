@@ -1,0 +1,15 @@
+﻿@{
+  ViewData["Title"] = "Home Page";
+}
+<div class="container bg-light bg-gradient p-5 border rounded-3">
+  <div class="mx-5 p-5 border rounded shadow-sm bg-white">
+    @if (ViewBag.HomeView == "Login")
+    {
+      @await Html.PartialAsync("Forms/Login.cshtml")
+    }
+    else
+    {
+      @await Html.PartialAsync("Forms/Register.cshtml")
+    }
+  </div>
+</div>
