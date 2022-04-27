@@ -34,7 +34,9 @@ namespace PantryPlusRecipe.Controllers
       }
       else if (getAuth == "profile")
       {
+        Console.WriteLine("code in Home/: " + code);
         var token = ApplicationUser.GetProfileToken(code);
+        Console.WriteLine("token in Home/: " + token);
         var krogerId = ApplicationUser.GetProfileId(token);
         // Console.WriteLine(krogerId);
         return RedirectToAction("LoginRegisterKrogerId", "Account", new { id = krogerId });

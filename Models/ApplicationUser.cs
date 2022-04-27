@@ -52,6 +52,8 @@ namespace PantryPlusRecipe.Models
       var result = id.Result;
 
       JObject jsonResponse = JObject.Parse(result);
+      Console.WriteLine("Token" + token);
+      Console.WriteLine("jsonResponse" + jsonResponse);
       var results = jsonResponse["data"]["id"];
       // Console.WriteLine(results);
       return results.ToString();

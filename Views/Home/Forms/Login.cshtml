@@ -5,12 +5,14 @@
   <div class="col-7">
     @using (Html.BeginForm("Login", "Account"))
     {
-      @Html.LabelFor(m => m.Email)
-      @Html.TextBoxFor(m => m.Email, new {@class="form-control mb-3 shadow-sm", type="email", required="required"})
-
-      @Html.LabelFor(m => m.Password)
-      @Html.PasswordFor(m => m.Password, new {@class="form-control mb-3 shadow-sm", required="required"})
-
+      <div class="form-outline">
+        @Html.TextBoxFor(m => m.Email, new {@class="form-control mb-3 shadow-sm border", type="email", required="required"})
+        @Html.LabelFor(m => m.Email, new {@class="form-label"})
+      </div>
+      <div class="form-outline">
+        @Html.PasswordFor(m => m.Password, new {@class="form-control mb-3 border shadow-sm", required="required"})
+        @Html.LabelFor(m => m.Password, new {@class="form-label"})
+      </div>
       <input type="submit" value="Sign in" class="btn btn-primary mb-3 shadow-sm text-white" />
     }
     <div class="card bg-light shadow-sm mt-3 rounded">
@@ -23,6 +25,6 @@
   </div>
   <div class="col-5">
     <p>Hey there! It looks like you aren't signed in yet. If you already have an account with PantryPlus.Recipes, type your email and password, and hit Sign in. If you initially registered with a Kroger account, click the Login With Krooger button below.</p>
-    <p>Don't have an account yet? Register <a href="/register" class="link-dark text-decoration-underline">here</a></p>
+    <p>Don't have an account yet? Register <a href="/" class="link-dark text-decoration-underline">here</a></p>
   </div>
 </div>
