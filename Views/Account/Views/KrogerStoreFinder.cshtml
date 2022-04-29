@@ -9,10 +9,49 @@
         <h5 class="modal-title fw-light" id="findKrogerStoreLabel">Find Kroger Location</h5>
         <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body text-start pb-5 pt-3">
+      <div class="modal-body text-start pb-5 pt-3 px-5" id="findZipModalBody">
+        <div class="row mt-3">
+          <div class="col-xs-12 col-md-6 col-sm-8">
+            <div class="form-outline">
+              <input type="text" name="zip" id="zipInput" class="form-control mb-3 shadow-sm" type="number">
+              <label for="zip" class="form-label">What is your ZIP code?</label>
+              <div class="form-notch">
+                <div class="form-notch-leading" style="width: 9px;"></div>
+                <div class="form-notch-middle" style="width: 87.2px;"></div>
+                <div class="form-notch-trailing"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-6 col-sm-4 text-start">
+            <input type="button" id="findStoresButton" value="Find Stores" disabled class="btn btn-primary shadow-sm text-white" />
+          </div>
+        </div>
+        <script>
+          $('#zipInput').on('keyup', function () {
+            var count = $(this).val().length;
+            if (count >= 5) {
+              $('#findStoresButton').prop("disabled", false);
+            } else {
+              $('#findStoresButton').prop("disabled", true);
+            }
+          });
+          $('#findStoresButton').click(function () {
+            $.ajax({
+              type: "POST",
+              url: '../../../Flavors/Delete',
+              data: { 'flavorId': $(`#flavorId-${id}`).val() },
+              success: function () {
+
+              },
+            });
+          });
+        </script>
+
+      </div>
+      <div class="modal-body text-start pb-5 pt-3 d-none" id="showStoresModalBody">
         @for (int x = 0; x < 5; x++)
         {
-          <div class="border shadow-sm p-3 mt-3 pb-0">
+          <div class="border shadow-sm p-3 my-4 pb-0">
             <div class="row">
               <div class="col-sm-8 col-xs-12">
                 <h3>Fred Meyer - Stadium</h3>
@@ -23,7 +62,6 @@
                 97209
               </div>
               <div class="col-sm-4 col-xs-12 text-end">
-                <p>Open in Google Maps</p>
                 <p>
                   <a href="https://www.google.com/maps/search/?api=1&query=47.5951518%2C-122.3316393&query_place_id=ChIJKxjxuaNqkFQR3CK6O1HNNqY" target="_blank">
                     <img src="~/assets/img/Google_Maps_icon.png" class="w-25 rounded shadow-sm" alt="Google Maps Icon">
@@ -33,7 +71,7 @@
               </div>
             </div> @* End Row *@
             <p class="text-center py-0 mb-2">
-              <span class="text-decoration-underline" id="storeDetailsClick-@x" style="cursor: pointer">Store Details +</span>
+              <span class="text-decoration-underline" id="storeDetailsClick-@x" style="cursor: pointer">Store Details <span id="storeDetailsClickShow-@x">+</span><span id="storeDetailsClickHide-@x" class="d-none">&nbsp-</span></span>
             </p>
             <div id="storeDetailsContainer-@x" class="d-none">
               <h4 class="fw-light">
@@ -148,6 +186,8 @@
             </div> @* End Store Details *@
             <script>
               $('#storeDetailsClick-@x').click(function () {
+                $('#storeDetailsClickHide-@x').toggleClass('d-none');
+                $('#storeDetailsClickShow-@x').toggleClass('d-none');
                 $('#storeDetailsContainer-@x').toggleClass('d-none');
               });
             </script>
