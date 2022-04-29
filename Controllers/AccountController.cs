@@ -38,12 +38,13 @@ namespace PantryPlusRecipe.Controllers
       else
       {
         var user = await _userManager.GetUserAsync(User);
-        var fullName = _userManager.GetUserAsync(User).Result?.FirstName;
-        var email = _userManager.GetEmailAsync(user);
-        var userName = _userManager.GetUserNameAsync(user);
-        var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-        ViewBag.Phone = phoneNumber;
-        ViewBag.FullName = fullName;
+        // var email = _userManager.GetEmailAsync(user);
+        // var userName = _userManager.GetUserNameAsync(user);
+        ViewBag.FullName = _userManager.GetUserAsync(User).Result?.FirstName + " " + _userManager.GetUserAsync(User).Result?.LastName;
+        ViewBag.Phone = await _userManager.GetPhoneNumberAsync(user);
+        // ViewBag.Phone = phoneNumber;
+        // ViewBag.FullName = fullName;
+        ViewBag.KrogerStoreId = _userManager.GetUserAsync(User).Result?.KrogerStoreId;
         ViewBag.AuthPageTitle = "Account Details";
         ViewBag.PageTitle = "Account Details";
       }

@@ -16,6 +16,7 @@ namespace PantryPlusRecipe.Models
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string KrogerId { get; set; }
+    public string KrogerStoreId { get; set; }
 
     public class RequestTokenJson
     {

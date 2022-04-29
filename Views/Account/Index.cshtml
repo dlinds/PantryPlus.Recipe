@@ -54,6 +54,15 @@
           }
         </div>
         <div class="col-4 text-end">
+          <strong>Kroger Store</strong><br />
+          @if (ViewBag.KrogerStoreId == null)
+          {
+            <button class="btn btn-primary shadow-sm" type="button">Find My Store</button>
+          }
+          else
+          {
+            @ViewBag.KrogerStoreId
+          }
         </div>
       </div>
     }
