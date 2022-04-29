@@ -96,6 +96,13 @@ namespace PantryPlusRecipe.Controllers
       return View();
     }
 
+    public ActionResult ListKrogerLocations(int zipCode)
+    {
+      return View();
+    }
+
+
+
     [HttpPost]
     public async Task<ActionResult> Register(RegisterViewModel model)
     {

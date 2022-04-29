@@ -57,7 +57,8 @@
           <strong>Kroger Store</strong><br />
           @if (ViewBag.KrogerStoreId == null)
           {
-            <button class="btn btn-primary shadow-sm" type="button">Find My Store</button>
+
+            @await Html.PartialAsync("./Views/KrogerStoreFinder.cshtml")
           }
           else
           {
