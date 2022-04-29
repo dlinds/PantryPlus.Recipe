@@ -37,7 +37,7 @@ namespace PantryPlusRecipe.Models
 
       // Console.WriteLine(request);
       IRestResponse response = await client.ExecuteTaskAsync(request);
-      // Console.WriteLine("line 38 KAPI" + response.Content);
+      // Console.WriteLine("line 38 Kroger API" + response.Content);
       return response.Content;
     }
 
@@ -74,5 +74,17 @@ namespace PantryPlusRecipe.Models
     //   Console.WriteLine(response.Content);
     //   return response.Content;
     // }
+
+    public static async Task<string> GetStoreListings(string token, int zipcode)
+    {
+      var client = new RestClient($"https://api.kroger.com/v1/locations?filter.zipCode.near={zipcode}");
+      client.Timeout = -1;
+      var request = new RestRequest(Method.GET);
+      request.AddHeader("Authorization", $"Bearer {token}");
+      IRestResponse response = await client.ExecuteTaskAsync(request);
+      Console.WriteLine(response.Content);
+      return response.Content;
+    }
+
   }
 }

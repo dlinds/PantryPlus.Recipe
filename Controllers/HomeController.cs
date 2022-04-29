@@ -36,7 +36,7 @@ namespace PantryPlusRecipe.Controllers
       {
         var token = ApplicationUser.GetProfileToken(code);
         var krogerId = ApplicationUser.GetProfileId(token);
-        return RedirectToAction("LoginRegisterKrogerId", "Account", new { id = krogerId });
+        return RedirectToAction("LoginRegisterKrogerId", "Account", new { id = krogerId, token = token });
       }
       if (TempData["error"] != null)
       {

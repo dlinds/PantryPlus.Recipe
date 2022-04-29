@@ -28,22 +28,21 @@
         </div>
         <script>
           $('#zipInput').on('keyup', function () {
-            var count = $(this).val().length;
-            if (count >= 5) {
+            if ($(this).val().length >= 5) {
               $('#findStoresButton').prop("disabled", false);
             } else {
               $('#findStoresButton').prop("disabled", true);
             }
           });
           $('#findStoresButton').click(function () {
-            $.ajax({
-              type: "POST",
-              url: '../../../Flavors/Delete',
-              data: { 'flavorId': $(`#flavorId-${id}`).val() },
-              success: function () {
+            @* $.ajax({
+                type: "POST",
+                url: '../../../Flavors/Delete',
+                data: { 'flavorId': $(`#flavorId-${id}`).val() },
+                success: function () {
 
-              },
-            });
+                },
+                }); *@
           });
         </script>
 

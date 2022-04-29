@@ -51,13 +51,18 @@ namespace PantryPlusRecipe.Models
     {
       var id = KrogerAPIHelper.GetProfileId(token);
       var result = id.Result;
-
       JObject jsonResponse = JObject.Parse(result);
-      // Console.WriteLine("Token" + token);
-      // Console.WriteLine("jsonResponse" + jsonResponse);
       var results = jsonResponse["data"]["id"];
-      // Console.WriteLine(results);
       return results.ToString();
+    }
+
+    public static string GetStoreListings(string token, int zipcode)
+    {
+      var id = KrogerAPIHelper.GetStoreListings(token, zipcode);
+      var result = id.Result;
+      JObject jsonResponse = JObject.Parse(result);
+      Console.WriteLine(jsonResponse);
+      return jsonResponse.ToString();
     }
   }
 }

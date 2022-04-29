@@ -8,6 +8,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace PantryPlusRecipe.Controllers
 {
@@ -52,7 +53,7 @@ namespace PantryPlusRecipe.Controllers
       return View();
     }
 
-    public async Task<IActionResult> LoginRegisterKrogerId(string id)
+    public async Task<IActionResult> LoginRegisterKrogerId(string id, string token)
     {
       var user = await _db?.Users?.SingleOrDefaultAsync(x => x.KrogerId == id);
       if (user == null) // if not registered yet, redirect to home and show finish registration screen
@@ -64,6 +65,11 @@ namespace PantryPlusRecipe.Controllers
       {
         string authenticationMethod = null;
         await _signInManager.SignInAsync(user, isPersistent: true, authenticationMethod);
+        var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var currentUser = await _userManager.FindByIdAsync(userId);
+        Token newToken = new Token();
+        newToken.TokenValue = token;
+        // _db.Tokens.Add(newToken);
         return RedirectToAction("Index", "Home");
       }
     }
