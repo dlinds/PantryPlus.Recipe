@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PantryPlusRecipe.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PantryPlusRecipe.Controllers
 {
+  [Authorize]
   public class PantryController : Controller
   {
     private readonly ILogger<PantryController> _logger;

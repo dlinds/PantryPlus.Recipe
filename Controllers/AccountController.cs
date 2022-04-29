@@ -129,7 +129,7 @@ namespace PantryPlusRecipe.Controllers
 
     public ActionResult Login()
     {
-      return View();
+      return RedirectToAction("Index", "Home", new { v = "login" });
     }
 
     [HttpPost]
