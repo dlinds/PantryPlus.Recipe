@@ -15,6 +15,7 @@ namespace PantryPlusRecipe.Controllers
     {
       public int Expires_In { get; set; }
       public string Access_Token { get; set; }
+      public string Refresh_Token { get; set; }
       public string Token_Type { get; set; }
     }
     private readonly PantryPlusRecipeContext _db;
@@ -35,8 +36,8 @@ namespace PantryPlusRecipe.Controllers
       else if (getAuth == "profile")
       {
         var token = ApplicationUser.GetProfileToken(code);
-        var krogerId = ApplicationUser.GetProfileId(token);
-        return RedirectToAction("LoginRegisterKrogerId", "Account", new { id = krogerId, token = token });
+        var krogerId = ApplicationUser.GetProfileId(token.Access_Token);
+        return RedirectToAction("LoginRegisterKrogerId", "Account", new { id = krogerId, token = token.Access_Token, refreshToken = token.Refresh_Token });
       }
       if (TempData["error"] != null)
       {

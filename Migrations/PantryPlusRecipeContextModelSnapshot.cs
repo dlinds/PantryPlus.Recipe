@@ -221,38 +221,14 @@ namespace PantryPlusRecipe.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("PantryPlusRecipe.Models.ApplicationUserToken", b =>
-                {
-                    b.Property<int>("ApplicationUserTokenId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId1")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<int>("TokenId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ApplicationUserTokenId");
-
-                    b.HasIndex("ApplicationUserId1");
-
-                    b.HasIndex("TokenId");
-
-                    b.ToTable("ApplicationUserTokens");
-                });
-
             modelBuilder.Entity("PantryPlusRecipe.Models.Token", b =>
                 {
                     b.Property<int>("TokenId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ExpiresIn")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("RefreshToken")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -321,23 +297,6 @@ namespace PantryPlusRecipe.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PantryPlusRecipe.Models.ApplicationUserToken", b =>
-                {
-                    b.HasOne("PantryPlusRecipe.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId1");
-
-                    b.HasOne("PantryPlusRecipe.Models.Token", "Token")
-                        .WithMany("JoinEntities")
-                        .HasForeignKey("TokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Token");
-                });
-
             modelBuilder.Entity("PantryPlusRecipe.Models.Token", b =>
                 {
                     b.HasOne("PantryPlusRecipe.Models.ApplicationUser", "User")
@@ -345,11 +304,6 @@ namespace PantryPlusRecipe.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PantryPlusRecipe.Models.Token", b =>
-                {
-                    b.Navigation("JoinEntities");
                 });
 #pragma warning restore 612, 618
         }

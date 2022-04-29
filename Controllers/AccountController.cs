@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using System.Security.Principal;
 
 namespace PantryPlusRecipe.Controllers
 {
@@ -53,7 +54,7 @@ namespace PantryPlusRecipe.Controllers
       return View();
     }
 
-    public async Task<IActionResult> LoginRegisterKrogerId(string id, string token)
+    public async Task<IActionResult> LoginRegisterKrogerId(string id, string token, string refreshToken)
     {
       var user = await _db?.Users?.SingleOrDefaultAsync(x => x.KrogerId == id);
       if (user == null) // if not registered yet, redirect to home and show finish registration screen
@@ -65,10 +66,17 @@ namespace PantryPlusRecipe.Controllers
       {
         string authenticationMethod = null;
         await _signInManager.SignInAsync(user, isPersistent: true, authenticationMethod);
-        var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var currentUser = await _userManager.FindByIdAsync(userId);
+
+        // ApplicationUser userTest = await _userManager.FindByIdAsync(user + "");
+        var test = await _userManager.GetPhoneNumberAsync(user);
         Token newToken = new Token();
         newToken.TokenValue = token;
+        // newToken.User = currentUser;
+        Console.WriteLine(test);
+        newToken.RefreshToken = refreshToken;
+        newToken.ExpiresAt = DateTime.Now.AddMinutes(30);
+        _db.Tokens.Add(newToken);
+        _db.SaveChanges();
         // _db.Tokens.Add(newToken);
         return RedirectToAction("Index", "Home");
       }

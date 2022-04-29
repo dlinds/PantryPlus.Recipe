@@ -23,6 +23,7 @@ namespace PantryPlusRecipe.Models
       public int Expires_In { get; set; }
       public string Access_Token { get; set; }
       public string Token_Type { get; set; }
+      public string Refresh_Token { get; set; }
     }
 
     public class RequestIdJson
@@ -38,13 +39,15 @@ namespace PantryPlusRecipe.Models
       RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
       return requestJson.Access_Token;
     }
-    public static string GetProfileToken(string code)
+    public static RequestTokenJson GetProfileToken(string code)
     {
       var token = KrogerAPIHelper.GetProfileToken(code);
       var result = token.Result;
+      // Console.WriteLine("AppUser 44: " + result);
       JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
       RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
-      return requestJson.Access_Token;
+      // Console.WriteLine("AppUser 47: " + requestJson);
+      return requestJson;
     }
 
     public static string GetProfileId(string token)
