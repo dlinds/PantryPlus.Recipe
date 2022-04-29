@@ -2,9 +2,16 @@
 
 @model RegisterViewModel
 
-<h3 class="mb-4">@ViewBag.PageTitle</h3>
+<h3 class="mb-4">Register
+  <hr />
+</h3>
+
 <div class="row">
-  <div class="col-7">
+  <div class="d-sm-block d-md-none col-sm-12">
+    <p>Use the form to the left to register an account with PantryPlus Recipes</p>
+    <p class="text-dark">Already have an account? Login <a href="/?v=login" class="link-dark text-decoration-underline">here</a></p>
+  </div>
+  <div class="col-sm-12 col-md-7">
     @if (ViewBag.KrogerId != null)
     {
       <p>Thanks! We've got your Id from Kroger. We just need a couple more bits of info to complete your registration.</p>
@@ -14,24 +21,51 @@
       <div class="form-outline">
         @Html.TextBoxFor(m => m.FirstName, new {@class="form-control mb-3 shadow-sm", required="required" })
         @Html.LabelFor(m => m.FirstName, "First Name", new {@class="form-label"})
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 87.2px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
       </div>
+
+
       <div class="form-outline">
         @Html.TextBoxFor(m => m.LastName, new {@class="form-control mb-3 shadow-sm", required="required" })
         @Html.LabelFor(m => m.LastName, "Last Name", new {@class="form-label"})
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 87.2px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
       </div>
       <div class="form-outline">
         @Html.TextBoxFor(m => m.Email, new {@class="form-control mb-3 shadow-sm", type="email", required="required" })
         @Html.LabelFor(m => m.Email, new {@class="form-label"})
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 87.2px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
       </div>
       @if (ViewBag.KrogerId == null)
       {
         <div class="form-outline">
           @Html.PasswordFor(m => m.Password, new {@class="form-control mb-3 shadow-sm", required="required"})
           @Html.LabelFor(m => m.Password, new {@class="form-label"})
+          <div class="form-notch">
+            <div class="form-notch-leading" style="width: 9px;"></div>
+            <div class="form-notch-middle" style="width: 87.2px;"></div>
+            <div class="form-notch-trailing"></div>
+          </div>
         </div>
         <div class="form-outline">
           @Html.PasswordFor(m => m.ConfirmPassword, new {@class="form-control mb-3 shadow-sm", required="required"})
           @Html.LabelFor(m => m.ConfirmPassword, new {@class="form-label"})
+          <div class="form-notch">
+            <div class="form-notch-leading" style="width: 9px;"></div>
+            <div class="form-notch-middle" style="width: 87.2px;"></div>
+            <div class="form-notch-trailing"></div>
+          </div>
         </div>
       }
       else
@@ -43,17 +77,18 @@
     }
     @if (ViewBag.KrogerId == null)
     {
-      <div class="card bg-light shadow-sm mt-3 rounded">
+      <div class="card bg-light shadow-sm mt-3 rounded border">
         <div class="card-body">
           <p class="card-text">Alternatively, use your Kroger account to register and login instead of an email and password.
           </p>
-          <a href="/GetAuthorizationCode"><input type="button" value="Register With Kroger" class="btn btn-primary mb-3 shadow-sm text-white" /></a>
+          <a href="/GetAuthorizationCode"><input type="button" value="Register With Kroger" class="btn btn-primary mb-3 shadow-sm text-white " /></a>
+          @* <a href="/GetAuthorizationCode"><input type="button" value="Register With Kroger" class="btn btn-primary mb-3 shadow-sm text-white d-block d-md-none w-100 ps-2" /></a> *@
         </div>
       </div>
     }
   </div>
-  <div class="col-5">
-    <p>Use the form to the left to register an account with PantryPlus.Recipes</p>
+  <div class="d-none d-md-block col-md-5">
+    <p>Use the form to the left to register an account with PantryPlus Recipes</p>
     <p class="text-dark">Already have an account? Login <a href="/?v=login" class="link-dark text-decoration-underline">here</a></p>
   </div>
 </div>
