@@ -3,24 +3,158 @@
 </button>
 
 <div class="modal fade" id="findKrogerStore" tabindex="-1" aria-labelledby="findKrogerStoreLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-light">
         <h5 class="modal-title fw-light" id="findKrogerStoreLabel">Find Kroger Location</h5>
         <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-start pb-5 pt-3">
-        <h3>Fred Meyer - Stadium</h3>
-        100 NW 20Th Pl
-        <br />
-        Portland, OR
-        <br />
-        97209
+        @for (int x = 0; x < 5; x++)
+        {
+          <div class="border shadow-sm p-3 mt-3 pb-0">
+            <div class="row">
+              <div class="col-sm-8 col-xs-12">
+                <h3>Fred Meyer - Stadium</h3>
+                100 NW 20Th Pl
+                <br />
+                Portland, OR
+                <br />
+                97209
+              </div>
+              <div class="col-sm-4 col-xs-12 text-end">
+                <p>Open in Google Maps</p>
+                <p>
+                  <a href="https://www.google.com/maps/search/?api=1&query=47.5951518%2C-122.3316393&query_place_id=ChIJKxjxuaNqkFQR3CK6O1HNNqY" target="_blank">
+                    <img src="~/assets/img/Google_Maps_icon.png" class="w-25 rounded shadow-sm" alt="Google Maps Icon">
+                  </a>
+                </p>
+                <button type="button" class="btn btn-primary mt-3">Set Store</button>
+              </div>
+            </div> @* End Row *@
+            <p class="text-center py-0 mb-2">
+              <span class="text-decoration-underline" id="storeDetailsClick-@x" style="cursor: pointer">Store Details +</span>
+            </p>
+            <div id="storeDetailsContainer-@x" class="d-none">
+              <h4 class="fw-light">
+                Hours
+                <hr class="m-0 mt-2">
+              </h4>
+              <div class="row p-3">
+                <div class="col-sm-3">
+                  <p>
+                    <strong>Monday</strong>
+                    <br />
+                    6AM - 10PM
+                  </p>
+                </div>
+                <div class="col-sm-3">
+                  <p>
+                    <strong>Tuesday</strong>
+                    <br />
+                    6AM - 10PM
+                  </p>
+                </div>
+                <div class="col-sm-3">
+                  <p>
+                    <strong>Wednesday</strong>
+                    <br />
+                    6AM - 10PM
+                  </p>
+                </div>
+                <div class="col-sm-3">
+                  <p>
+                    <strong>Thursday</strong>
+                    <br />
+                    6AM - 10PM
+                  </p>
+                </div>
+                <div class="col-sm-3">
+                  <p>
+                    <strong>Friday</strong>
+                    <br />
+                    6AM - 10PM
+                  </p>
+                </div>
+                <div class="col-sm-3">
+                  <p>
+                    <strong>Saturday</strong>
+                    <br />
+                    6AM - 10PM
+                  </p>
+                </div>
+                <div class="col-sm-3">
+                  <p>
+                    <strong>Sunday</strong>
+                    <br />
+                    6AM - 10PM
+                  </p>
+                </div>
+              </div>
+              <h4 class="fw-light">
+                Departments
+                <hr class="m-0 mt-2">
+              </h4>
+              <div class="row p-3">
 
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
+                  Bakery</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Natural And Organics</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Olive Bar</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Atm</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Red Box</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
+                  Cosmetics</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Kosher Food</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Boar’s Head</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Cheese Counter</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Meal
+                  Kits</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Cell Phone</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Coin Star</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Free Wireless Access</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> I-Wireless</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
+                  Growler Fill</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Deli</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Pharmacy</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Scan</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Bag</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Go</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Wine</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Ticketmaster</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
+                  Electric Vehicle Charging Station</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Home Shop</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Western Union</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
+                  Seafood Department</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Bath</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Salad Bar</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Murray’s Cheese</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Online
+                  Deli/Bakery Ordering</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Wine Tasting Bar</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Meat Department</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
+                  Enomatic Machine</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Books and Magazines</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Starbucks</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Money
+                  Services</div>
+                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Pickup</div>
+              </div>
 
+            </div> @* End Store Details *@
+            <script>
+              $('#storeDetailsClick-@x').click(function () {
+                $('#storeDetailsContainer-@x').toggleClass('d-none');
+              });
+            </script>
+          </div> @* End Store Container Div *@
+        }
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Set Store</button>
         <button type="button" class="btn btn-light" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Cancel</button>
       </div>
     </div>
