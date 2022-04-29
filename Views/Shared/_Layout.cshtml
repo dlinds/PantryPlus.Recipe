@@ -23,35 +23,34 @@
         <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarButtonsExample" aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fas fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbarButtonsExample">
-          <div class="d-flex align-items-center my-sm-4 my-md-1">
-            <a class="nav-link btn btn-primary text-white mx-2 px-3" href="/">Home</a>
-            <a class="nav-link btn btn-primary text-white mx-2 px-3" href="/pantry">Pantry</a>
-            <a class="nav-link btn btn-primary text-white mx-2 px-3" href="/recipes">Recipes</a>
+        @if (User.Identity.IsAuthenticated)
+        {
+          <div class="collapse navbar-collapse" id="navbarButtonsExample">
+            <div class="d-flex align-items-center my-sm-4 my-md-1">
+              <a class="nav-link btn btn-primary text-white mx-2 px-3" href="/">Home</a>
+              <a class="nav-link btn btn-primary text-white mx-2 px-3" href="/pantry">Pantry</a>
+              <a class="nav-link btn btn-primary text-white mx-2 px-3" href="/recipes">Recipes</a>
+            </div>
           </div>
-        </div>
-        <div class="d-flex align-items-center">
-          <a class="text-reset me-3" href="#">
-            <i class="fas fa-shopping-cart"></i>
-          </a>
-          <div class="dropdown">
-            <a class="dropdown-toggle d-flex align-items-center hidden-arrow text-dark" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-user-circle"></i>
+          <div class="d-flex align-items-center">
+            <a class="text-reset me-3" href="#">
+              <i class="fas fa-shopping-cart"></i>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
-              <li>
-                <a class="dropdown-item" href="#">My profile</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">Settings</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">Logout</a>
-              </li>
-            </ul>
+            <div class="dropdown">
+              <a class="dropdown-toggle d-flex align-items-center hidden-arrow text-dark" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user-circle"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                <li>
+                  <a class="dropdown-item" href="/Account/">Account Info</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/Account/Logoff">Logoff</a>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </div>
+        }
       </div>
     </nav>
   </header>

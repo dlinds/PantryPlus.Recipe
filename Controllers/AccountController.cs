@@ -54,12 +54,12 @@ namespace PantryPlusRecipe.Controllers
     public async Task<IActionResult> LoginRegisterKrogerId(string id)
     {
       var user = await _db?.Users?.SingleOrDefaultAsync(x => x.KrogerId == id);
-      if (user == null)
+      if (user == null) // if not registered yet, redirect to home and show finish registration screen
       {
         TempData["krogerId"] = id;
-        return RedirectToAction("Register", "Account");
+        return RedirectToAction("Index", "Home");
       }
-      else
+      else //if they are registered, sign them in and go to home
       {
         string authenticationMethod = null;
         await _signInManager.SignInAsync(user, isPersistent: true, authenticationMethod);
@@ -102,19 +102,19 @@ namespace PantryPlusRecipe.Controllers
       // Console.WriteLine(model.KrogerId);
       if (model.KrogerId != null)
       {
-        var user = new ApplicationUser { UserName = model.Email, FirstName = model.FirstName, Email = model.Email, KrogerId = model.KrogerId };
+        var user = new ApplicationUser { UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName, Email = model.Email, KrogerId = model.KrogerId };
         result = await _userManager.CreateAsync(user);
       }
       else
       {
-        var user = new ApplicationUser { UserName = model.Email, FirstName = model.FirstName, Email = model.Email };
+        var user = new ApplicationUser { UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName, Email = model.Email };
         result = await _userManager.CreateAsync(user, model.Password);
       }
 
 
       if (result.Succeeded)
       {
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", "Home", new { v = "login" });
       }
       else
       {
@@ -146,7 +146,6 @@ namespace PantryPlusRecipe.Controllers
       }
     }
 
-    [HttpPost]
     public async Task<ActionResult> LogOff()
     {
       await _signInManager.SignOutAsync();

@@ -35,7 +35,7 @@ namespace PantryPlusRecipe.Models
       // Console.WriteLine(code);
       request.AddParameter("application/x-www-form-urlencoded", $"grant_type=authorization_code&code=" + code + $"&redirect_uri=https://localhost:6003?getAuth=profile&client_id={EnvironmentVariables.client_id}&client_secret={EnvironmentVariables.client_secret}&scope=profile.compact", ParameterType.RequestBody);
 
-      Console.WriteLine(request);
+      // Console.WriteLine(request);
       IRestResponse response = await client.ExecuteTaskAsync(request);
       // Console.WriteLine("line 38 KAPI" + response.Content);
       return response.Content;

@@ -3,13 +3,20 @@
 }
 <div class="container py-5">
   <div class="mx-5 p-5 border rounded shadow-sm bg-white">
-    @if (ViewBag.HomeView == "Login")
+    @if (!User.Identity.IsAuthenticated)
     {
-      @await Html.PartialAsync("Forms/Login.cshtml")
+      @if (ViewBag.HomeView == "Login")
+      {
+        @await Html.PartialAsync("Forms/Login.cshtml")
+      }
+      else
+      {
+        @await Html.PartialAsync("Forms/Register.cshtml")
+      }
     }
     else
     {
-      @await Html.PartialAsync("Forms/Register.cshtml")
+      @await Html.PartialAsync("Views/Home.cshtml")
     }
   </div>
 </div>
