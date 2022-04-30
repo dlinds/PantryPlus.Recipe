@@ -1,13 +1,24 @@
-<button type="button" class="btn btn-primary shadow-sm" data-mdb-toggle="modal" data-mdb-target="#findKrogerStore">
-  Find My Store
-</button>
+@if (ViewBag.KrogerStoreName != null)
+{
+  <br />
+  <button type="button" class="btn btn-white btn-sm shadow-sm border" data-mdb-toggle="modal" data-mdb-target="#findKrogerStore">
+    <span>Change</span>
+  </button>
+}
+else
+{
+  <button type="button" class="btn btn-primary shadow-sm" data-mdb-toggle="modal" data-mdb-target="#findKrogerStore">
+    <span>Find My Store</span>
+  </button>
+}
+
 
 <div class="modal fade" id="findKrogerStore" tabindex="-1" aria-labelledby="findKrogerStoreLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title fw-light" id="findKrogerStoreLabel">Find Kroger Location</h5>
-        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" id="modalCloseX" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-start pb-5 pt-3 px-5" id="findZipModalBody">
         <div class="row mt-3">
@@ -30,8 +41,16 @@
                 <div class="form-notch-trailing"></div>
               </div>
             </div>
+            <select class="form-control" id="storeSelect">
+              <option value="select" disabled selected>Select a store chain</option>
+              <option value="FRED">Fred Meyer</option>
+              <option value="FRYS">Fry's Marketplace</option>
+              <option value="QFC">QFC</option>
+            </select>
+
+
           </div>
-          <div class="col-xs-12 col-md-6 col-sm-4 text-start">
+          <div class="col-xs-12 col-md-6 col-sm-4 text-start mt-3 mt-sm-0">
             <input type="button" id="findStoresButton" value="Find Stores" disabled class="btn btn-primary shadow-sm text-white" />
           </div>
         </div>
@@ -65,7 +84,11 @@
                                       <img src="../../assets/img/Google_Maps_icon.png" class="w-25 rounded shadow-sm" alt="Google Maps Icon">
                                     </a>
                                   </p>
-                                  <button type="button" class="btn btn-primary mt-3">Set Store</button>
+                                  <form method="POST" action="/Account/SetStore">
+                                  <input type="hidden" value="${location.locationId}" name="krogerStoreId">
+                                  <input type="hidden" value="${location.name}" name="krogerStoreName">
+                                  <button type="submit" class="btn btn-primary mt-3">Set Store</button>
+                                  </form>
                                 </div>`;
                 outputHtml += `</div>`;
                 outputHtml += `<p class="text-center py-0 mb-2">
@@ -163,13 +186,14 @@
           $('#findStoresButton').click(function () {
             let zipCode = $('#zipInput').val();
             let miles = $('#milesInput').val();
+            let store = $('#storeSelect').val();
             if (miles.length < 1) {
               miles = 10;
             }
             $.ajax({
               type: "GET",
               url: '../../../Account/ListKrogerLocations',
-              data: { 'zipCode': zipCode, 'miles': miles },
+              data: { 'zipCode': zipCode, 'miles': miles, 'store': store },
               success: function (result) {
                 generateStoreText(result);
               },
@@ -188,8 +212,13 @@
         <button type="button" id="closeStoreModal" class="btn btn-white" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Cancel</button>
         <script>
           $('#closeStoreModal').click(function () {
-            $('#findZipModalBody').toggleClass('d-none');
-            $('#showStoresModalBody').toggleClass('d-none');
+            $('#findZipModalBody').removeClass('d-none');
+            $('#showStoresModalBody').addClass('d-none');
+          });
+
+          $('#modalCloseX').click(function () {
+            $('#findZipModalBody').removeClass('d-none');
+            $('#showStoresModalBody').addClass('d-none');
           });
         </script>
       </div>

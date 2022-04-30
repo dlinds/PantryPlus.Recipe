@@ -16,7 +16,8 @@ namespace PantryPlusRecipe.Models
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string KrogerId { get; set; }
-    public string KrogerStoreId { get; set; }
+    public int? KrogerStoreId { get; set; }
+    public string KrogerStoreName { get; set; }
 
     public class RequestTokenJson
     {
@@ -59,12 +60,12 @@ namespace PantryPlusRecipe.Models
       return results.ToString();
     }
 
-    public static string GetStoreListings(string token, int zipcode, int miles)
+    public static string GetStoreListings(string token, int zipcode, int miles, string store)
     {
-      var id = KrogerAPIHelper.GetStoreListings(token, zipcode, miles);
+      var id = KrogerAPIHelper.GetStoreListings(token, zipcode, miles, store);
       var result = id.Result;
       JObject jsonResponse = JObject.Parse(result);
-      Console.WriteLine(jsonResponse);
+      // Console.WriteLine(jsonResponse);
       return jsonResponse.ToString();
     }
   }

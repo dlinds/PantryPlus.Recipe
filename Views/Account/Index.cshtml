@@ -12,7 +12,7 @@
     else
     {
       <div class="row">
-        <div class="col-8">
+        <div class="col-md-8 col-sm-12">
           <p>
             <strong>Name</strong>
             <br>
@@ -38,7 +38,7 @@
                   </p>
                 </div>
                 <div class="col-4">
-                  <br>
+                  <br class="d-none d-sm-block ">
                   <button type="submit" class="btn btn-primary">Add</button>
                 </div>
               </div>
@@ -53,16 +53,17 @@
             </p>
           }
         </div>
-        <div class="col-4 text-end">
+        <div class="col-md-4 col-sm-12 text-md-end text-sm-start">
+          <br class="d-block d-sm-none">
           <strong>Kroger Store</strong><br />
-          @if (ViewBag.KrogerStoreId == null)
+          @if (ViewBag.KrogerStoreName == null)
           {
-
             @await Html.PartialAsync("./Views/KrogerStoreFinder.cshtml")
           }
           else
           {
-            @ViewBag.KrogerStoreId
+            @ViewBag.KrogerStoreName
+            @await Html.PartialAsync("./Views/KrogerStoreFinder.cshtml")
           }
         </div>
       </div>

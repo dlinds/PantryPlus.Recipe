@@ -41,13 +41,9 @@ namespace PantryPlusRecipe.Controllers
       else
       {
         var user = await _userManager.GetUserAsync(User);
-        // var email = _userManager.GetEmailAsync(user);
-        // var userName = _userManager.GetUserNameAsync(user);
         ViewBag.FullName = _userManager.GetUserAsync(User).Result?.FirstName + " " + _userManager.GetUserAsync(User).Result?.LastName;
         ViewBag.Phone = await _userManager.GetPhoneNumberAsync(user);
-        // ViewBag.Phone = phoneNumber;
-        // ViewBag.FullName = fullName;
-        ViewBag.KrogerStoreId = _userManager.GetUserAsync(User).Result?.KrogerStoreId;
+        ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
         ViewBag.AuthPageTitle = "Account Details";
         ViewBag.PageTitle = "Account Details";
       }
@@ -114,14 +110,32 @@ namespace PantryPlusRecipe.Controllers
       return View();
     }
 
-    public async Task<JsonResult> ListKrogerLocations(int zipCode, int miles)
+    public async Task<JsonResult> ListKrogerLocations(int zipCode, int miles, string store)
     {
+      if (miles > 30 || miles < 1)
+      {
+        miles = 30;
+      }
+      if (store == null)
+      {
+        store = "FRED";
+      }
       var user = await _userManager.GetUserAsync(User);
       var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
-      var result = ApplicationUser.GetStoreListings(currentToken.TokenValue, zipCode, miles);
-      // Console.WriteLine(result);
+      var result = ApplicationUser.GetStoreListings(currentToken.TokenValue, zipCode, miles, store);
       return Json(result);
     }
+
+    [HttpPost]
+    public async Task<ActionResult> SetStore(int krogerStoreId, string krogerStoreName)
+    {
+      var user = await _userManager.GetUserAsync(User);
+      user.KrogerStoreId = krogerStoreId;
+      user.KrogerStoreName = krogerStoreName;
+      IdentityResult result = await _userManager.UpdateAsync(user);
+      return RedirectToAction("Index");
+    }
+
 
     [HttpPost]
     public async Task<ActionResult> Register(RegisterViewModel model)
@@ -146,7 +160,6 @@ namespace PantryPlusRecipe.Controllers
         foreach (var error in result.Errors)
         {
           TempData["error"] = error.Description;
-          // Console.WriteLine(error.Description);
         }
         return RedirectToAction("Index", "Home");
       }
