@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Linq;
 
 namespace PantryPlusRecipe.Controllers
 {
@@ -54,6 +55,13 @@ namespace PantryPlusRecipe.Controllers
       return View();
     }
 
+    public async Task<bool> HandleTokenRequest(ApplicationUser user, string token, string refreshToken)
+    {
+      var currentToken = await _db?.Tokens?.SingleOrDefaultAsync(x => x.User == user);
+      return true;
+
+    }
+
     public async Task<IActionResult> LoginRegisterKrogerId(string id, string token, string refreshToken)
     {
       var user = await _db?.Users?.SingleOrDefaultAsync(x => x.KrogerId == id);
@@ -62,22 +70,18 @@ namespace PantryPlusRecipe.Controllers
         TempData["krogerId"] = id;
         return RedirectToAction("Index", "Home");
       }
-      else //if they are registered, sign them in and go to home
+      else //if they are registered, sign them in and go to home, and add token to DB
       {
         string authenticationMethod = null;
         await _signInManager.SignInAsync(user, isPersistent: true, authenticationMethod);
-
-        // ApplicationUser userTest = await _userManager.FindByIdAsync(user + "");
-        var test = await _userManager.GetPhoneNumberAsync(user);
         Token newToken = new Token();
         newToken.TokenValue = token;
-        // newToken.User = currentUser;
-        Console.WriteLine(test);
+        newToken.User = user;
         newToken.RefreshToken = refreshToken;
-        newToken.ExpiresAt = DateTime.Now.AddMinutes(30);
+        newToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
+        newToken.RefreshTokenExpiresAt = DateTime.Now.AddDays(180);
         _db.Tokens.Add(newToken);
         _db.SaveChanges();
-        // _db.Tokens.Add(newToken);
         return RedirectToAction("Index", "Home");
       }
     }
@@ -110,18 +114,19 @@ namespace PantryPlusRecipe.Controllers
       return View();
     }
 
-    public ActionResult ListKrogerLocations(int zipCode)
+    public async Task<JsonResult> ListKrogerLocations(int zipCode, int miles)
     {
-      return View();
+      var user = await _userManager.GetUserAsync(User);
+      var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
+      var result = ApplicationUser.GetStoreListings(currentToken.TokenValue, zipCode, miles);
+      // Console.WriteLine(result);
+      return Json(result);
     }
-
-
 
     [HttpPost]
     public async Task<ActionResult> Register(RegisterViewModel model)
     {
       IdentityResult result = new IdentityResult { };
-      // Console.WriteLine(model.KrogerId);
       if (model.KrogerId != null)
       {
         var user = new ApplicationUser { UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName, Email = model.Email, KrogerId = model.KrogerId };
@@ -132,8 +137,6 @@ namespace PantryPlusRecipe.Controllers
         var user = new ApplicationUser { UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName, Email = model.Email };
         result = await _userManager.CreateAsync(user, model.Password);
       }
-
-
       if (result.Succeeded)
       {
         return RedirectToAction("Index", "Home", new { v = "login" });

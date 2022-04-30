@@ -5,7 +5,7 @@
 <div class="modal fade" id="findKrogerStore" tabindex="-1" aria-labelledby="findKrogerStoreLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-light">
+      <div class="modal-header">
         <h5 class="modal-title fw-light" id="findKrogerStoreLabel">Find Kroger Location</h5>
         <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -13,8 +13,17 @@
         <div class="row mt-3">
           <div class="col-xs-12 col-md-6 col-sm-8">
             <div class="form-outline">
-              <input type="text" name="zip" id="zipInput" class="form-control mb-3 shadow-sm" type="number">
-              <label for="zip" class="form-label">What is your ZIP code?</label>
+              <input type="number" name="zip" id="zipInput" class="form-control mb-3 shadow-sm" type="number">
+              <label for="zipInput" class="form-label">What is your ZIP code?</label>
+              <div class="form-notch">
+                <div class="form-notch-leading" style="width: 9px;"></div>
+                <div class="form-notch-middle" style="width: 87.2px;"></div>
+                <div class="form-notch-trailing"></div>
+              </div>
+            </div>
+            <div class="form-outline">
+              <input type="number" min="1" max="30" name="milesInput" id="milesInput" class="form-control mb-3 shadow-sm" type="number">
+              <label for="milesInput" class="form-label">How large of a search area in miles?</label>
               <div class="form-notch">
                 <div class="form-notch-leading" style="width: 9px;"></div>
                 <div class="form-notch-middle" style="width: 87.2px;"></div>
@@ -34,167 +43,155 @@
               $('#findStoresButton').prop("disabled", true);
             }
           });
-          $('#findStoresButton').click(function () {
-            @* $.ajax({
-                type: "POST",
-                url: '../../../Flavors/Delete',
-                data: { 'flavorId': $(`#flavorId-${id}`).val() },
-                success: function () {
 
-                },
-                }); *@
+          function generateStoreText(jsonResult) {
+            const obj = JSON.parse(jsonResult);
+            let outputHtml = '';
+            obj.data.forEach(function (location) {
+              if ((location.chain === "FRED" || location.chain === "FRYS") && (!location.name.includes('Fuel'))) {
+                outputHtml += `<div class="border shadow-sm p-3 my-4 pb-0 bg-white">`;
+                outputHtml += `<div class="row">`;
+                outputHtml += `<div class="col-sm-8 col-xs-12">
+                                  <h3>${location.name}</h3>
+                                  ${location.address.addressLine1}
+                                  <br />
+                                  ${location.address.city}, ${location.address.state}
+                                  <br />
+                                  ${location.address.zipCode}
+                                </div>`;
+                outputHtml += `<div class="col-sm-4 col-xs-12 text-end">
+                                  <p>
+                                    <a href="https://www.google.com/maps/search/?api=1&query=${location.geolocation.latLng}" target="_blank">
+                                      <img src="../../assets/img/Google_Maps_icon.png" class="w-25 rounded shadow-sm" alt="Google Maps Icon">
+                                    </a>
+                                  </p>
+                                  <button type="button" class="btn btn-primary mt-3">Set Store</button>
+                                </div>`;
+                outputHtml += `</div>`;
+                outputHtml += `<p class="text-center py-0 mb-2">
+                                  <span class="text-decoration-underline" id="storeDetailsClick-${location.locationId}" style="cursor: pointer">Store Details <span id="storeDetailsClickShow-${location.locationId}">+</span><span id="storeDetailsClickHide-${location.locationId}" class="d-none">&nbsp-</span></span>
+                              </p>`;
+                outputHtml += `<div id="storeDetailsContainer-${location.locationId}" class="d-none">
+                                <h4 class="fw-light">
+                                  Hours
+                                  <hr class="m-0 mt-2">
+                                </h4>
+                                <div class="row p-3">
+                                  <div class="col-sm-3">
+                                    <p>
+                                      <strong>Monday</strong>
+                                      <br />
+                                      ${location.hours.monday.open} - ${location.hours.monday.close}
+                                    </p>
+                                  </div>
+                                  <div class="col-sm-3">
+                                    <p>
+                                      <strong>Tuesday</strong>
+                                      <br />
+                                      ${location.hours.tuesday.open} - ${location.hours.tuesday.close}
+                                    </p>
+                                  </div>
+                                  <div class="col-sm-3">
+                                    <p>
+                                      <strong>Wednesday</strong>
+                                      <br />
+                                      ${location.hours.wednesday.open} - ${location.hours.wednesday.close}
+                                    </p>
+                                  </div>
+                                  <div class="col-sm-3">
+                                    <p>
+                                      <strong>Thursday</strong>
+                                      <br />
+                                      ${location.hours.thursday.open} - ${location.hours.thursday.close}
+                                    </p>
+                                  </div>
+                                  <div class="col-sm-3">
+                                    <p>
+                                      <strong>Friday</strong>
+                                      <br />
+                                      ${location.hours.friday.open} - ${location.hours.friday.close}
+                                    </p>
+                                  </div>
+                                  <div class="col-sm-3">
+                                    <p>
+                                      <strong>Saturday</strong>
+                                      <br />
+                                      ${location.hours.saturday.open} - ${location.hours.saturday.close}
+                                    </p>
+                                  </div>
+                                  <div class="col-sm-3">
+                                    <p>
+                                      <strong>Sunday</strong>
+                                      <br />
+                                      ${location.hours.sunday.open} - ${location.hours.sunday.close}
+                                    </p>
+                                  </div>
+                                </div>`;
+                outputHtml += `<h4 class="fw-light">
+                                  Departments
+                                  <hr class="m-0 mt-2">
+                                </h4>
+                                <div class="row px-3">`;
+                if (location.departments) {
+                  for (let x = 0; x < location.departments.length; x++) {
+                    outputHtml += `<div class="col-md-3 col-sm-6 col-xs-12 p-2 border-bottom">`;
+                    if (location.departments[x].hours) {
+                      outputHtml += `<span data-toggle="tooltip" class="text-decoration-underline" title="${location.departments[x].name} Hours: ${location.departments[x].hours.monday.open} - ${location.departments[x].hours.monday.close}">${location.departments[x].name}</span>`
+                    } else {
+                      outputHtml += `${location.departments[x].name}`;
+                    }
+
+                    outputHtml += `</div>`;
+                  }
+                }
+                outputHtml += `</div>
+                              </div></div>`;
+                outputHtml += `<script>
+                                  $('[data-toggle="tooltip"]').tooltip();
+                                  $('#storeDetailsClick-${location.locationId}').click(function () {
+                                    $('#storeDetailsContainer-${location.locationId}').toggleClass('d-none');
+                                  });
+                                <\/script>`;
+              }
+            });
+            $('#showStoresModalBody').html(outputHtml);
+            $('#showStoresModalBody').removeClass('d-none');
+            $('#findZipModalBody').addClass('d-none');
+          }
+
+
+          $('#findStoresButton').click(function () {
+            let zipCode = $('#zipInput').val();
+            let miles = $('#milesInput').val();
+            if (miles.length < 1) {
+              miles = 10;
+            }
+            $.ajax({
+              type: "GET",
+              url: '../../../Account/ListKrogerLocations',
+              data: { 'zipCode': zipCode, 'miles': miles },
+              success: function (result) {
+                generateStoreText(result);
+              },
+              error: function (result) {
+                console.log("ERROR", result);
+              }
+            });
           });
         </script>
 
       </div>
-      <div class="modal-body text-start pb-5 pt-3 d-none" id="showStoresModalBody">
-        @for (int x = 0; x < 5; x++)
-        {
-          <div class="border shadow-sm p-3 my-4 pb-0">
-            <div class="row">
-              <div class="col-sm-8 col-xs-12">
-                <h3>Fred Meyer - Stadium</h3>
-                100 NW 20Th Pl
-                <br />
-                Portland, OR
-                <br />
-                97209
-              </div>
-              <div class="col-sm-4 col-xs-12 text-end">
-                <p>
-                  <a href="https://www.google.com/maps/search/?api=1&query=47.5951518%2C-122.3316393&query_place_id=ChIJKxjxuaNqkFQR3CK6O1HNNqY" target="_blank">
-                    <img src="~/assets/img/Google_Maps_icon.png" class="w-25 rounded shadow-sm" alt="Google Maps Icon">
-                  </a>
-                </p>
-                <button type="button" class="btn btn-primary mt-3">Set Store</button>
-              </div>
-            </div> @* End Row *@
-            <p class="text-center py-0 mb-2">
-              <span class="text-decoration-underline" id="storeDetailsClick-@x" style="cursor: pointer">Store Details <span id="storeDetailsClickShow-@x">+</span><span id="storeDetailsClickHide-@x" class="d-none">&nbsp-</span></span>
-            </p>
-            <div id="storeDetailsContainer-@x" class="d-none">
-              <h4 class="fw-light">
-                Hours
-                <hr class="m-0 mt-2">
-              </h4>
-              <div class="row p-3">
-                <div class="col-sm-3">
-                  <p>
-                    <strong>Monday</strong>
-                    <br />
-                    6AM - 10PM
-                  </p>
-                </div>
-                <div class="col-sm-3">
-                  <p>
-                    <strong>Tuesday</strong>
-                    <br />
-                    6AM - 10PM
-                  </p>
-                </div>
-                <div class="col-sm-3">
-                  <p>
-                    <strong>Wednesday</strong>
-                    <br />
-                    6AM - 10PM
-                  </p>
-                </div>
-                <div class="col-sm-3">
-                  <p>
-                    <strong>Thursday</strong>
-                    <br />
-                    6AM - 10PM
-                  </p>
-                </div>
-                <div class="col-sm-3">
-                  <p>
-                    <strong>Friday</strong>
-                    <br />
-                    6AM - 10PM
-                  </p>
-                </div>
-                <div class="col-sm-3">
-                  <p>
-                    <strong>Saturday</strong>
-                    <br />
-                    6AM - 10PM
-                  </p>
-                </div>
-                <div class="col-sm-3">
-                  <p>
-                    <strong>Sunday</strong>
-                    <br />
-                    6AM - 10PM
-                  </p>
-                </div>
-              </div>
-              <h4 class="fw-light">
-                Departments
-                <hr class="m-0 mt-2">
-              </h4>
-              <div class="row p-3">
+      <div class="modal-body text-start pb-5 pt-3 bg-light d-none" id="showStoresModalBody">
 
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
-                  Bakery</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Natural And Organics</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Olive Bar</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Atm</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Red Box</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
-                  Cosmetics</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Kosher Food</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Boar’s Head</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Cheese Counter</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Meal
-                  Kits</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Cell Phone</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Coin Star</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Free Wireless Access</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> I-Wireless</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
-                  Growler Fill</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Deli</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Pharmacy</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Scan</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Bag</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Go</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Wine</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Ticketmaster</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
-                  Electric Vehicle Charging Station</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Home Shop</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Western Union</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
-                  Seafood Department</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Bath</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Salad Bar</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Murray’s Cheese</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Online
-                  Deli/Bakery Ordering</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Wine Tasting Bar</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Meat Department</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom">
-                  Enomatic Machine</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Books and Magazines</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Starbucks</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Money
-                  Services</div>
-                <div class="col-md-3 col-sm-6 col-xs-12 border-bottom"> Pickup</div>
-              </div>
-
-            </div> @* End Store Details *@
-            <script>
-              $('#storeDetailsClick-@x').click(function () {
-                $('#storeDetailsClickHide-@x').toggleClass('d-none');
-                $('#storeDetailsClickShow-@x').toggleClass('d-none');
-                $('#storeDetailsContainer-@x').toggleClass('d-none');
-              });
-            </script>
-          </div> @* End Store Container Div *@
-        }
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-light" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Cancel</button>
+        <button type="button" id="closeStoreModal" class="btn btn-white" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Cancel</button>
+        <script>
+          $('#closeStoreModal').click(function () {
+            $('#findZipModalBody').toggleClass('d-none');
+            $('#showStoresModalBody').toggleClass('d-none');
+          });
+        </script>
       </div>
     </div>
   </div>

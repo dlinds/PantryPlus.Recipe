@@ -9,7 +9,8 @@ namespace PantryPlusRecipe.Models
     //   this.JoinEntities = new HashSet<ApplicationUserToken>();
     // }
     public int TokenId { get; set; }
-    public DateTime ExpiresAt { get; set; }
+    public DateTime TokenValueExpiresAt { get; set; }
+    public DateTime RefreshTokenExpiresAt { get; set; }
     public string TokenValue { get; set; }
     public string RefreshToken { get; set; }
 

@@ -227,14 +227,17 @@ namespace PantryPlusRecipe.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("RefreshToken")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<DateTime>("RefreshTokenExpiresAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("TokenValue")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("TokenValueExpiresAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");

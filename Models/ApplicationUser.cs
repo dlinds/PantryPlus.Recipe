@@ -59,9 +59,9 @@ namespace PantryPlusRecipe.Models
       return results.ToString();
     }
 
-    public static string GetStoreListings(string token, int zipcode)
+    public static string GetStoreListings(string token, int zipcode, int miles)
     {
-      var id = KrogerAPIHelper.GetStoreListings(token, zipcode);
+      var id = KrogerAPIHelper.GetStoreListings(token, zipcode, miles);
       var result = id.Result;
       JObject jsonResponse = JObject.Parse(result);
       Console.WriteLine(jsonResponse);

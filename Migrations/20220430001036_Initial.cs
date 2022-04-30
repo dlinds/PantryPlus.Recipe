@@ -163,7 +163,8 @@ namespace PantryPlusRecipe.Migrations
                 {
                     TokenId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ExpiresAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    TokenValueExpiresAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    RefreshTokenExpiresAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     TokenValue = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
                     RefreshToken = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
                     UserId = table.Column<string>(type: "varchar(255) CHARACTER SET utf8mb4", nullable: true)

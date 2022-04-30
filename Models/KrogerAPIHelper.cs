@@ -75,14 +75,14 @@ namespace PantryPlusRecipe.Models
     //   return response.Content;
     // }
 
-    public static async Task<string> GetStoreListings(string token, int zipcode)
+    public static async Task<string> GetStoreListings(string token, int zipcode, int miles)
     {
-      var client = new RestClient($"https://api.kroger.com/v1/locations?filter.zipCode.near={zipcode}");
+      var client = new RestClient($"https://api.kroger.com/v1/locations?filter.zipCode.near={zipcode}&filter.limit=30&miles={miles}");
       client.Timeout = -1;
       var request = new RestRequest(Method.GET);
       request.AddHeader("Authorization", $"Bearer {token}");
       IRestResponse response = await client.ExecuteTaskAsync(request);
-      Console.WriteLine(response.Content);
+      // Console.WriteLine(response.Content);
       return response.Content;
     }
 
