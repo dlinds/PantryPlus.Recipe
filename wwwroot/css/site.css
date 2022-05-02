@@ -18,6 +18,15 @@ a {
   border-color: #1861ac;
 }
 
+.btn-danger {
+  color: #fff;
+  background-color: #c52642;
+}
+
+.btn-danger:hover {
+  background-color: #e52d4e
+}
+
 .btn-primary:hover {
   background-color: #207ad6
 }

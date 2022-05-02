@@ -1,8 +1,52 @@
 @{
   ViewData["Title"] = "Pantry";
 }
+<div class="container py-5">
+  <div class="mx-5 p-5 border rounded shadow-sm bg-white">
+    @* <div class="input-group input-group-sm mb-3">
+      <span class="input-group-text shadow-sm" id="inputGroup-sizing-sm">Chicken / 1LB</span>
+      <button class="btn btn-sm btn-light pb-2 shadow-sm border"><i class="fas fa-edit"></i></button>
+      <button class="btn btn-sm btn-primary pb-2 shadow-sm"><i class="fas fa-minus-square"></i></button>
+      </div> *@
+    <div class="py-4 px-2 bg-white border mb-3 d-flex w-25">
+      <div class="form-outline">
 
-<div class="text-center">
-  <h1 class="display-4">Welcome</h1>
-  <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+        <datalist id="datalistOptions">
+          <option>Chicken</option>
+          <option>Orange</option>
+        </datalist>
+        <label for="exampleDataList" class="form-label">Add an ingredient</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 87.2px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+      <button class="btn btn-sm btn-primary shadow-sm border mx-1"><i class="fas fa-add"></i></button>
+
+    </div>
+    @for (int y = 0; y < 7; y++)
+    {
+      <div class="bg-light p-3 rounded border mb-4 shadow-sm">
+        <h3 class="mb-3">Proteins</h3>
+        <div class="row">
+          @for (int x = 0; x < 7; x++)
+          {
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-2">
+              <div class="card border  text-center">
+                <div class="card-body py-2">
+                  Chicken 2LBs
+                </div>
+                <div class="card-footer py-1">
+                  <button class="btn btn-sm btn-primary shadow-sm border mx-1"><i class="fas fa-add"></i></button>
+                  <button class="btn btn-sm btn-light shadow-sm border"><i class="fas fa-edit"></i></button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
 </div>

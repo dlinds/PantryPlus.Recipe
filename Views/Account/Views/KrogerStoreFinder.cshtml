@@ -24,7 +24,7 @@ else
         <div class="row mt-3">
           <div class="col-xs-12 col-md-6 col-sm-8">
             <div class="form-outline">
-              <input type="number" name="zip" id="zipInput" class="form-control mb-3 shadow-sm" type="number">
+              <input type="number" name="zip" id="zipInput" class="form-control mb-3 shadow-sm">
               <label for="zipInput" class="form-label">What is your ZIP code?</label>
               <div class="form-notch">
                 <div class="form-notch-leading" style="width: 9px;"></div>
@@ -33,7 +33,7 @@ else
               </div>
             </div>
             <div class="form-outline">
-              <input type="number" min="1" max="30" name="milesInput" id="milesInput" class="form-control mb-3 shadow-sm" type="number">
+              <input type="number" min="1" max="30" name="milesInput" id="milesInput" class="form-control mb-3 shadow-sm">
               <label for="milesInput" class="form-label">How large of a search area in miles?</label>
               <div class="form-notch">
                 <div class="form-notch-leading" style="width: 9px;"></div>
@@ -78,7 +78,7 @@ else
                                   <br />
                                   ${location.address.zipCode}
                                 </div>`;
-                outputHtml += `<div class="col-sm-4 col-xs-12 text-end">
+                outputHtml += `<div class="col-sm-4 col-xs-12 text-md-end d-flex d-md-block">
                                   <p>
                                     <a href="https://www.google.com/maps/search/?api=1&query=${location.geolocation.latLng}" target="_blank">
                                       <img src="../../assets/img/Google_Maps_icon.png" class="w-25 rounded shadow-sm" alt="Google Maps Icon">
@@ -87,7 +87,7 @@ else
                                   <form method="POST" action="/Account/SetStore">
                                   <input type="hidden" value="${location.locationId}" name="krogerStoreId">
                                   <input type="hidden" value="${location.name}" name="krogerStoreName">
-                                  <button type="submit" class="btn btn-primary mt-3">Set Store</button>
+                                  <button type="submit" class="btn btn-primary mt-0 mt-md-3">Set Store</button>
                                   </form>
                                 </div>`;
                 outputHtml += `</div>`;
@@ -104,49 +104,49 @@ else
                                     <p>
                                       <strong>Monday</strong>
                                       <br />
-                                      ${location.hours.monday.open} - ${location.hours.monday.close}
+                                      ${location.hours.monday.open} AM - ${parseInt(((location.hours.monday.close).charAt(0)) + ((location.hours.monday.close).charAt(1))) - 12}:${((location.hours.monday.close).charAt(3))}0 PM
                                     </p>
                                   </div>
                                   <div class="col-sm-3">
                                     <p>
                                       <strong>Tuesday</strong>
                                       <br />
-                                      ${location.hours.tuesday.open} - ${location.hours.tuesday.close}
+                                      ${location.hours.tuesday.open} AM - ${parseInt(((location.hours.tuesday.close).charAt(0)) + ((location.hours.tuesday.close).charAt(1))) - 12}:${((location.hours.tuesday.close).charAt(3))}0 PM
                                     </p>
                                   </div>
                                   <div class="col-sm-3">
                                     <p>
                                       <strong>Wednesday</strong>
                                       <br />
-                                      ${location.hours.wednesday.open} - ${location.hours.wednesday.close}
+                                      ${location.hours.wednesday.open} AM - ${parseInt(((location.hours.wednesday.close).charAt(0)) + ((location.hours.wednesday.close).charAt(1))) - 12}:${((location.hours.wednesday.close).charAt(3))}0 PM
                                     </p>
                                   </div>
                                   <div class="col-sm-3">
                                     <p>
                                       <strong>Thursday</strong>
                                       <br />
-                                      ${location.hours.thursday.open} - ${location.hours.thursday.close}
+                                      ${location.hours.thursday.open} AM - ${parseInt(((location.hours.wednesday.close).charAt(0)) + ((location.hours.wednesday.close).charAt(1))) - 12}:${((location.hours.wednesday.close).charAt(3))}0 PM
                                     </p>
                                   </div>
                                   <div class="col-sm-3">
                                     <p>
                                       <strong>Friday</strong>
                                       <br />
-                                      ${location.hours.friday.open} - ${location.hours.friday.close}
+                                      ${location.hours.friday.open} AM - ${parseInt(((location.hours.friday.close).charAt(0)) + ((location.hours.friday.close).charAt(1))) - 12}:${((location.hours.friday.close).charAt(3))}0 PM
                                     </p>
                                   </div>
                                   <div class="col-sm-3">
                                     <p>
                                       <strong>Saturday</strong>
                                       <br />
-                                      ${location.hours.saturday.open} - ${location.hours.saturday.close}
+                                      ${location.hours.saturday.open} AM - ${parseInt(((location.hours.saturday.close).charAt(0)) + ((location.hours.saturday.close).charAt(1))) - 12}:${((location.hours.saturday.close).charAt(3))}0 PM
                                     </p>
                                   </div>
                                   <div class="col-sm-3">
                                     <p>
                                       <strong>Sunday</strong>
                                       <br />
-                                      ${location.hours.sunday.open} - ${location.hours.sunday.close}
+                                      ${location.hours.sunday.open} AM - ${parseInt(((location.hours.sunday.close).charAt(0)) + ((location.hours.sunday.close).charAt(1))) - 12}:${((location.hours.sunday.close).charAt(3))}0 PM
                                     </p>
                                   </div>
                                 </div>`;
