@@ -1,8 +1,33 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using Microsoft.AspNetCore.Mvc.ViewFeatures
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<a href="recipes/create" class="btn btn-primary my-2 mx-1 mx-md-5">Add Recipe</a>
+
+@await Html.PartialAsync("./Home/CategorySelect.cshtml")
+<div class="my-3">
 </div>
+@await Html.PartialAsync("./Home/RecipeSection.cshtml", new ViewDataDictionary(ViewData) {
+{ "type", "favorites" },
+{ "name", @ViewBag.Favorites.Name },
+{ "url", @ViewBag.Favorites.ImgUrl },
+{ "steps", @ViewBag.Favorites.NumberOfSteps },
+{ "cookTime", (@ViewBag.Favorites.CookMinutes + @ViewBag.Favorites.PrepMinutes) } })
+<div class="my-3">
+</div>
+@await Html.PartialAsync("./Home/RecipeSection.cshtml", new ViewDataDictionary(ViewData) {
+{ "type", "budget" },
+{ "name", @ViewBag.Budget.Name },
+{ "url", @ViewBag.Budget.ImgUrl },
+{ "steps", @ViewBag.Budget.NumberOfSteps },
+{ "cookTime", (@ViewBag.Budget.CookMinutes + @ViewBag.Budget.PrepMinutes) }
+})
+<div class="my-3">
+</div>
+@await Html.PartialAsync("./Home/RecipeSection.cshtml",
+new ViewDataDictionary(ViewData) {
+{ "type", "fast" },
+{ "name", @ViewBag.Fast.Name },
+{ "url", @ViewBag.Fast.ImgUrl },
+{ "steps", @ViewBag.Fast.NumberOfSteps },
+{ "cookTime", (@ViewBag.Fast.CookMinutes + @ViewBag.Fast.PrepMinutes) }
+})
