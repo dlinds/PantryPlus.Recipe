@@ -1,34 +1,70 @@
 <div class="box bg-white border shadow-sm mb-5 mx-3 pb-3 mt-0 mt-md-5">
   <div class="ribbon-2 btn-primary text-white pt-2">
-    <h3 class="fw-light">Instructions</h3>
+    <h3 class="fw-light" id="head">Instructions</h3>
+  </div>
+  <div id="addedSections">
   </div>
   <div class="form-outline mx-3">
-    <input type="text" name="PrepMinutes" id="PrepMinutes" class="form-control mb-3 shadow-sm" placeholder="ex: Pie Crust">
-    <label for="PrepMinutes" class="form-label">Section Name</label>
+    <input type="text" name="sectionName" id="sectionName" class="form-control mb-1 shadow-sm" placeholder="ex: Pie Crust">
+    <label for="sectionName" class="form-label">Section Name</label>
     <div class="form-notch">
       <div class="form-notch-leading" style="width: 9px;"></div>
       <div class="form-notch-middle" style="width: 87.2px;"></div>
       <div class="form-notch-trailing"></div>
     </div>
   </div>
-  <ul class="list-group list-group-light px-3">
-    <li class="list-group-item py-2">Add the Italian sausage to a deep skillet or pot and cook over medium heat, breaking it up into pieces as it cooks. Mince two cloves of garlic, add it to the
-      browned sausage, and sauté for 1 minute more.
-    </li>
-    <li class="list-group-item py-2">Next, add the tomato paste, crushed tomatoes, Italian seasoning, and water. Stir to combine and dissolve the browned bits off the bottom of the skillet. Allow the sauce to come to a simmer. Once simmering, place a tilted lid on top (to allow steam to escape while blocking splatter) and turn the heat down to medium-low. Let the sauce simmer, stirring occasionally, while you cook the pasta.
-    </li>
-  </ul>
-  <div class="px-3 my-3">
+  <div id="stepsContainerUL">
+    <ul class="list-group list-group-light px-3 mb-2" id="listOfSteps">
+      @* <li class="list-group-item pb-2">Add the Italian sausage to a deep skillet or pot and cook over medium heat, breaking it up into pieces as it cooks. Mince two cloves of garlic, add it to the
+        browned sausage, and sauté for 1 minute more.
+        </li>
+        <li class="list-group-item pb-2">Next, add the tomato paste, crushed tomatoes, Italian seasoning, and water. Stir to combine and dissolve the browned bits off the bottom of the skillet. Allow the sauce to come to a simmer. Once simmering, place a tilted lid on top (to allow steam to escape while blocking splatter) and turn the heat down to medium-low. Let the sauce simmer, stirring occasionally, while you cook the pasta.
+        </li> *@
+    </ul>
+  </div>
+  <div class="px-3 mb-3">
     <div class="form-outline">
-      <textarea class="form-control" id="textAreaExample1" rows="4"></textarea>
-      <label class="form-label" for="textAreaExample" style="margin-left: 0px;">Insert Step Details</label>
+      <textarea class="form-control" id="stepDetails" rows="4"></textarea>
+      <label class="form-label" for="stepDetails" style="margin-left: 0px;">Insert Step Details</label>
       <div class="form-notch">
         <div class="form-notch-leading" style="width: 9px;"></div>
         <div class="form-notch-middle" style="width: 60px;"></div>
         <div class="form-notch-trailing"></div>
       </div>
     </div>
-    <button type="button" class="btn btn-primary mt-3">Add Step</button>
-    <button type="button" class="btn btn-primary">Add Section</button>
+    <button type="button" class="btn btn-primary mt-3" id="addStep" disabled>Add Step</button>
+    <button type="button" class="btn btn-primary" id="addSection" disabled>Add Section</button>
   </div>
 </div>
+
+<script>
+
+  $('#stepDetails').on('keyup', function () {
+    if ($(this).val().length >= 1) {
+      $('#addStep').prop("disabled", false);
+    } else {
+      $('#addStep').prop("disabled", true);
+    }
+  });
+
+  $('#sectionName').on('keyup', function () {
+    if ($(this).val().length >= 1) {
+      $('#addSection').prop("disabled", false);
+    } else {
+      $('#addSection').prop("disabled", true);
+    }
+  });
+
+  $(`#addStep`).click(function () {
+    $(`#listOfSteps`).append(`<li class="list-group-item pb-2 px-2"><span class="fs-4 fw-light">${$("#listOfSteps li").length + 1}.</span> ${$('#stepDetails').val()}</li>`);
+    $('#stepDetails').val("");
+    $('#addStep').prop("disabled", true);
+  });
+
+  $('#addSection').click(function () {
+    let stepsHTML = `<ul class="list-group list-group-light px-3 mb-2">${$('#listOfSteps').html()}</ul>`;
+    $('#addedSections').append(`<div class="fs-4 px-3">${$('#sectionName').val()}</div>${stepsHTML}`);
+    $('#sectionName').val("");
+    $('#listOfSteps').empty();
+  });
+</script>
