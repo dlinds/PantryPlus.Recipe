@@ -1,0 +1,29 @@
+@* <div style="width: 100vh?;overflow-x: auto; white-space: nowrap;"> *@
+@using PantryPlusRecipe.Models
+<div class="p-5 pt-0 mx-1 mx-md-5 rounded shadow-sm border bg-white">
+  <h1 class="text-start fw-light pt-3 ps-3">@ViewData["type"]</h1>
+  <div class="d-flex scroll py-3">
+    @for (int x = 0; x < 9; x++)
+    {
+      <div style="min-width:170px; min-height:200px;" class="me-4">
+        <div class="card border me-3 shadow-sm" style="min-width:170px; min-height:200px;">
+          <div class="card text-white shadow-sm">
+            <img src="@ViewData["url"]" class="card-img" alt="...">
+            <div class="overlay"></div>
+            <div class="card-img-overlay py-3 px-2 d-flex align-items-center">
+              <h5 class="card-title multiline fw-normal" style="text-overflow: ellipsis;">@ViewData["name"]</h5>
+            </div>
+          </div>
+          <div class="card-body px-3 py-2">
+            STEPS: @ViewData["steps"]
+            <br />
+            TIME: @ViewData["cookTime"] minutes
+            <br />
+            HAVE: 8 of 12
+            <br />
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
