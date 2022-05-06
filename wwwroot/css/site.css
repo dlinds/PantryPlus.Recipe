@@ -53,7 +53,7 @@ div.scroll {
 }
 
 .scroll::-webkit-scrollbar {
-  height: .5vh;
+  height: .4em;
 }
 
 .scroll::-webkit-scrollbar-track {
@@ -65,7 +65,8 @@ div.scroll {
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
   background-color: #bdbdbd;
 
 }
@@ -154,4 +155,26 @@ body {
 .box {
   /*margin:50pxauto0;*/
   position: relative;
+}
+
+.inset-shadow-sm {
+  box-shadow: inset 3px 2px 15px #e9e9e9, inset -2px -4px 5px #ffffff, 0 0.165rem .25rem rgba(0, 0, 0, .075) !important
+}
+
+
+.btn-outline-primary {
+  /* color: #1b6ec2; */
+  border-color: #1b6ec2;
+}
+
+[class*=btn-outline-] {
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: none;
+  padding: .5rem 1.375rem .375rem;
+}
+
+.btn-outline-primary:hover {
+  color: #FFF;
+  background-color: #1b6ec2;
 }
