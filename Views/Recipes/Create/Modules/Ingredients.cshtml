@@ -2,17 +2,19 @@
   <div class="ribbon-2 btn-primary text-white pt-2">
     <h3 class="fw-light">Ingredients</h3>
   </div>
-  <ul class="list-group list-group-light px-3">
-    <li class="list-group-item py-2">1 TBSP of Tomato Paste</li>
-    <li class="list-group-item py-2">1 TBSP of Tomato Paste</li>
-    <li class="list-group-item py-2">1 TBSP of Tomato Paste</li>
+  <div id="addedIngredients">
+  </div>
+  <ul class="list-group list-group-light px-3" id="ingredientsList">
+    @* <li class="list-group-item py-2">1 TBSP of Tomato Paste</li>
+      <li class="list-group-item py-2">1 TBSP of Tomato Paste</li>
+      <li class="list-group-item py-2">1 TBSP of Tomato Paste</li> *@
   </ul>
   <div class="px-3 my-3">
     <div class="row">
       <div class="col">
         <div class="form-outline">
-          <input type="text" name="PrepMinutes" id="PrepMinutes" class="form-control mb-3 shadow-sm" placeholder="ex .25">
-          <label for="PrepMinutes" class="form-label">Count</label>
+          <input type="number" name="ingredientCount" id="ingredientCount" class="form-control mb-3 shadow-sm" placeholder="ex .25">
+          <label for="ingredientCount" class="form-label">Count</label>
           <div class="form-notch">
             <div class="form-notch-leading" style="width: 9px;"></div>
             <div class="form-notch-middle" style="width: 87.2px;"></div>
@@ -21,8 +23,8 @@
         </div>
       </div>
       <div class="col">
-        <select class="form-select form-control shadow-sm" style="color:rgba(0,0,0,.6)!important" aria-label="Default select example">
-          <option selected>Unit of Measurement</option>
+        <select class="form-select form-control shadow-sm" id="unitSelection" style="color:rgba(0,0,0,.6)!important" aria-label="Default select example">
+          <option selected disabled value="default">Unit of Measurement</option>
           <option value="cup">Cup</option>
           <option value="tbsp">TBSP</option>
           <option value="tsp">TSP</option>
@@ -31,14 +33,39 @@
       </div>
     </div>
     <div class="form-outline">
-      <input type="text" name="CookMinutes" id="CookMinutes" class="form-control mb-3 shadow-sm">
-      <label for="CookMinutes" class="form-label">Ingredient</label>
+      <input type="text" name="ingredientInput" id="ingredientInput" class="form-control mb-3 shadow-sm">
+      <label for="ingredientInput" class="form-label">Ingredient</label>
       <div class="form-notch">
         <div class="form-notch-leading" style="width: 9px;"></div>
         <div class="form-notch-middle" style="width: 87.2px;"></div>
         <div class="form-notch-trailing"></div>
       </div>
     </div>
-    <button type="button" class="btn btn-primary">Add Ingredient</button>
+    <button type="button" disabled class="btn btn-primary" id="addIngredientBtn">Add Ingredient</button>
   </div>
 </div>
+<script>
+  $('#ingredientInput').on('keyup', function () {
+    if ($(this).val().length >= 1 && $("#ingredientCount").val().length >= 1) {
+      $('#addIngredientBtn').prop("disabled", false);
+    } else {
+      $('#addIngredientBtn').prop("disabled", true);
+    }
+  });
+  $(`#addIngredientBtn`).click(function () {
+    count = $("#ingredientCount").val();
+    unit = $(`#unitSelection`).val();
+    if (unit === null) {
+      unit = '';
+    } else {
+      unit += " of"
+    }
+    ingredient = $(`#ingredientInput`).val();
+    $('#ingredientsList').append(`<li class="list-group-item py-2">${count} ${unit} ${ingredient}</li>`);
+    $("#ingredientCount").val('');
+    $(`#ingredientInput`).val('');
+    $(`#unitSelection`).val('default');
+  });
+
+
+</script>

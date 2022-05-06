@@ -13,15 +13,13 @@
       <div class="form-notch-trailing"></div>
     </div>
   </div>
-  <div id="stepsContainerUL">
-    <ul class="list-group list-group-light px-3 mb-2" id="listOfSteps">
-      @* <li class="list-group-item pb-2">Add the Italian sausage to a deep skillet or pot and cook over medium heat, breaking it up into pieces as it cooks. Mince two cloves of garlic, add it to the
-        browned sausage, and sauté for 1 minute more.
-        </li>
-        <li class="list-group-item pb-2">Next, add the tomato paste, crushed tomatoes, Italian seasoning, and water. Stir to combine and dissolve the browned bits off the bottom of the skillet. Allow the sauce to come to a simmer. Once simmering, place a tilted lid on top (to allow steam to escape while blocking splatter) and turn the heat down to medium-low. Let the sauce simmer, stirring occasionally, while you cook the pasta.
-        </li> *@
-    </ul>
-  </div>
+  <ul class="list-group list-group-light px-3 mb-2" id="listOfSteps">
+    @* <li class="list-group-item pb-2">Add the Italian sausage to a deep skillet or pot and cook over medium heat, breaking it up into pieces as it cooks. Mince two cloves of garlic, add it to the
+      browned sausage, and sauté for 1 minute more.
+      </li>
+      <li class="list-group-item pb-2">Next, add the tomato paste, crushed tomatoes, Italian seasoning, and water. Stir to combine and dissolve the browned bits off the bottom of the skillet. Allow the sauce to come to a simmer. Once simmering, place a tilted lid on top (to allow steam to escape while blocking splatter) and turn the heat down to medium-low. Let the sauce simmer, stirring occasionally, while you cook the pasta.
+      </li> *@
+  </ul>
   <div class="px-3 mb-3">
     <div class="form-outline">
       <textarea class="form-control" id="stepDetails" rows="4"></textarea>
@@ -63,7 +61,7 @@
 
   $('#addSection').click(function () {
     let stepsHTML = `<ul class="list-group list-group-light px-3 mb-2">${$('#listOfSteps').html()}</ul>`;
-    $('#addedSections').append(`<div class="fs-4 px-3">${$('#sectionName').val()}</div>${stepsHTML}`);
+    $('#addedSections').append(`<div class="fs-4 px-3">${$('#sectionName').val()}</div>${stepsHTML}<hr />`);
     $('#sectionName').val("");
     $('#listOfSteps').empty();
   });
