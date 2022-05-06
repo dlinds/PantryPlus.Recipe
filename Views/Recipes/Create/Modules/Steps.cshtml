@@ -2,8 +2,7 @@
   <div class="ribbon-2 btn-primary text-white pt-2">
     <h3 class="fw-light" id="head">Instructions</h3>
   </div>
-  <div id="addedSections">
-  </div>
+
   <div class="form-outline mx-3">
     <input type="text" name="sectionName" id="sectionName" class="form-control mb-1 shadow-sm" placeholder="ex: Pie Crust">
     <label for="sectionName" class="form-label">Section Name</label>
@@ -33,6 +32,8 @@
     <button type="button" class="btn btn-primary mt-3" id="addStep" disabled>Add Step</button>
     <button type="button" class="btn btn-primary" id="addSection" disabled>Add Section</button>
   </div>
+  <div id="addedSections">
+  </div>
 </div>
 
 <script>
@@ -54,14 +55,14 @@
   });
 
   $(`#addStep`).click(function () {
-    $(`#listOfSteps`).append(`<li class="list-group-item pb-2 px-2"><span class="fs-4 fw-light">${$("#listOfSteps li").length + 1}.</span> ${$('#stepDetails').val()}</li>`);
+    $(`#listOfSteps`).append(`<li class="list-group-item pb-2 px-2 rounded"><span class="fs-4 fw-light">${$("#listOfSteps li").length + 1}.</span> ${$('#stepDetails').val()}</li>`);
     $('#stepDetails').val("");
     $('#addStep').prop("disabled", true);
   });
 
   $('#addSection').click(function () {
-    let stepsHTML = `<ul class="list-group list-group-light px-3 mb-2">${$('#listOfSteps').html()}</ul>`;
-    $('#addedSections').append(`<div class="fs-4 px-3">${$('#sectionName').val()}</div>${stepsHTML}<hr />`);
+    let stepsHTML = `<ul class="list-group list-group-light p-3 m-3 border rounded inset-shadow-sm"><div class="fs-4 ps-2">${$('#sectionName').val()}</div>${$('#listOfSteps').html()}</ul>`;
+    $('#addedSections').append(`${stepsHTML}<hr />`);
     $('#sectionName').val("");
     $('#listOfSteps').empty();
   });
