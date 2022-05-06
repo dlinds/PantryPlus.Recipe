@@ -1,70 +1,34 @@
-<style>
-  .ribbon-2 {
-    --f: 10px;
-    /* control the folded part*/
-    --r: -1px;
-    /* control the ribbon shape */
-    --t: -1px;
-    /* the top offset */
-    width: calc(100% + 1px);
-    position: inherit;
-    inset: var(--t) calc(-1*var(--f)) auto auto;
-    padding: 0 0px var(--f) calc(10px + var(--r));
-    clip-path:
-      polygon(0 0, 100% 0, 100% calc(100% - var(--f)), calc(100% - var(--f)) 100%,
-        calc(100% - var(--f)) calc(100% - var(--f)), 0 calc(100% - var(--f)),
-        var(--r) calc(50% - var(--f)/2));
-    box-shadow: 0 calc(-1*var(--f)) 0 inset #0005;
-  }
-
-  .box {
-    /*margin:50pxauto0;*/
-    position: relative;
-  }
-</style>
-
-
-<div class="box bg-white border shadow-sm m-5">
+<div class="box bg-white border shadow-sm mb-5 mx-3 pb-3 mt-0 mt-md-5">
   <div class="ribbon-2 btn-primary text-white pt-2">
-    <h3 class="fw-light">Ingredients</h3>
+    <h3 class="fw-light">Instructions</h3>
+  </div>
+  <div class="form-outline mx-3">
+    <input type="text" name="PrepMinutes" id="PrepMinutes" class="form-control mb-3 shadow-sm" placeholder="ex: Pie Crust">
+    <label for="PrepMinutes" class="form-label">Section Name</label>
+    <div class="form-notch">
+      <div class="form-notch-leading" style="width: 9px;"></div>
+      <div class="form-notch-middle" style="width: 87.2px;"></div>
+      <div class="form-notch-trailing"></div>
+    </div>
   </div>
   <ul class="list-group list-group-light px-3">
-    <li class="list-group-item py-2">1 TBSP of Tomato Paste</li>
-    <li class="list-group-item py-2">1 TBSP of Tomato Paste</li>
-    <li class="list-group-item py-2">1 TBSP of Tomato Paste</li>
+    <li class="list-group-item py-2">Add the Italian sausage to a deep skillet or pot and cook over medium heat, breaking it up into pieces as it cooks. Mince two cloves of garlic, add it to the
+      browned sausage, and sauté for 1 minute more.
+    </li>
+    <li class="list-group-item py-2">Next, add the tomato paste, crushed tomatoes, Italian seasoning, and water. Stir to combine and dissolve the browned bits off the bottom of the skillet. Allow the sauce to come to a simmer. Once simmering, place a tilted lid on top (to allow steam to escape while blocking splatter) and turn the heat down to medium-low. Let the sauce simmer, stirring occasionally, while you cook the pasta.
+    </li>
   </ul>
   <div class="px-3 my-3">
-    <div class="row">
-      <div class="col">
-        <div class="form-outline">
-          <input type="text" name="PrepMinutes" id="PrepMinutes" class="form-control mb-3 shadow-sm" placeholder="ex .25">
-          <label for="PrepMinutes" class="form-label">Count</label>
-          <div class="form-notch">
-            <div class="form-notch-leading" style="width: 9px;"></div>
-            <div class="form-notch-middle" style="width: 87.2px;"></div>
-            <div class="form-notch-trailing"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <select class="form-select form-control shadow-sm" style="color:rgba(0,0,0,.6)!important" aria-label="Default select example">
-          <option selected>Unit of Measurement</option>
-          <option value="cup">Cup</option>
-          <option value="tbsp">TBSP</option>
-          <option value="tsp">TSP</option>
-          <option value="tsp">OZ</option>
-        </select>
-      </div>
-    </div>
     <div class="form-outline">
-      <input type="text" name="CookMinutes" id="CookMinutes" class="form-control mb-3 shadow-sm">
-      <label for="CookMinutes" class="form-label">Ingredient</label>
+      <textarea class="form-control" id="textAreaExample1" rows="4"></textarea>
+      <label class="form-label" for="textAreaExample" style="margin-left: 0px;">Insert Step Details</label>
       <div class="form-notch">
         <div class="form-notch-leading" style="width: 9px;"></div>
-        <div class="form-notch-middle" style="width: 87.2px;"></div>
+        <div class="form-notch-middle" style="width: 60px;"></div>
         <div class="form-notch-trailing"></div>
       </div>
     </div>
-    <button type="button" class="btn btn-primary">Add Ingredient</button>
+    <button type="button" class="btn btn-primary mt-3">Add Step</button>
+    <button type="button" class="btn btn-primary">Add Section</button>
   </div>
 </div>
