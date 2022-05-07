@@ -55,6 +55,25 @@ namespace PantryPlusRecipe.Controllers
       return View();
     }
 
+    [HttpPost]
+    public ActionResult Create(List<string> SectionName, string[][] Step)
+    {
+      // Guid myuuid = Guid.NewGuid();
+      // string myuuidAsString = myuuid.ToString();
+      foreach (string section in SectionName)
+      {
+        Console.WriteLine(section);
+      }
+      Console.WriteLine("Sections: " + SectionName);
+      Console.WriteLine("Steps: " + Step.Length);
+
+      return RedirectToAction("Index");
+    }
+    public ActionResult Recipe(int id)
+    {
+      return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

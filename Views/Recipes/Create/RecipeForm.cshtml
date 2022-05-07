@@ -1,12 +1,10 @@
-<form>
-  <div class="row">
-    <div class="col-lg-4">
-      @await Html.PartialAsync("./Modules/CookTimes.cshtml")
+<div class="row">
+  <div class="col-lg-4">
+    @await Html.PartialAsync("./Modules/CookTimes.cshtml")
 
-      @await Html.PartialAsync("./Modules/Ingredients.cshtml")
-    </div>
-    <div class="col-lg-8">
-      @await Html.PartialAsync("./Modules/Steps.cshtml")
-    </div>
+    @await Html.PartialAsync("./Modules/Ingredients.cshtml")
   </div>
-</form>
+  <div class="col-lg-8">
+    @await Html.PartialAsync("./Modules/Steps.cshtml")
+  </div>
+</div>

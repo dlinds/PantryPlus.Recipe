@@ -1,5 +1,38 @@
-<form><a href="recipes/create" class="btn btn-primary my-2 mx-1 mx-md-5">Save</a>
+<form action="/Recipes/Create" method="post" id="submitForm">
+  <button type="submit" class="btn btn-primary my-2 mx-1 mx-md-5">Save</button>
   <div class="bg-white mx-1 mx-md-5 pe-3 pe-lg-1 rounded inset-shadow-sm border">
     @await Html.PartialAsync("./Create/RecipeForm.cshtml")
   </div>
 </form>
+
+
+<script>
+  function submitForm() {
+    //first sections
+    let postJson = {};
+    let sections = [];
+    $('#hiddenParams').children().each(function () {
+      if ($(this).prop('name').includes('SectionName')) {
+        sections.push($(this).prop('defaultValue'));
+      }
+    });
+
+    for (let x = 0; x < sections.length; x++) {
+      let steps = [];
+      $('#hiddenParams').children().each(function () {
+        if ($(this).prop('name').includes('Step[' + x + ',')) {
+          steps.push($(this).prop('defaultValue'));
+        }
+      });
+      postJson[sections[x]] = steps;
+    }
+
+    console.log(postJson);
+  }
+
+
+  $(`#submitForm`).submit(function (event) {
+    event.preventDefault();
+    submitForm();
+  });
+</script>

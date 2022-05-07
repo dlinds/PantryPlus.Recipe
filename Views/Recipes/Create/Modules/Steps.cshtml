@@ -1,9 +1,9 @@
-<div class="box bg-white border shadow-sm mb-5 mx-3 pb-3 mt-0 mt-md-5">
+<div class="box bg-white border shadow-sm mb-5 mx-3 pb-3 mt-0 mt-lg-5">
   <div class="ribbon-2 btn-primary text-white pt-2">
     <h3 class="fw-light" id="head">Instructions</h3>
   </div>
 
-  <div class="form-outline mx-3">
+  <div class="form-outline mx-3 mt-3">
     <input type="text" name="sectionName" id="sectionName" class="form-control mb-1 shadow-sm" placeholder="ex: Pie Crust">
     <label for="sectionName" class="form-label">Section Name</label>
     <div class="form-notch">
@@ -34,6 +34,8 @@
   </div>
   <div id="addedSections">
   </div>
+  <div id="hiddenParams" class="d-none">
+  </div>
 </div>
 
 <script>
@@ -61,9 +63,22 @@
   });
 
   $('#addSection').click(function () {
-    let stepsHTML = `<ul class="list-group list-group-light p-3 m-3 border rounded inset-shadow-sm"><div class="fs-4 ps-2">${$('#sectionName').val()}</div>${$('#listOfSteps').html()}</ul>`;
-    $('#addedSections').append(`${stepsHTML}<hr />`);
+    let sectionName = $('#sectionName').val();
+    let listOfSteps = $('#listOfSteps').html();
+    let stepsHTML = `<ul class="list-group list-group-light p-3 m-3 border rounded inset-shadow-sm" id="list-${sectionName.replaceAll(' ', '-')}"><div class="fs-4 ps-2">${sectionName}</div>${listOfSteps}</ul>`;
+    $('#hiddenParams').append(`<input type='hidden' value="${sectionName}" name="SectionName[${$('#addedSections').children().length}]">`);
+    $('#addedSections').append(`${stepsHTML}`);
+
+    for (let x = 0; x < $(`#list-${sectionName.replaceAll(' ', '-')}`).children('li').length; x++) {
+      $('#hiddenParams').append(`
+            <input type='hidden'
+            name="Step[${$('#addedSections').children().length - 1},${[x]}]"
+            value="${$(`#list-${sectionName.replaceAll(' ', '-')}`).children('li')[x].outerText}">`);
+    }
+
+
     $('#sectionName').val("");
     $('#listOfSteps').empty();
+    $('#addSection').prop("disabled", true);
   });
 </script>
