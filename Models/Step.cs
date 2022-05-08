@@ -3,15 +3,19 @@ using System;
 
 namespace PantryPlusRecipe.Models
 {
-  public class RecipeStep
+  public class Step
   {
-    public int RecipeStepId { get; set; }
-    public int RecipeId { get; set; }
+    public Step()
+    {
+      this.JoinEntities = new HashSet<StepRecipe>();
+    }
+    public int StepId { get; set; }
     public int StepNumber { get; set; }
-    public string Step { get; set; }
+    public string Details { get; set; }
     public int SectionNumber { get; set; }
     public string SectionName { get; set; }
 
+    public virtual ICollection<StepRecipe> JoinEntities { get; }
     public virtual ApplicationUser User { get; set; }
   }
 }

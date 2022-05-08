@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PantryPlusRecipe.Models;
 
 namespace PantryPlusRecipe.Migrations
 {
     [DbContext(typeof(PantryPlusRecipeContext))]
-    partial class PantryPlusRecipeContextModelSnapshot : ModelSnapshot
+    [Migration("20220508010047_FixJoinTableForRecipeSteps")]
+    partial class FixJoinTableForRecipeSteps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,6 +296,9 @@ namespace PantryPlusRecipe.Migrations
 
                     b.Property<string>("Details")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("SectionName")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");

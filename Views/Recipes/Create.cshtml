@@ -7,9 +7,14 @@
 
 
 <script>
-  function submitForm() {
-    //first sections
+  function createJson() {
+
     let postJson = {};
+    postJson.sections = [];
+    postJson.prepTime = $('#PrepMinutes').val();
+    postJson.cookTime = $('#CookMinutes').val();
+
+    //first sections
     let sections = [];
     $('#hiddenParams').children().each(function () {
       if ($(this).prop('name').includes('SectionName')) {
@@ -24,15 +29,44 @@
           steps.push($(this).prop('defaultValue'));
         }
       });
-      postJson[sections[x]] = steps;
+      let tempArray = [];
+      tempArray.push(sections[x]);
+      tempArray.push(steps);
+      postJson.sections.push(tempArray);
     }
 
+    //now ingredients
+
+    let ingredients = [];
+    $('#ingredientsList').children('li').each(function () {
+      ingredients.push($(this).prop('innerText'));
+    });
+    postJson.ingredients = ingredients;
     console.log(postJson);
+    return JSON.stringify(postJson);
   }
 
+  function submitAjax(jsonString) {
+    $.ajax(
+      {
+        type: 'POST',
+        dataType: 'JSON',
+        url: '/Recipes/Create',
+        data: { jsonPost: jsonString },
+        success:
+          function (response) {
+            // Generate HTML table.
+            alert("sucess");
+          },
+        error:
+          function (response) {
+            console.log("Error: ", response);
+          }
+      });
+  }
 
   $(`#submitForm`).submit(function (event) {
     event.preventDefault();
-    submitForm();
+    submitAjax(createJson());
   });
 </script>

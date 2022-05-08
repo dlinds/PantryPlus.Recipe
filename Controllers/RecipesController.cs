@@ -7,6 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PantryPlusRecipe.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Data;
+using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using System.Security.Principal;
+using RestSharp.Authenticators;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
+
 
 
 namespace PantryPlusRecipe.Controllers
@@ -14,11 +26,22 @@ namespace PantryPlusRecipe.Controllers
   [Authorize]
   public class RecipesController : Controller
   {
-    private readonly ILogger<PantryController> _logger;
-
-    public RecipesController(ILogger<PantryController> logger)
+    // private readonly ILogger<PantryController> _logger;
+    private readonly PantryPlusRecipeContext _db;
+    private readonly UserManager<ApplicationUser> _userManager;
+    public RecipesController(UserManager<ApplicationUser> userManager, PantryPlusRecipeContext db)
     {
-      _logger = logger;
+      _userManager = userManager;
+      _db = db;
+    }
+
+
+    public class PostRecipeJson
+    {
+      public Dictionary<string, string[]> sections { get; set; }
+      public List<string> ingredients { get; set; }
+      public int cookTime { get; set; }
+      public int prepTime { get; set; }
     }
 
     public IActionResult Index()
@@ -56,18 +79,48 @@ namespace PantryPlusRecipe.Controllers
     }
 
     [HttpPost]
-    public ActionResult Create(List<string> SectionName, string[][] Step)
+    public async Task<ActionResult> Create(string jsonPost)
     {
-      // Guid myuuid = Guid.NewGuid();
-      // string myuuidAsString = myuuid.ToString();
-      foreach (string section in SectionName)
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      dynamic posted = JObject.Parse(jsonPost);
+      Recipe recipe = new Recipe();
+      recipe.CookMinutes = posted.cookTime;
+      recipe.PrepMinutes = posted.prepTime;
+      int numOfSections = 0;
+      int numOfSteps = 0;
+      recipe.User = currentUser;
+      _db.Recipes.Add(recipe);
+      _db.SaveChanges();
+      // Console.WriteLine("ID......: " + recipe.RecipeId);
+      foreach (var section in posted.sections)
       {
-        Console.WriteLine(section);
-      }
-      Console.WriteLine("Sections: " + SectionName);
-      Console.WriteLine("Steps: " + Step.Length);
+        // Console.WriteLine(section[0]);
+        int index = 0;
+        foreach (var step in section[1])
+        {
+          string stepDetails = "STARTSTEP:-" + step;
+          stepDetails = stepDetails.Replace($"STARTSTEP:-{index + 1}. ", "");
+          // Console.WriteLine(stepDetails);
+          Step recipeStep = new Step();
+          recipeStep.StepNumber = index + 1;
+          recipeStep.Details = stepDetails;
+          recipeStep.SectionNumber = numOfSections + 1;
+          recipeStep.SectionName = section[0];
+          recipeStep.User = currentUser;
+          _db.Steps.Add(recipeStep);
+          _db.SaveChanges();
 
-      return RedirectToAction("Index");
+          _db.StepRecipes.Add(new StepRecipe() { RecipeId = recipe.RecipeId, StepId = recipeStep.StepId });
+          index++;
+          _db.SaveChanges();
+          numOfSteps++;
+        }
+        numOfSections++;
+      }
+
+      // _db.SaveChanges();
+      return Json(new { Message = "message" });
     }
     public ActionResult Recipe(int id)
     {
