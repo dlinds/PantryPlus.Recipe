@@ -128,7 +128,7 @@ namespace PantryPlusRecipe.Controllers
     }
     public async Task<ActionResult> Recipe(int id)
     {
-      Recipe model = await _db.Recipes.FindAsync(id);
+      Recipe model = await _db.Recipes.Include(r => r.JoinEntities).FirstOrDefaultAsync(r => r.RecipeId == id);
       return View(model);
     }
 
