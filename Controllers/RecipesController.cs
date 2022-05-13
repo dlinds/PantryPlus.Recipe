@@ -126,9 +126,10 @@ namespace PantryPlusRecipe.Controllers
       // _db.SaveChanges();
       return Json(new { Message = "message" });
     }
-    public ActionResult Recipe(int id)
+    public async Task<ActionResult> Recipe(int id)
     {
-      return View();
+      Recipe model = await _db.Recipes.FindAsync(id);
+      return View(model);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,1 +1,14 @@
-@await Html.PartialAsync("./Recipe/IngredientsAndNotes.cshtml")
+@model PantryPlusRecipe.Models.Recipe
+
+<div class="row m-3">
+  <div class="col-sm-4">
+    <div class="m-3 p-3 border rounded inset-shadow-sm">
+      @await Html.PartialAsync("./Recipe/LeftSide.cshtml")
+    </div>
+  </div>
+  <div class="col-sm-8">
+    <div class="m-3 p-3 border rounded inset-shadow-sm">
+      @await Html.PartialAsync("./Recipe/RightSide.cshtml")
+    </div>
+  </div>
+</div>
