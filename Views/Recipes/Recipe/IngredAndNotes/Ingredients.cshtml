@@ -1,78 +1,86 @@
-@model PantryPlusRecipe.Models.Recipe
+<h3 class="mb-3"><em>Ingredients</em></h3>
 
-<h3><em>Ingredients</em></h3>
-
-<div class="d-flex my-2">
-
-  <a href="" class="pt-1">
-    <i class="fas fa-cart-plus me-3"></i>
-  </a>
-  <span>
-    1/2 lb. Italian sausage (hot, mild
-    or sweet)
-  </span>
-</div>
-<div class="d-flex my-2">
-  <span>
+@foreach (var join in @Model.JoinEntitiesIngredients)
+{
+  <div class="d-flex my-2" data-bs-placement="right" title="You currently have this ingredient">
     <i class="fas fa-check me-3"></i>
-  </span>
-  <span>
-    2 cloves garlic
-  </span>
-</div>
-<div class="d-flex my-2">
-  <a class="pt-1">
-    <i class="fas fa-cart-plus me-3"></i>
-  </a>
-  <span>
-    2 Tbsp tomato paste
-  </span>
-</div>
-<div class="d-flex my-2">
-  <span class="pt-1">
-    <i class="fas fa-check me-3"></i>
-  </span>
-  <span>
-    1 28oz. can crushed tomatoes
-  </span>
-</div>
-<div class="d-flex my-2">
-  <a class="pt-1">
-    <i class="fas fa-cart-plus me-3"></i>
+    <span>
+      @join.Ingredient.Name
     </span>
-    <a>
-      1 tsp Italian seasoning blend
-      </span>
-</div>
-<div class="d-flex my-2">
-  <span class="pt-1">
-    <i class="fas fa-check me-3"></i>
-  </span>
-  <span>
-    1/2 Cup Water
-  </span>
-</div>
-<div class="d-flex my-2">
-  <span class="pt-1">
-    <i class="fas fa-check me-3"></i>
-  </span>
-  <span>
-    1/2 lb. pasta
-  </span>
-</div>
-<div class="d-flex my-2">
-  <a class="pt-1">
-    <i class="fas fa-cart-plus me-3"></i>
+  </div>
+}
+
+
+@* <div class="d-flex my-2">
+  <a href="" class="pt-1">
+  <i class="fas fa-cart-plus me-3"></i>
   </a>
   <span>
-    1/3 cup heavy cream
+  1/2 lb. Italian sausage (hot, mild
+  or sweet)
   </span>
-</div>
-<div class="d-flex my-2">
+  </div>
+  <div class="d-flex my-2">
+  <span>
+  <i class="fas fa-check me-3"></i>
+  </span>
+  <span>
+  2 cloves garlic
+  </span>
+  </div>
+  <div class="d-flex my-2">
   <a class="pt-1">
-    <i class="fas fa-cart-plus me-3"></i>
+  <i class="fas fa-cart-plus me-3"></i>
   </a>
   <span>
-    4 oz. fresh spinach
+  2 Tbsp tomato paste
   </span>
-</div>
+  </div>
+  <div class="d-flex my-2">
+  <span class="pt-1">
+  <i class="fas fa-check me-3"></i>
+  </span>
+  <span>
+  1 28oz. can crushed tomatoes
+  </span>
+  </div>
+  <div class="d-flex my-2">
+  <a class="pt-1">
+  <i class="fas fa-cart-plus me-3"></i>
+  </span>
+  <a>
+  1 tsp Italian seasoning blend
+  </span>
+  </div>
+  <div class="d-flex my-2">
+  <span class="pt-1">
+  <i class="fas fa-check me-3"></i>
+  </span>
+  <span>
+  1/2 Cup Water
+  </span>
+  </div>
+  <div class="d-flex my-2">
+  <span class="pt-1">
+  <i class="fas fa-check me-3"></i>
+  </span>
+  <span>
+  1/2 lb. pasta
+  </span>
+  </div>
+  <div class="d-flex my-2">
+  <a class="pt-1">
+  <i class="fas fa-cart-plus me-3"></i>
+  </a>
+  <span>
+  1/3 cup heavy cream
+  </span>
+  </div>
+  <div class="d-flex my-2">
+  <a class="pt-1">
+  <i class="fas fa-cart-plus me-3"></i>
+  </a>
+  <span>
+  4 oz. fresh spinach
+  </span>
+  </div> *@

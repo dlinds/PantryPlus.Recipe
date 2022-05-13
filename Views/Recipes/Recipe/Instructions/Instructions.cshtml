@@ -3,7 +3,7 @@
   @for (int x = 1; x <= @Model.NumberOfSections; x++)
   {
     string sectionName = "";
-    @foreach (var join in @Model.JoinEntities)
+    @foreach (var join in @Model.JoinEntitiesSteps)
     {
       @if (join.Step.SectionNumber == x)
       {
@@ -12,7 +12,7 @@
     }
     <h4 class="mt-3">@sectionName</h4>
     <ol class="list-group list-group-light list-group-numbered me-3">
-      @foreach (var join in @Model.JoinEntities)
+      @foreach (var join in @Model.JoinEntitiesSteps)
       {
 
         @if (join.Step.SectionNumber == x)

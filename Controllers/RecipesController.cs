@@ -123,12 +123,25 @@ namespace PantryPlusRecipe.Controllers
       }
       recipe.NumberOfSections = numOfSections;
       recipe.NumberOfSteps = numOfSteps;
-      // _db.SaveChanges();
+      _db.SaveChanges();
+
+      foreach (var postedIngred in posted.ingredients)
+      {
+        Ingredient ingredient = new Ingredient();
+        ingredient.Name = postedIngred;
+        ingredient.User = currentUser;
+        _db.Ingredients.Add(ingredient);
+        _db.SaveChanges();
+        _db.IngredientRecipes.Add(new IngredientRecipe() { RecipeId = recipe.RecipeId, IngredientId = ingredient.IngredientId });
+        _db.SaveChanges();
+      }
+
+
       return Json(new { Message = "message" });
     }
     public async Task<ActionResult> Recipe(int id)
     {
-      Recipe model = await _db.Recipes.Include(r => r.JoinEntities).FirstOrDefaultAsync(r => r.RecipeId == id);
+      Recipe model = await _db.Recipes.Include(r => r.JoinEntitiesSteps).FirstOrDefaultAsync(r => r.RecipeId == id);
       return View(model);
     }
 
