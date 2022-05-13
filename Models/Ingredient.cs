@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace PantryPlusRecipe.Models
 {
@@ -16,5 +18,16 @@ namespace PantryPlusRecipe.Models
 
     public virtual ApplicationUser User { get; set; }
     public virtual ICollection<IngredientRecipe> JoinEntities { get; }
+
+
+    public static string GetKrogerProduct(string token, string searchTerm, int storeId)
+    {
+      var id = KrogerAPIHelper.GetProductListings(token, searchTerm, storeId);
+      var result = id.Result;
+      JObject jsonResponse = JObject.Parse(result);
+      return jsonResponse.ToString();
+    }
+
+
   }
 }

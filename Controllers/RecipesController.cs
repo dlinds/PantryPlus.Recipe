@@ -150,6 +150,20 @@ namespace PantryPlusRecipe.Controllers
       return View(model);
     }
 
+
+    public ActionResult GetProductListings(string searchTerm)
+    {
+      string user = _userManager.GetUserAsync(User).Result?.Id;
+      Console.WriteLine("user " + user.GetType());
+      var storeId = _userManager.GetUserAsync(User).Result?.KrogerStoreId;
+      Console.WriteLine("Kroger Id " + storeId);
+
+      // string token = _db.Tokens.FirstOrDefault(t => t.User == user);
+
+      // Ingredient.GetKrogerProduct(token, searchTerm, storeId);
+      return Json(new { Message = "message" });
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

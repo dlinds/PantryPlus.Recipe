@@ -51,30 +51,6 @@ namespace PantryPlusRecipe.Models
       return response.Content;
     }
 
-
-    //     public static async Task<string> GetProfileId(string token)
-    // {
-    //   var client = new RestClient("https://api.kroger.com/v1/identity/profile");
-    //   client.Timeout = -1;
-    //   var request = new RestRequest(Method.GET);
-    //   request.AddHeader("content-type", "application/x-www-form-urlencoded");
-    //   request.AddHeader("Authorization", $"Bearer {token}");
-    //   IRestResponse response = await client.ExecuteTaskAsync(request);
-    //   Console.WriteLine("Profile ID::::::::::::::::::: " + response.Content);
-    //   return response.Content;
-    // }
-
-    // public static async Task<string> GetMilk(string token)
-    // {
-    //   var client = new RestClient("https://api.kroger.com/v1/products?filter.term=milk&filter.limit=5");
-    //   client.Timeout = -1;
-    //   var request = new RestRequest(Method.GET);
-    //   request.AddHeader("Authorization", $"Bearer {token}");
-    //   IRestResponse response = await client.ExecuteTaskAsync(request);
-    //   Console.WriteLine(response.Content);
-    //   return response.Content;
-    // }
-
     public static async Task<string> GetStoreListings(string token, int zipcode, int miles, string store)
     {
       var client = new RestClient($"https://api.kroger.com/v1/locations?filter.zipCode.near={zipcode}&filter.limit=30&filter.radiusInMiles={miles}&filter.chain={store}");
@@ -83,6 +59,18 @@ namespace PantryPlusRecipe.Models
       request.AddHeader("Authorization", $"Bearer {token}");
       IRestResponse response = await client.ExecuteTaskAsync(request);
       // Console.WriteLine(response.Content);
+      return response.Content;
+    }
+
+
+    public static async Task<string> GetProductListings(string token, string searchTerm, int storeId)
+    {
+      var client = new RestClient($"https://api.kroger.com/v1/products?filter.term={searchTerm}&filter.locationId={storeId}&filter.fulfillment=inStore&filter.limit=10");
+      client.Timeout = -1;
+      var request = new RestRequest(Method.GET);
+      request.AddHeader("Authorization", $"Bearer {token}");
+      IRestResponse response = await client.ExecuteTaskAsync(request);
+      Console.WriteLine(response.Content);
       return response.Content;
     }
 
