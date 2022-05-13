@@ -178,3 +178,22 @@ body {
   color: #FFF;
   background-color: #1b6ec2;
 }
+
+.centeredOverlayText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+}
+
+.wrapperForOverlay {
+  position: relative;
+  text-align: center;
+}
+
+.headerImgForOverlay {
+  height: 10em;
+  filter: brightness(55%);
+  object-fit: cover;
+}
