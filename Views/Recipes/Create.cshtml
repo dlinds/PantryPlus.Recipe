@@ -42,7 +42,12 @@
 
     let ingredients = [];
     $('#ingredientsList').children('li').each(function () {
-      ingredients.push($(this).prop('innerText'));
+      @* ingredients.push($(this).prop('innerText')); *@
+        let ingredArray = [];
+      ingredArray.push($(this).children('.ingredLICount').prop('innerText'));
+      ingredArray.push($(this).children('.ingredLIUnit').prop('innerText'));
+      ingredArray.push($(this).children('.ingredLIIngredient').prop('innerText'));
+      ingredients.push(ingredArray);
     });
     postJson.ingredients = ingredients;
     console.log(postJson);
@@ -71,5 +76,6 @@
   $(`#submitForm`).submit(function (event) {
     event.preventDefault();
     submitAjax(createJson());
+    createJson();
   });
 </script>

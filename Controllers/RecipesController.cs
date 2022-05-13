@@ -128,7 +128,12 @@ namespace PantryPlusRecipe.Controllers
       foreach (var postedIngred in posted.ingredients)
       {
         Ingredient ingredient = new Ingredient();
-        ingredient.Name = postedIngred;
+        ingredient.Count = postedIngred[0];
+        if (postedIngred[1] != "")
+        {
+          ingredient.Measurement = postedIngred[1];
+        }
+        ingredient.Name = postedIngred[2];
         ingredient.User = currentUser;
         _db.Ingredients.Add(ingredient);
         _db.SaveChanges();

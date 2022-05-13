@@ -30,6 +30,7 @@
           <option value="tsp">TSP</option>
           <option value="lb">LB</option>
           <option value="oz">OZ</option>
+          <option value="pinch">Pinch</option>
         </select>
       </div>
     </div>
@@ -56,13 +57,14 @@
   $(`#addIngredientBtn`).click(function () {
     count = $("#ingredientCount").val();
     unit = $(`#unitSelection`).val();
-    if (unit === null) {
-      unit = '';
+    let fillerText = " ";
+    if (unit !== null) {
+      fillerText = " of ";
     } else {
-      unit += " of"
+      unit = '';
     }
     ingredient = $(`#ingredientInput`).val();
-    $('#ingredientsList').append(`<li class="list-group-item py-2">${count} ${unit} ${ingredient}</li>`);
+    $('#ingredientsList').append(`<li class="list-group-item py-2"><span class="ingredLICount">${count}</span> <span class="ingredLIUnit">${unit}</span>${fillerText}<span class="ingredLIIngredient">${ingredient}</span></li>`);
     $("#ingredientCount").val('');
     $(`#ingredientInput`).val('');
     $(`#unitSelection`).val('default');

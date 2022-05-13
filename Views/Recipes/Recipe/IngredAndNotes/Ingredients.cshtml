@@ -5,6 +5,16 @@
   <div class="d-flex my-2" data-bs-placement="right" title="You currently have this ingredient">
     <i class="fas fa-check me-3"></i>
     <span>
+      @if (@join.Ingredient.Count > 0)
+      {
+        @join.Ingredient.Count
+      }
+
+      @if (join.Ingredient.Measurement != null)
+      {
+        @join.Ingredient.Measurement
+        @: of
+      }
       @join.Ingredient.Name
     </span>
   </div>
