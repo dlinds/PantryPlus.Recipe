@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-lg-4">
+    <div class="box bg-white rounded inset-shadow-sm ms-3 pb-4 mt-3">
+      <div class="text-dark p-3 pb-0">
+        <h3 class="fw-light" id="head">Name</h3>
+      </div>
+      <div class="form-outline mx-3 mt-3">
+        <input type="text" name="recipeName" id="recipeName" class="form-control shadow-sm" placeholder="ex: Australian Meat Pie">
+        <label for="recipeName" class="form-label">Recipe Name</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 87.2px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+      <div class="form-outline mx-3 mt-3">
+        <input type="text" name="recipeCost" id="recipeCost" class="form-control shadow-sm" placeholder="ex: $10">
+        <label for="recipeName" class="form-label">Cost</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 87.2px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+      <div class="form-outline mx-3 mt-3">
+        <input type="file" class="form-control rounded shadow-sm" style="border: 1px solid #bdbdbd;" id="customFile" />
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="box bg-white rounded inset-shadow-sm ms-3 mx-lg-3 pb-2 mt-3 mt-lg-3">
+      <div class="p-3 pb-0">
+        <h3 class="fw-light" id="head">Notes</h3>
+      </div>
+      <div class="m-3">
+        <select class="form-select form-control shadow-sm" id="categorySelection" style="color:rgba(0,0,0,.6)!important" aria-label="Default select example">
+          <option selected disabled value="default">Meal Category</option>
+          <option>Breakfast</option>
+          <option>Lunch</option>
+          <option>Dinner</option>
+          <option>Dessert</option>
+          <option>Snack</option>
+        </select>
+      </div>
+      <div class="form-outline m-3">
+        <textarea class="form-control shadow-sm" id="notes" rows="3"></textarea>
+        <label class="form-label" for="notes" style="margin-left: 0px;">Any Notes About the Recipe?</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 60px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

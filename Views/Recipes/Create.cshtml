@@ -1,6 +1,6 @@
 <form action="/Recipes/Create" method="post" id="submitForm">
   <button type="submit" class="btn btn-primary my-2 mx-1 mx-md-5">Save</button>
-  <div class="bg-white mx-1 mx-md-5 pe-3 pe-lg-1 rounded inset-shadow-sm border">
+  <div class="mx-1 mx-md-4 pe-3 pe-lg-1">
     @await Html.PartialAsync("./Create/RecipeForm.cshtml")
   </div>
 </form>
@@ -13,7 +13,10 @@
     postJson.sections = [];
     postJson.prepTime = $('#PrepMinutes').val();
     postJson.cookTime = $('#CookMinutes').val();
-
+    postJson.cost = $('#recipeCost').val();
+    postJson.notes = $('#notes').val();
+    postJson.categoryName = $('#categorySelection').val();
+    postJson.recipeName = $('#recipeName').val();
     //first sections
     let sections = [];
     $('#hiddenParams').children().each(function () {

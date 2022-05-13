@@ -87,12 +87,15 @@ namespace PantryPlusRecipe.Controllers
       Recipe recipe = new Recipe();
       recipe.CookMinutes = posted.cookTime;
       recipe.PrepMinutes = posted.prepTime;
+      recipe.CategoryName = posted.categoryName;
+      recipe.Cost = posted.cost;
+      recipe.Notes = posted.notes;
+      recipe.Name = posted.recipeName;
       int numOfSections = 0;
       int numOfSteps = 0;
       recipe.User = currentUser;
       _db.Recipes.Add(recipe);
       _db.SaveChanges();
-      // Console.WriteLine("ID......: " + recipe.RecipeId);
       foreach (var section in posted.sections)
       {
         // Console.WriteLine(section[0]);
@@ -118,7 +121,8 @@ namespace PantryPlusRecipe.Controllers
         }
         numOfSections++;
       }
-
+      recipe.NumberOfSections = numOfSections;
+      recipe.NumberOfSteps = numOfSteps;
       // _db.SaveChanges();
       return Json(new { Message = "message" });
     }
