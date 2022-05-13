@@ -8,6 +8,7 @@ namespace PantryPlusRecipe.Models
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<Token> Tokens { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
+    public DbSet<IngredientRecipe> IngredientRecipes { get; set; }
     public DbSet<Recipe> Recipes { get; set; }
     public DbSet<Step> Steps { get; set; }
     public DbSet<StepRecipe> StepRecipes { get; set; }
