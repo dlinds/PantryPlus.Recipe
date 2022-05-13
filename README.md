@@ -102,7 +102,9 @@ _MIT_
 Copyright (c) _5-1-2022_ _Daniel Lindsey_
 
 <br />
+
 ## User Flows and Design Templates
+
 
 <img src="./ProjectInfoAssets/flow_userLogin.png"
      alt="User Login Flow"
@@ -116,12 +118,12 @@ Copyright (c) _5-1-2022_ _Daniel Lindsey_
 
 <br />
 
-<img src="./ProjectInfoAssets/possible-register-page.png"
+<img src="./ProjectInfoAssets/possible-register-page.PNG"
      alt="User Login Flow"
      style="margin-right: 10px;" />
 <br />
 
-<img src="./ProjectInfoAssets/recipes-page.png"
+<img src="./ProjectInfoAssets/recipes-page.PNG"
      alt="User Login Flow"
      style="margin-right: 10px;" />
 
@@ -129,4 +131,10 @@ Copyright (c) _5-1-2022_ _Daniel Lindsey_
 
 <img src="./ProjectInfoAssets/single-recipe-view.PNG"
      alt="User Login Flow"
+     style="margin-right: 10px;" />
+
+<br>
+
+<img src="./ProjectInfoAssets/itemSearchModal.PNG"
+     alt="Item Search Modal.PNG"
      style="margin-right: 10px;" />
