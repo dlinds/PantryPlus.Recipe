@@ -36,7 +36,7 @@
 
 <!-- Second modal dialog -->
 <div class="modal fade" id="ingredientSecondModal-@ViewData["id"]" aria-hidden="true" aria-labelledby="exampleModalToggleLabel22" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered" style="max-width: 650px;">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 850px;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalToggleLabel22">Add @ViewData["name"] to your cart</h5>
@@ -46,36 +46,36 @@
         <div class="text-center">
           <h4>Fred Meyer - Stadium</h4>
           <div>
-            <div class="row">
-              <div class="text-center">
-                <button type="button" id="searchIngredientButton-@ViewData["id"]" class="btn btn-primary mt-3 w-25">Search</button>
-              </div>
-              <div id="searchIngredientResults-@ViewData["id"]">
-                @* @for (int x = 0; x < 10; x++)
-                  {
-                  <div class="col-sm-6">
-                  <div class="border rounded p-3 pt-1 m-3 shadow-sm">
-                  <div class="row">
-                  <div class="col-sm-3">
-                  <img src="https://www.kroger.com/product/images/medium/front/0001111072977" alt="Nutmeg Photo" style="height: 7em !important;">
-                  </div>
-                  <div class="col-sm-9">
-                  <div class="text-end">
-                  <i class="fas fa-map-marker-alt mb-2"></i>
-                  Aisle 13
-                  <div>
-                  Private Selection™ Ground Nutmeg
-                  <br />
-                  1.72OZ
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  <span class="text-primary fs-5 me-5">$5.49</span><button type="button" class="btn btn-primary btn-sm mt-3">Add to Cart</button>
-                  </div>
-                  </div>
-                  } *@
-              </div>
+            <div class="text-center">
+              <button type="button" id="searchIngredientButton-@ViewData["id"]" class="btn btn-primary mt-3 w-25">Search</button>
+            </div>
+            <div id="searchIngredientResults-@ViewData["id"]">
+              @* <div class="row">
+                @for (int x = 0; x < 10; x++)
+                {
+                <div class="col-sm-6">
+                <div class="border rounded p-3 pt-1 m-3 shadow-sm">
+                <div class="row">
+                <div class="col-sm-3">
+                <img src="https://www.kroger.com/product/images/medium/front/0001111072977" alt="Nutmeg Photo" style="height: 7em !important;">
+                </div>
+                <div class="col-sm-9">
+                <div class="text-end">
+                <i class="fas fa-map-marker-alt mb-2"></i>
+                Aisle 13
+                <div>
+                Private Selection™ Ground Nutmeg
+                <br />
+                1.72OZ
+                </div>
+                </div>
+                </div>
+                </div>
+                <span class="text-primary fs-5 me-5">$5.49</span><button type="button" class="btn btn-primary btn-sm mt-3">Add to Cart</button>
+                </div>
+                </div>
+                }
+                </div> *@
             </div>
           </div>
         </div>
@@ -88,10 +88,64 @@
     </div>
   </div>
 </div>
+<style>
 
+</style>
 <script>
   $(`#searchIngredientButton-@ViewData["id"]`).click(function () {
+    function printResults(jsonResult) {
+      console.log(jsonResult);
+      let htmlString = `<div class="row">`;
+      jsonResult.forEach((item) => {
+        htmlString += `
+                <div class="col-sm-6">
+                  <div class="border rounded p-3 pt-1 m-3 shadow-sm" style="min-height: 13em; position: relative;">
+                    <div class="row">
+                      <div class="col-sm-5 ps-0">`;
+        let imgUrl;
+        item.images.forEach((imgCategory) => {
+          if (imgCategory.featured) {
+            imgCategory.sizes.forEach((image) => {
+              if (image.size === 'medium') {
+                imgUrl = image.url;
+              }
+            });
+          }
+        });
+        htmlString += `<img src="${imgUrl}" alt="Photo of ${item.description}" class="rounded w-100" style="max-width: fit-content;">
+                      </div>
+                      <div class="col-sm-7">
+                        <div class="text-end">
+                          <i class="fas fa-map-marker-alt mb-2"></i>`;
+        let aisle = '';
+        item.aisleLocations.forEach((aisleLoc) => {
+          if (aisleLoc.description.toLowerCase().includes("aisle")) {
+            aisle = aisleLoc.description.toLowerCase();
+          }
+        });
+        htmlString += `${aisle}<div>
+                        ${item.description}
+                        <br />
+                        ${item.items[0].size}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="position: absolute; bottom: 4%; left: 25%;">
+                  <span class="text-primary fs-5 me-5">
+                    $${item.items[0].price.regular}
+                  </span>
+                  <button type="button" class="btn btn-primary btn-sm mt-3">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+                `;
+      });
 
+      $('#searchIngredientResults-@ViewData["id"]').html(`</div>${htmlString}`);
+    }
 
     $.ajax(
       {
@@ -101,9 +155,9 @@
         data: { searchTerm: '@ViewData["name"]' },
         success:
           function (response) {
-            // Generate HTML table.
-            alert("sucess");
-            console.log("Success: ", response);
+            printResults(JSON.parse(response).data.sort(function (a, b) {
+              return a.productId - b.productId;
+            }));
           },
         error:
           function (response) {
