@@ -151,17 +151,19 @@ namespace PantryPlusRecipe.Controllers
     }
 
 
-    public ActionResult GetProductListings(string searchTerm)
+    public async Task<ActionResult> GetProductListings(string searchTerm)
     {
-      string user = _userManager.GetUserAsync(User).Result?.Id;
-      Console.WriteLine("user " + user.GetType());
-      var storeId = _userManager.GetUserAsync(User).Result?.KrogerStoreId;
-      Console.WriteLine("Kroger Id " + storeId);
+      var apiCallTask = ApplicationUser.GetProductToken();
+      Console.WriteLine("apiCallTask " + apiCallTask);
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      int? storeId = _userManager.GetUserAsync(User).Result?.KrogerStoreId;
 
-      // string token = _db.Tokens.FirstOrDefault(t => t.User == user);
+      // Token token = _db.Tokens.FirstOrDefault(t => t.User == currentUser);
+      // Console.WriteLine("Current token: " + token.TokenValue);
+      var result = Ingredient.GetKrogerProduct(apiCallTask, searchTerm, storeId);
 
-      // Ingredient.GetKrogerProduct(token, searchTerm, storeId);
-      return Json(new { Message = "message" });
+      return Json(new { Message = result });
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

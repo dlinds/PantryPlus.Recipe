@@ -20,7 +20,7 @@ namespace PantryPlusRecipe.Models
     public virtual ICollection<IngredientRecipe> JoinEntities { get; }
 
 
-    public static string GetKrogerProduct(string token, string searchTerm, int storeId)
+    public static string GetKrogerProduct(string token, string searchTerm, int? storeId)
     {
       var id = KrogerAPIHelper.GetProductListings(token, searchTerm, storeId);
       var result = id.Result;
