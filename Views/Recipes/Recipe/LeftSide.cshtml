@@ -10,3 +10,136 @@
 <div class="pt-3">
   @await Html.PartialAsync("./IngredAndNotes/Notes.cshtml")
 </div>
+
+
+<script>
+  const retrieveResults = (event, id, name) => {
+    event.preventDefault();
+    $(`#pagination-${id}`).addClass('d-none');
+    $(`#searchIngredientResults-${id}`).html(`<div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>`);
+    let page = parseInt(event.target.innerText);
+    callAjax(id, name, page);
+  }
+
+  function callAjax(ingredientId, searchTerm, page) {
+    if (!page) {
+      page = 1;
+    }
+    $.ajax(
+      {
+        type: 'GET',
+        dataType: 'JSON',
+        url: '/Recipes/GetProductListings',
+        data: { searchTerm: `${searchTerm}`, page: `${page}` },
+        success:
+          function (response) {
+            let jsonOut = JSON.parse(response);
+            printResults(ingredientId, jsonOut.data.sort(function (a, b) {
+              return a.productId - b.productId;
+            }));
+            $(`#searchIngredientButton-${ingredientId}`).hide();
+            $(`#pagination-${ingredientId}`).removeClass('d-none');
+            generatePagination(ingredientId, jsonOut.meta.pagination.total, page, searchTerm);
+          },
+        error:
+          function (response) {
+            console.log("Error: ", response);
+            $(`#searchIngredientButton-${ingredientId}`).show();
+            $(`#pagination-${ingredientId}`).addClass('d-none');
+          }
+      });
+  }
+  const generatePagination = (id, total, page = 1, searchTerm) => {
+    $(`#paginationUL-${id}`).html('');
+
+    console.log("here :", id, total, page, searchTerm);
+    outputHtml = `<li class="page-item">
+              <a class="page-link" href="#" onclick='retrieveResults(event, ${id}, "${searchTerm}")' aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>`;
+    let pageStart = page;
+    if (pageStart <= 3) {
+      pageStart = 1;
+    } else {
+      pageStart = page - 2;
+    }
+    console.log('pageStart: ', pageStart)
+    for (let x = 1; x <= 5 && x < Math.ceil(total / 6); x++) {
+      console.log(x);
+
+      outputHtml += `<li class="page-item ${(pageStart === page) ? "active" : ""}">
+              <a class="page-link" href="#" onclick='retrieveResults(event, ${id}, "${searchTerm}")'>${pageStart}</span></a>
+            </li>`;
+      pageStart++;
+    }
+    outputHtml += `
+            <li class="page-item">
+              <a class="page-link" href="#" onclick='retrieveResults(event, ${id}, "${searchTerm}")' aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>`;
+
+    $(`#paginationUL-${id}`).html(outputHtml);
+    $(`#pagination-${id}`).removeClass('d-none');
+  }
+
+  function printResults(ingredientId, jsonResult) {
+    console.log("left side: ", jsonResult);
+    let htmlString = `<div class="row">`;
+    jsonResult.forEach((item) => {
+      htmlString += `
+                <div class="col-sm-6">
+                  <div class="border rounded p-3 pt-1 m-3 shadow-sm" style="min-height: 13em; position: relative;">
+                    <div class="row">
+                      <div class="col-sm-5 ps-0">`;
+      let imgUrl;
+      item.images.forEach((imgCategory) => {
+        if (imgCategory.featured) {
+          imgCategory.sizes.forEach((image) => {
+            if (image.size === 'medium') {
+              imgUrl = image.url;
+            }
+          });
+        }
+      });
+      htmlString += `<img src="${imgUrl}" alt="Photo of ${item.description}" class="rounded w-100" style="max-width: fit-content;">
+                      </div>
+                      <div class="col-sm-7">
+                        <div class="text-end">
+                          <i class="fas fa-map-marker-alt mb-2"></i>`;
+      let aisle = '';
+      item.aisleLocations.forEach((aisleLoc) => {
+        if (aisleLoc.description.toLowerCase().includes("aisle")) {
+          aisle = aisleLoc.description.toLowerCase();
+        }
+      });
+      if (aisle === '') {
+        aisle = (item.aisleLocations[0].description) ? item.aisleLocations[0].description : "";
+      }
+      htmlString += `&nbsp;${aisle.toLowerCase()}<div>
+                        ${item.description}
+                        <br />
+                        ${item.items[0].size}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="position: absolute; bottom: 4%; right: 4%;">
+                  <span class="text-primary fs-5 me-5">
+                    $${(item.items[0].price.regular) ? item.items[0].price.regular : ''}
+                  </span>
+                  <button type="button" class="btn btn-primary btn-sm mt-3">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+                `;
+    });
+
+    $(`#searchIngredientResults-${ingredientId}`).html(`</div>${htmlString}`);
+  }
+</script>

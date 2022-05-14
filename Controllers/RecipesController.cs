@@ -147,17 +147,18 @@ namespace PantryPlusRecipe.Controllers
     public async Task<ActionResult> Recipe(int id)
     {
       Recipe model = await _db.Recipes.Include(r => r.JoinEntitiesSteps).FirstOrDefaultAsync(r => r.RecipeId == id);
+      ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
       return View(model);
     }
 
 
-    public async Task<JsonResult> GetProductListings(string searchTerm)
+    public async Task<JsonResult> GetProductListings(string searchTerm, int page)
     {
       var apiCallTask = ApplicationUser.GetProductToken();
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       var currentUser = await _userManager.FindByIdAsync(userId);
       int? storeId = _userManager.GetUserAsync(User).Result?.KrogerStoreId;
-      var result = Ingredient.GetKrogerProduct(apiCallTask, searchTerm, storeId);
+      var result = Ingredient.GetKrogerProduct(apiCallTask, searchTerm, storeId, page);
       Console.WriteLine(result);
       return Json(result);
     }

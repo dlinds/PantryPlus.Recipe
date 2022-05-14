@@ -63,9 +63,10 @@ namespace PantryPlusRecipe.Models
     }
 
 
-    public static async Task<string> GetProductListings(string token, string searchTerm, int? storeId)
+    public static async Task<string> GetProductListings(string token, string searchTerm, int? storeId, int page)
     {
-      var client = new RestClient($"https://api.kroger.com/v1/products?filter.term={searchTerm}&filter.locationId={storeId}&filter.fulfillment=inStore&filter.limit=10");
+      page = ((page - 1) * 6) + 1;
+      var client = new RestClient($"https://api.kroger.com/v1/products?filter.term={searchTerm}&filter.locationId={storeId}&filter.fulfillment=inStore&filter.start={page}&filter.limit=6");
       client.Timeout = -1;
       var request = new RestRequest(Method.GET);
       request.AddHeader("Authorization", $"Bearer {token}");
