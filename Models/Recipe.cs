@@ -9,6 +9,7 @@ namespace PantryPlusRecipe.Models
     {
       this.JoinEntitiesSteps = new HashSet<StepRecipe>();
       this.JoinEntitiesIngredients = new HashSet<IngredientRecipe>();
+      this.JoinEntitiesCart = new HashSet<CartRecipe>();
     }
     public int RecipeId { get; set; }
     public string Name { get; set; }
@@ -23,6 +24,7 @@ namespace PantryPlusRecipe.Models
 
     public virtual ICollection<StepRecipe> JoinEntitiesSteps { get; }
     public virtual ICollection<IngredientRecipe> JoinEntitiesIngredients { get; }
+    public virtual ICollection<CartRecipe> JoinEntitiesCart { get; }
     public virtual ApplicationUser User { get; set; }
   }
 }
