@@ -9,3 +9,33 @@
     </div>
   </div>
 </div>
+<button id="test" type="button" class="btn btn-primary">Test</button>
+
+<script>
+  $('#test').click(function () {
+    let test = {};
+    test.data = { items: [] };
+    test.data.items.push({ "upc": "0001111040190", "quantity": 2 });
+    test.data.items.push({ "upc": "0001111008485", "quantity": 1 });
+    test.data.items.push({ "upc": "0001200018119", "quantity": 4 });
+
+    submitAjax(test)
+  });
+  function submitAjax(jsonString) {
+    $.ajax(
+      {
+        type: 'POST',
+        dataType: 'JSON',
+        url: '/Cart/PutToCart',
+        data: { jsonPost: JSON.stringify(jsonString) },
+        success:
+          function (response) {
+            console.log(response);
+          },
+        error:
+          function (response) {
+            console.log("Error: ", response);
+          }
+      });
+  }
+</script>
