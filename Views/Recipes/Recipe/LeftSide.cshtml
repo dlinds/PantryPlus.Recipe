@@ -91,10 +91,10 @@
     let htmlString = `<div class="row">`;
     jsonResult.forEach((item) => {
       htmlString += `
-                <div class="col-sm-6">
-                  <div class="border rounded p-3 pt-1 m-3 shadow bg-white" style="min-height: 13em; position: relative;">
+                <div class="col-md-6">
+                  <div class="border rounded p-3 pt-1 m-3 shadow bg-white">
                     <div class="row">
-                      <div class="col-sm-5 ps-0">`;
+                      <div class="col-md-4 ps-0" style="max-height:9em;overflow:hidden;">`;
       let imgUrl;
       item.images.forEach((imgCategory) => {
         if (imgCategory.featured) {
@@ -105,9 +105,9 @@
           });
         }
       });
-      htmlString += `<img src="${imgUrl}" alt="Photo of ${item.description}" class="rounded w-100" style="max-width: fit-content;">
+      htmlString += `<img src="${imgUrl}" alt="Photo of ${item.description}" class="rounded" style="max-height: 100%; width: auto !important;">
                       </div>
-                      <div class="col-sm-7">
+                      <div class="col-md-8">
                         <div class="text-end">
                           <i class="fas fa-map-marker-alt mb-2"></i>`;
       let aisle = '';
@@ -121,27 +121,23 @@
       }
       htmlString += `&nbsp;${aisle.toLowerCase()}<div>
                         ${item.description}
-                        <br />
-                        ${item.items[0].size}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div style="position: absolute; bottom: 4%; right: 4%;">
-                  <span class="text-primary fs-5 me-2 fw-light">`;
+                        <p class="text-primary fs-5 fw-light mb-0 mt-3">`;
       let itemPrice;
       if (item.items[0].price && item.items[0].price.promo === 0) {
         itemPrice = `$${item.items[0].price.regular.toFixed(2)}`;
       } else if (item.items[0].price && item.items[0].price.promo > 0) {
-        itemPrice = `<strike class="me-2">$${item.items[0].price.regular.toFixed(2)}</strike> $${item.items[0].price.promo.toFixed(2)}`;
+        itemPrice = `<strike class="me-2">$${item.items[0].price.regular.toFixed(2)}</strike> <span style="background-color: #fed241;" class="text-dark">$${item.items[0].price.promo.toFixed(2)}</span>`;
       } else {
         itemPrice = '$-.--';
       }
 
-      htmlString += `${itemPrice}</span>
-                  <button type="button" class="btn btn-primary btn-sm mt-3">
+      htmlString += `${itemPrice} <span class="text-dark fs-6">/ ${item.items[0].size}</span></p>
+                  <button type="button" class="btn btn-primary btn-sm">
                     Add to Cart
                   </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
