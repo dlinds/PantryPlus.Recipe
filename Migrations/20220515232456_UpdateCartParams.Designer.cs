@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PantryPlusRecipe.Models;
 
 namespace PantryPlusRecipe.Migrations
 {
     [DbContext(typeof(PantryPlusRecipeContext))]
-    partial class PantryPlusRecipeContextModelSnapshot : ModelSnapshot
+    [Migration("20220515232456_UpdateCartParams")]
+    partial class UpdateCartParams
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

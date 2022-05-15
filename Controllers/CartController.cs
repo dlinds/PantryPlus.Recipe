@@ -71,7 +71,7 @@ namespace PantryPlusRecipe.Controllers
       var user = await _userManager.GetUserAsync(User);
       var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
       // currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.TokenAuthType == "cart.basic:write");
-      var response = Cart.PutInCart(currentToken.TokenValue, body);
+      var response = Cart.PutInKrogerCart(currentToken.TokenValue, body);
       return Json(response);
     }
 

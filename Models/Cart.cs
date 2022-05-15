@@ -19,13 +19,14 @@ namespace PantryPlusRecipe.Models
     public string KrogerImgLink { get; set; }
     public float KrogerCost { get; set; }
     public int ItemCount { get; set; }
+    public int CountPlacedInCart { get; set; }
 
     public virtual ICollection<CartRecipe> JoinEntities { get; }
     public virtual ApplicationUser User { get; set; }
 
-    public static string PutInCart(string token, string body)
+    public static string PutInKrogerCart(string token, string body)
     {
-      return KrogerAPIHelper.PutProductsInCart(token, body).ToString();
+      return KrogerAPIHelper.PutProductsInKrogerCart(token, body).ToString();
     }
   }
 }

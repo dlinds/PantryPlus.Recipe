@@ -13,12 +13,8 @@
           <button type="button" class="btn btn-primary btn-sm mt-3">Add to Pantry</button>
         </p>
         <p class="mt-4 p-4 bg-light bg-gradient border rounded shadow fw-normal">
-          Add it to my PantryPlus shopping list without Kroger item info!
-          <br />
-          <button type="button" class="btn btn-primary btn-sm mt-3">Add to List</button>
-        </p>
-        <p class="mt-4 p-4 bg-light bg-gradient border rounded shadow fw-normal">
-          Add it to my Kroger shopping cart or Pantry shopping list! <em>(recommended)</em>
+          Add it to my PantryPlus shopping list! <em>(recommended)</em>
+          <small>From there, you can add it to your Kroger account</small>
           <br />
           <button class="btn btn-primary btn-sm mt-3" id='openKrogerSearch-@ViewData["id"]' data-mdb-target="#ingredientSecondModal-@ViewData["id"]" data-mdb-toggle="modal" data-mdb-dismiss="modal">
             Find with Kroger
@@ -50,32 +46,6 @@
               <button type="button" id="searchIngredientButton-@ViewData["id"]" class="btn btn-primary my-3 w-25">Search</button>
             </div>
             <div id="searchIngredientResults-@ViewData["id"]">
-              @* <div class="row">
-                @for (int x = 0; x < 10; x++)
-                {
-                <div class="col-sm-6">
-                <div class="border rounded p-3 pt-1 m-3 shadow-sm">
-                <div class="row">
-                <div class="col-sm-3">
-                <img src="https://www.kroger.com/product/images/medium/front/0001111072977" alt="Nutmeg Photo" style="height: 7em !important;">
-                </div>
-                <div class="col-sm-9">
-                <div class="text-end">
-                <i class="fas fa-map-marker-alt mb-2"></i>
-                Aisle 13
-                <div>
-                Private Selection™ Ground Nutmeg
-                <br />
-                1.72OZ
-                </div>
-                </div>
-                </div>
-                </div>
-                <span class="text-primary fs-5 me-5">$5.49</span><button type="button" class="btn btn-primary btn-sm mt-3">Add to Cart</button>
-                </div>
-                </div>
-                }
-                </div> *@
             </div>
           </div>
         </div>
@@ -87,7 +57,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary" data-mdb-target="#ingredientModal-@ViewData["id"]" data-mdb-toggle="modal">
-          Back to first
+          Back
         </button>
       </div>
     </div>

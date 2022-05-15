@@ -88,7 +88,7 @@ namespace PantryPlusRecipe.Models
       return response.Content;
     }
 
-    public static async Task<string> PutProductsInCart(string token, string body)
+    public static async Task<string> PutProductsInKrogerCart(string token, string body)
     {
       var client = new RestClient("https://api.kroger.com/v1/cart/add");
       client.Timeout = -1;
