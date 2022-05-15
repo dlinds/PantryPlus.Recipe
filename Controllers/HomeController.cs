@@ -36,7 +36,6 @@ namespace PantryPlusRecipe.Controllers
       }
       if (TempData["error"] != null)
       {
-        // Console.WriteLine(TempData["error"]);
         ViewBag.Error = TempData["error"];
       }
       if (TempData["krogerId"] != null)

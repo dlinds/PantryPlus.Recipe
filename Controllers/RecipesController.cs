@@ -98,14 +98,12 @@ namespace PantryPlusRecipe.Controllers
       _db.SaveChanges();
       foreach (var section in posted.sections)
       {
-        // Console.WriteLine(section[0]);
         int index = 0;
         foreach (var step in section[1])
         {
           string unique = Guid.NewGuid().ToString();
           string stepDetails = $"{unique}:-" + step;
           stepDetails = stepDetails.Replace($"{unique}:-{index + 1}. ", "");
-          // Console.WriteLine(stepDetails);
           Step recipeStep = new Step();
           recipeStep.StepNumber = index + 1;
           recipeStep.Details = stepDetails;
@@ -161,7 +159,6 @@ namespace PantryPlusRecipe.Controllers
       var currentUser = await _userManager.FindByIdAsync(userId);
       int? storeId = _userManager.GetUserAsync(User).Result?.KrogerStoreId;
       var result = Ingredient.GetKrogerProduct(token.TokenValue, searchTerm, storeId, page);
-      Console.WriteLine(result);
       return Json(result);
     }
 

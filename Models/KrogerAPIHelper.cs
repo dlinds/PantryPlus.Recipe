@@ -46,7 +46,7 @@ namespace PantryPlusRecipe.Models
     //   request.AddParameter("application/x-www-form-urlencoded", $"grant_type=authorization_code&code=" + code + $"&redirect_uri=https://localhost:6003?getAuth=profile&client_id={EnvironmentVariables.client_id}&client_secret={EnvironmentVariables.client_secret}&scope=cart.basic:write", ParameterType.RequestBody);
     //   foreach (var req in request.Parameters)
     //   {
-    //     Console.WriteLine(req);
+    //
     //   }
     //   IRestResponse response = await client.ExecuteTaskAsync(request);
     //   return response.Content;
@@ -68,7 +68,6 @@ namespace PantryPlusRecipe.Models
       var request = new RestRequest(Method.GET);
       request.AddHeader("Authorization", $"Bearer {token}");
       IRestResponse response = await client.ExecuteTaskAsync(request);
-      // Console.WriteLine(response.Content);
       return response.Content;
     }
 
@@ -86,11 +85,10 @@ namespace PantryPlusRecipe.Models
       var request = new RestRequest(Method.GET);
       request.AddHeader("Authorization", $"Bearer {token}");
       IRestResponse response = await client.ExecuteTaskAsync(request);
-      // Console.WriteLine(response.Content);
       return response.Content;
     }
 
-    public static async Task<IRestResponse> PutProductsInCart(string token, string body)
+    public static async Task<string> PutProductsInCart(string token, string body)
     {
       var client = new RestClient("https://api.kroger.com/v1/cart/add");
       client.Timeout = -1;
@@ -99,7 +97,7 @@ namespace PantryPlusRecipe.Models
       request.AddHeader("Authorization", $"Bearer {token}");
       request.AddParameter("application/json", body, ParameterType.RequestBody);
       IRestResponse response = await client.ExecuteTaskAsync(request);
-      return response;
+      return response.StatusCode.ToString();
     }
 
 

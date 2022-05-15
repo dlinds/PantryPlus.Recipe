@@ -75,22 +75,22 @@ namespace PantryPlusRecipe.Controllers
       return Json(response);
     }
 
-    public async Task<IActionResult> CartAuthTokenSuccess(string id, string token, string refreshToken)
-    {
-      var user = await _db?.Users?.SingleOrDefaultAsync(x => x.KrogerId == id);
+    // public async Task<IActionResult> CartAuthTokenSuccess(string id, string token, string refreshToken)
+    // {
+    //   var user = await _db?.Users?.SingleOrDefaultAsync(x => x.KrogerId == id);
 
-      Token newToken = new Token();
-      newToken.TokenValue = token;
-      newToken.User = user;
-      newToken.RefreshToken = refreshToken;
-      newToken.TokenAuthType = "cart.basic:write";
-      newToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
-      newToken.RefreshTokenExpiresAt = DateTime.Now.AddDays(180);
-      _db.Tokens.Add(newToken);
-      _db.SaveChanges();
-      return RedirectToAction("Index");
+    //   Token newToken = new Token();
+    //   newToken.TokenValue = token;
+    //   newToken.User = user;
+    //   newToken.RefreshToken = refreshToken;
+    //   newToken.TokenAuthType = "cart.basic:write";
+    //   newToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
+    //   newToken.RefreshTokenExpiresAt = DateTime.Now.AddDays(180);
+    //   _db.Tokens.Add(newToken);
+    //   _db.SaveChanges();
+    //   return RedirectToAction("Index");
 
-    }
+    // }
 
 
   }
