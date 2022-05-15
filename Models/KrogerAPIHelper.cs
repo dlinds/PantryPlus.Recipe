@@ -66,7 +66,12 @@ namespace PantryPlusRecipe.Models
     public static async Task<string> GetProductListings(string token, string searchTerm, int? storeId, int page)
     {
       page = ((page - 1) * 6) + 1;
-      var client = new RestClient($"https://api.kroger.com/v1/products?filter.term={searchTerm}&filter.locationId={storeId}&filter.fulfillment=inStore&filter.start={page}&filter.limit=6");
+      string searchPageParam = $"&filter.start={page}";
+      if (page == 1)
+      {                       // blank out the search when it's first page. If only on
+        searchPageParam = ""; // product is returned (Puff Pastry), then no results
+      }                       // are returned if search results start at page 1
+      var client = new RestClient($"https://api.kroger.com/v1/products?filter.term={searchTerm}&filter.locationId={storeId}&filter.fulfillment=inStore&filter.limit=6{searchPageParam}");
       client.Timeout = -1;
       var request = new RestRequest(Method.GET);
       request.AddHeader("Authorization", $"Bearer {token}");
