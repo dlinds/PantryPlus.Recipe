@@ -102,8 +102,9 @@ namespace PantryPlusRecipe.Controllers
         int index = 0;
         foreach (var step in section[1])
         {
-          string stepDetails = "STARTSTEP:-" + step;
-          stepDetails = stepDetails.Replace($"STARTSTEP:-{index + 1}. ", "");
+          string unique = Guid.NewGuid().ToString();
+          string stepDetails = $"{unique}:-" + step;
+          stepDetails = stepDetails.Replace($"{unique}:-{index + 1}. ", "");
           // Console.WriteLine(stepDetails);
           Step recipeStep = new Step();
           recipeStep.StepNumber = index + 1;
@@ -154,11 +155,12 @@ namespace PantryPlusRecipe.Controllers
 
     public async Task<JsonResult> GetProductListings(string searchTerm, int page)
     {
-      var apiCallTask = ApplicationUser.GetProductToken();
+      var user = await _userManager.GetUserAsync(User);
+      var token = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       var currentUser = await _userManager.FindByIdAsync(userId);
       int? storeId = _userManager.GetUserAsync(User).Result?.KrogerStoreId;
-      var result = Ingredient.GetKrogerProduct(apiCallTask, searchTerm, storeId, page);
+      var result = Ingredient.GetKrogerProduct(token.TokenValue, searchTerm, storeId, page);
       Console.WriteLine(result);
       return Json(result);
     }

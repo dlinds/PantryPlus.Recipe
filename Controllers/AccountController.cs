@@ -74,6 +74,7 @@ namespace PantryPlusRecipe.Controllers
         newToken.TokenValue = token;
         newToken.User = user;
         newToken.RefreshToken = refreshToken;
+        newToken.TokenAuthType = "profile:compact";
         newToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
         newToken.RefreshTokenExpiresAt = DateTime.Now.AddDays(180);
         _db.Tokens.Add(newToken);
@@ -122,6 +123,7 @@ namespace PantryPlusRecipe.Controllers
       }
       var user = await _userManager.GetUserAsync(User);
       var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
+      // currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.TokenAuthType == "profile:compact");
       var result = ApplicationUser.GetStoreListings(currentToken.TokenValue, zipCode, miles, store);
       return Json(result);
     }

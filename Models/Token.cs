@@ -13,7 +13,7 @@ namespace PantryPlusRecipe.Models
     public DateTime RefreshTokenExpiresAt { get; set; }
     public string TokenValue { get; set; }
     public string RefreshToken { get; set; }
-
+    public string TokenAuthType { get; set; }
 
     // public virtual ICollection<ApplicationUserToken> JoinEntities { get; }
     public virtual ApplicationUser User { get; set; }

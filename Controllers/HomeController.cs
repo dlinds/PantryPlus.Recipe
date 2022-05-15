@@ -28,12 +28,7 @@ namespace PantryPlusRecipe.Controllers
     [HttpGet("/")]
     public ActionResult Index(string getAuth, string code, string v)
     {
-      if (getAuth == "product")
-      {
-        var apiCallTask = ApplicationUser.GetProductToken();
-        // Console.WriteLine(apiCallTask);
-      }
-      else if (getAuth == "profile")
+      if (getAuth == "profile")
       {
         var token = ApplicationUser.GetProfileToken(code);
         var krogerId = ApplicationUser.GetProfileId(token.Access_Token);
@@ -62,7 +57,7 @@ namespace PantryPlusRecipe.Controllers
     [HttpGet("/GetAuthorizationCode")]
     public ActionResult GetAuthorizationCode()
     {
-      return Redirect($"https://api.kroger.com/v1/connect/oauth2/authorize?scope=profile.compact&response_type=code&client_id={EnvironmentVariables.client_id}&redirect_uri=https://localhost:6003?getAuth=profile");
+      return Redirect($"https://api.kroger.com/v1/connect/oauth2/authorize?scope=profile.compact%20cart.basic:write%20product.compact&response_type=code&client_id={EnvironmentVariables.client_id}&redirect_uri=https://localhost:6003?getAuth=profile");
     }
 
     public IActionResult Privacy()

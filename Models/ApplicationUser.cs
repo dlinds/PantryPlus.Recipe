@@ -32,22 +32,28 @@ namespace PantryPlusRecipe.Models
       public string id { get; set; }
     }
 
-    public static string GetProductToken()
-    {
-      var token = KrogerAPIHelper.GetProductToken();
-      var result = token.Result;
-      JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
-      RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
-      return requestJson.Access_Token;
-    }
+    // public static string GetProductToken()
+    // {
+    //   var token = KrogerAPIHelper.GetProductToken();
+    //   var result = token.Result;
+    //   JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
+    //   RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
+    //   return requestJson.Access_Token;
+    // }
+    // public static RequestTokenJson GetCartToken(string code)
+    // {
+    //   var token = KrogerAPIHelper.GetCartToken(code);
+    //   var result = token.Result;
+    //   JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
+    //   RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
+    //   return requestJson;
+    // }
     public static RequestTokenJson GetProfileToken(string code)
     {
       var token = KrogerAPIHelper.GetProfileToken(code);
       var result = token.Result;
-      // Console.WriteLine("AppUser 44: " + result);
       JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
       RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
-      // Console.WriteLine("AppUser 47: " + requestJson);
       return requestJson;
     }
 
