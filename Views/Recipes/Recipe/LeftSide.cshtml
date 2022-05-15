@@ -116,7 +116,7 @@
           aisle = aisleLoc.description.toLowerCase();
         }
       });
-      if (aisle === '') {
+      if (aisle === '' && item.aisleLocations.length > 0) {
         aisle = (item.aisleLocations[0].description) ? item.aisleLocations[0].description : "";
       }
       htmlString += `&nbsp;${aisle.toLowerCase()}<div>
