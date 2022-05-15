@@ -12,6 +12,7 @@ namespace PantryPlusRecipe.Models
     public DbSet<Recipe> Recipes { get; set; }
     public DbSet<Step> Steps { get; set; }
     public DbSet<StepRecipe> StepRecipes { get; set; }
+    public DbSet<Pantry> Pantry { get; set; }
     // public DbSet<ApplicationUserToken> ApplicationUserTokens { get; set; }
     public PantryPlusRecipeContext(DbContextOptions options) : base(options) { }
 
