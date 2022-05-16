@@ -1,41 +1,78 @@
-﻿@{
-  ViewData["Title"] = "Pantry";
-}
+﻿@using Microsoft.AspNetCore.Mvc.ViewFeatures
+
 
 <div class="row m-3">
   <div class="col-sm-12 px-2">
-    <div class="mt-3 p-4 border rounded inset-shadow-sm bg-white">
-      @* @await Html.PartialAsync("./Recipe/LeftSide.cshtml") *@
-    </div>
+    @for (int y = 0; y < 3; y++)
+    {
+      <div class="mt-3 p-4 border rounded inset-shadow-sm bg-white">
+        <div class="row">
+          <div class="col-sm-7 ps-5">
+            <div class="row">
+              <div class="col-2">
+              </div>
+              <div class="col-5 text-center">
+                Item
+              </div>
+              <div class="col-3 text-center">
+                Quantity
+              </div>
+              <div class="col-2 text-end">
+                Cost
+              </div>
+            </div>
+            @for (int x = 0; x < 7; x++)
+            {
+              @await Html.PartialAsync("./Modules/Product.cshtml",
+          new ViewDataDictionary(ViewData) {
+          { "imgUrl", "https://www.kroger.com/product/images/medium/front/0001111080580" },
+          { "name", "Tillamook Salted Butter"},
+          { "itemCount", "4ct / 4oz"},
+          { "quantity", 3},
+          { "itemPrice", 5.99}
+          })
+            }
+          </div>
+          <div class="col-sm-5 pb-5">
+            <div class="row d-flex justify-content-center">
+              <div class="col-6 text-center">
+                Recipe Details
+              </div>
+            </div>
+            @await Html.PartialAsync("./Modules/Recipe.cshtml")
+          </div>
+        </div>
+      </div>
+    }
   </div>
 </div>
-<button id="test" type="button" class="btn btn-primary">Test</button>
-<a href="/GetCartAuthorizationCode"><input type="button" value="Authorize Cart Add" class="btn btn-primary mb-3 shadow-sm text-white" /></a>
-<script>
+@* <button id="test" type="button" class="btn btn-primary">Test</button>
+  <a href="/GetCartAuthorizationCode"><input type="button" value="Authorize Cart Add" class="btn btn-primary mb-3 shadow-sm text-white" /></a>
+  <script>
   $('#test').click(function () {
-    let test = {};
-    test.data = { items: [] };
-    test.data.items.push({ "upc": "0001111040190", "quantity": 2 });
-    test.data.items.push({ "upc": "0001111008485", "quantity": 1 });
-    test.data.items.push({ "upc": "0001200018119", "quantity": 4 });
+  let test = {};
+  test.data = { items: [] };
+  test.data.items.push({ "upc": "0001111040190", "quantity": 2 });
+  test.data.items.push({ "upc": "0001111008485", "quantity": 1 });
+  test.data.items.push({ "upc": "0001200018119", "quantity": 4 });
 
-    submitAjax(test)
+  submitAjax(test)
   });
   function submitAjax(jsonString) {
-    $.ajax(
-      {
-        type: 'POST',
-        dataType: 'JSON',
-        url: '/Cart/PutToCart',
-        data: { jsonPost: JSON.stringify(jsonString) },
-        success:
-          function (response) {
-            console.log(response);
-          },
-        error:
-          function (response) {
-            console.log("Error: ", response);
-          }
-      });
+  $.ajax(
+  {
+  type: 'POST',
+  dataType: 'JSON',
+  url: '/Cart/PutToCart',
+  data: { jsonPost: JSON.stringify(jsonString) },
+  success:
+  function (response) {
+  console.log(response);
+  },
+  error:
+  function (response) {
+  console.log("Error: ", response);
   }
-</script>
+  });
+  }
+  </script> *@

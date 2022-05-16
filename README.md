@@ -138,3 +138,27 @@ Copyright (c) _5-1-2022_ _Daniel Lindsey_
 <img src="./ProjectInfoAssets/itemSearchModal.PNG"
      alt="Item Search Modal.PNG"
      style="margin-right: 10px;" />
+
+<br>
+
+<img src="./ProjectInfoAssets/CartTemplateView.PNG"
+     alt="Item Search Modal.PNG"
+     style="margin-right: 10px;" />
+
+
+
+## TO-DO
+
+fix token refresh
+
+tasty api
+
+develop cart view
+
+allow editing of search term
+
+back next arrows
+
+img upload
+
+back to first button in modal, change text
