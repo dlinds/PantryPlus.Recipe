@@ -197,3 +197,9 @@ body {
   filter: brightness(55%);
   object-fit: cover;
 }
+
+.overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

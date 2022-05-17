@@ -40,7 +40,7 @@ namespace PantryPlusRecipe.Controllers
     public async Task<ActionResult> Index()
     {
       var user = await _userManager.GetUserAsync(User);
-      ViewBag.CartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).ToListAsync();
+      ViewBag.CartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).OrderBy(x => x.KrogerAisle).ToListAsync();
       List<string> recipeNameList = new List<string> { };
       List<Recipe> recipeList = new List<Recipe> { };
       foreach (var item in ViewBag.CartItems)
@@ -54,6 +54,7 @@ namespace PantryPlusRecipe.Controllers
           }
         }
       }
+      ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
       ViewBag.ListOfRecipes = recipeList;
       return View();
     }
@@ -107,31 +108,30 @@ namespace PantryPlusRecipe.Controllers
     {
       var user = await _userManager.GetUserAsync(User);
       var cartItems = await _db.Carts.Where(x => x.User == user && x.ItemCount > 0).Include(x => x.JoinEntities).ToListAsync();
-      Console.WriteLine("cartItems.Count" + cartItems.Count);
       var body = @"{" + "\n" +
       @"    ""items"": [" + "\n";
       int count = 0; //only used for comma in json
       foreach (var item in cartItems)
       {
-        foreach (var join in item.JoinEntities)
+        // foreach (var join in item.JoinEntities)
+        // {
+        //   if (join.Recipe.RecipeId == id)
+        //   {
+        body += "        {\n       \"quantity\": " + item.ItemCount + ",\n       \"upc\": \"" + item.KrogerUPC + "\"\n      }";
+        if (count < cartItems.Count - 1)
         {
-          if (join.Recipe.RecipeId == id)
-          {
-            body += "        {\n       \"quantity\": " + item.ItemCount + ",\n       \"upc\": \"" + item.KrogerUPC + "\"\n      }";
-            if (count < cartItems.Count - 1)
-            {
-              body += ",\n";
-            }
-            else
-            {
-              body += "\n";
-            }
-            // _db.Carts.Remove(item);
-            // await _db.SaveChangesAsync();
-
-          }
-          count++;
+          body += ",\n";
         }
+        else
+        {
+          body += "\n";
+        }
+        // _db.Carts.Remove(item);
+        // await _db.SaveChangesAsync();
+
+        // }
+        count++;
+        // }
         item.CountPlacedInCart += item.ItemCount;
         item.ItemCount = 0;
         _db.Entry(item).State = EntityState.Modified;

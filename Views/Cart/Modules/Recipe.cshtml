@@ -1,4 +1,4 @@
-<div class="card border me-3 shadow-sm p-3">
+<div class="card border me-3 shadow-sm p-3 mb-3 hiddenRecipe" id='@ViewData["id"]-recipeCard' style="display:none;">
   <a href="/recipes/recipe?id=@ViewData["id"]" target="_blank">
     <div class="rounded wrapperForOverlay mb-2 shadow">
       <img class="rounded w-100 headerImgForOverlay" src="@ViewData["imgUrl"]" alt="Photo of @ViewData["name"]">
@@ -7,30 +7,9 @@
       </div>
     </div>
   </a>
-  <div class="card-body px-3 py-2">
+  <div class="card-body px-3 py-2 text-center">
     @ViewData["steps"] Steps
-    <hr class="mt-0">
+    <hr class="my-1">
     @ViewData["minutes"] minutes to make
-    @*<hr class="mt-0">
-      <em class="fs-5">Ingredients already in Pantry</em>
-      <br>
-      <div class="d-flex my-2" data-bs-placement="right" title="You currently have this ingredient">
-      <i class="fas fa-check me-3"></i>
-      <span>
-      2 Beef Bullion Cubes
-      </span>
-      </div>
-      <div class="d-flex my-2" data-bs-placement="right" title="You currently have this ingredient">
-      <i class="fas fa-check me-3"></i>
-      <span>
-      2 Beef Bullion Cubes
-      </span>
-      </div>
-      <div class="d-flex my-2" data-bs-placement="right" title="You currently have this ingredient">
-      <i class="fas fa-check me-3"></i>
-      <span>
-      2 Beef Bullion Cubes
-      </span>
-      </div> *@
   </div>
 </div>

@@ -1,12 +1,17 @@
-<div class="row mb-3 border shadow-sm rounded py-2">
-  <div class="col-3 d-flex align-items-center justify-content-start overflow-hidden pe-0">
-    <img src='@ViewData["imgUrl"]' alt='@ViewData["name"] thumbnail' style="max-height: 7em">
+<div class="row mb-3 border shadow-sm rounded py-2 @ViewData["recipeId"]-recipe">
+  <div class="col-2 d-flex align-items-center justify-content-start overflow-hidden pe-0">
+    <img src='@ViewData["imgUrl"]' alt='@ViewData["name"] thumbnail' style="max-height: 7em; max-width:100%;">
   </div>
   <div class="col-4 d-flex flex-column ps-1">
 
     <span class="fs-6">@ViewData["name"]</span>
-    <p>$@ViewData["itemPrice"]</span></p>
-    <p>@ViewData["itemSize"]</p>
+    <p>$@ViewData["itemPrice"] / @ViewData["itemSize"]
+      @if ((int)@ViewData["krogerCartQuantity"] > 0)
+      {
+        <br />
+        <small>@ViewData["krogerCartQuantity"] previously added to Kroger Cart</small>
+      }
+    </p>
 
   </div>
   <div class="col-3 d-flex align-items-center justify-content-center">
@@ -14,18 +19,15 @@
       <button type="button" class="btn btn-light border btn-small py-1 px-2" onclick="addSubtractTotal('@ViewData["cartId"]', 'subtract')"><i class=" fas fa-minus"></i></button>
       <u class="mx-3" id="@ViewData["cartId"]-quantity">@ViewData["quantity"]</u>
       <button type="button" class="btn btn-primary btn-small py-1 px-2" onclick="addSubtractTotal('@ViewData["cartId"]', 'add')"><i class="fas fa-plus"></i></button>
-      @if ((int)ViewData["krogerCartQuantity"] > 0)
-      {
-        <div class="w-100"></div>
-        <br />
-        @:<span>@ViewData["krogerCartQuantity"] already in cart</span>
-      }
+
     </div>
   </div>
-  <div class="col-2 d-flex align-items-end justify-content-center flex-column">
+  <div class="col-3 d-flex align-items-center justify-content-center flex-column">
     @* <button type="button" class="btn btn-outline-danger btn-sm btn-floating mt-1 mb-2">
       <i class="fas fa-trash"></i>
       </button> *@
-    <span class="fs-5">$<span id="@ViewData["cartId"]-calcPrice">@ViewData["calculatedItemPrice"]</span></span>
+    @* <span class="fs-6">$<span id="@ViewData["cartId"]-calcPrice">@ViewData["calculatedItemPrice"]</span></span> *@
+    @ViewData["krogerAisle"]
+
   </div>
 </div>
