@@ -14,6 +14,12 @@
       <button type="button" class="btn btn-light border btn-small py-1 px-2" onclick="addSubtractTotal('@ViewData["cartId"]', 'subtract')"><i class=" fas fa-minus"></i></button>
       <u class="mx-3" id="@ViewData["cartId"]-quantity">@ViewData["quantity"]</u>
       <button type="button" class="btn btn-primary btn-small py-1 px-2" onclick="addSubtractTotal('@ViewData["cartId"]', 'add')"><i class="fas fa-plus"></i></button>
+      @if ((int)ViewData["krogerCartQuantity"] > 0)
+      {
+        <div class="w-100"></div>
+        <br />
+        @:<span>@ViewData["krogerCartQuantity"] already in cart</span>
+      }
     </div>
   </div>
   <div class="col-2 d-flex align-items-end justify-content-center flex-column">

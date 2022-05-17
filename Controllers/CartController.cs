@@ -106,10 +106,11 @@ namespace PantryPlusRecipe.Controllers
     public async Task<JsonResult> PutToCart(int id)
     {
       var user = await _userManager.GetUserAsync(User);
-      var cartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).ToListAsync();
+      var cartItems = await _db.Carts.Where(x => x.User == user && x.ItemCount > 0).Include(x => x.JoinEntities).ToListAsync();
+      Console.WriteLine("cartItems.Count" + cartItems.Count);
       var body = @"{" + "\n" +
       @"    ""items"": [" + "\n";
-      int count = 0;
+      int count = 0; //only used for comma in json
       foreach (var item in cartItems)
       {
         foreach (var join in item.JoinEntities)
@@ -117,7 +118,7 @@ namespace PantryPlusRecipe.Controllers
           if (join.Recipe.RecipeId == id)
           {
             body += "        {\n       \"quantity\": " + item.ItemCount + ",\n       \"upc\": \"" + item.KrogerUPC + "\"\n      }";
-            if (count != cartItems.Count - 1)
+            if (count < cartItems.Count - 1)
             {
               body += ",\n";
             }
@@ -125,15 +126,21 @@ namespace PantryPlusRecipe.Controllers
             {
               body += "\n";
             }
-            _db.Carts.Remove(item);
-            await _db.SaveChangesAsync();
+            // _db.Carts.Remove(item);
+            // await _db.SaveChangesAsync();
 
           }
           count++;
         }
+        item.CountPlacedInCart += item.ItemCount;
+        item.ItemCount = 0;
+        _db.Entry(item).State = EntityState.Modified;
+        await _db.SaveChangesAsync();
       }
       body += @"    ]" + "\n" +
       @"}";
+
+      Console.WriteLine(body);
       var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
       var response = Cart.PutInKrogerCart(currentToken.TokenValue, body);
       return Json(response);
