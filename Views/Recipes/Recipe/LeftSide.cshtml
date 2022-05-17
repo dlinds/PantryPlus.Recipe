@@ -105,7 +105,7 @@
           });
         }
       });
-      htmlString += `<img src="${imgUrl}" alt="Photo of ${item.description}" class="rounded" style="max-height: 100%; width: auto !important;">
+      htmlString += `<img src="${imgUrl}" alt="Photo of ${item.description}" class="rounded" style="max-height: 100%; width: auto !important;" id='${item.upc}-imgUrl'>
                       </div>
                       <div class="col-md-8">
                         <div class="text-end">
@@ -119,20 +119,20 @@
       if (aisle === '' && item.aisleLocations.length > 0) {
         aisle = (item.aisleLocations[0].description) ? item.aisleLocations[0].description : "";
       }
-      htmlString += `&nbsp;${aisle.toLowerCase()}<div>
-                        ${item.description}
+      htmlString += `&nbsp;<span id='${item.upc}-aisle'>${aisle.toLowerCase()}</span><div>
+                        <span id='${item.upc}-name'>${item.description}</span>
                         <p class="text-primary fs-5 fw-light mb-0 mt-3">`;
       let itemPrice;
       if (item.items[0].price && item.items[0].price.promo === 0) {
-        itemPrice = `$${item.items[0].price.regular.toFixed(2)}`;
+        itemPrice = `$<span id='${item.upc}-price'>${item.items[0].price.regular.toFixed(2)}</span>`;
       } else if (item.items[0].price && item.items[0].price.promo > 0) {
-        itemPrice = `<strike class="me-2">$${item.items[0].price.regular.toFixed(2)}</strike> <span style="background-color: #fed241;" class="text-dark">$${item.items[0].price.promo.toFixed(2)}</span>`;
+        itemPrice = `<strike class="me-2">$${item.items[0].price.regular.toFixed(2)}</strike> <span style="background-color: #fed241;" class="text-dark">$<span id='${item.upc}-price'>${item.items[0].price.promo.toFixed(2)}</span></span>`;
       } else {
         itemPrice = '$-.--';
       }
 
-      htmlString += `${itemPrice} <span class="text-dark fs-6">/ ${item.items[0].size}</span></p>
-                  <button type="button" class="btn btn-primary btn-sm">
+      htmlString += `${itemPrice} <span class="text-dark fs-6">/ <span id='${item.upc}-size'>${item.items[0].size}</span></span></p>
+                  <button type="button" class="btn btn-primary btn-sm" id="${item.upc}-addToCartButton" onClick="handleAddToCartClick('${item.upc}')">
                     Add to Cart
                   </button>
                       </div>
@@ -145,5 +145,36 @@
     });
 
     $(`#searchIngredientResults-${ingredientId}`).html(`</div>${htmlString}`);
+
+  }
+
+  function handleAddToCartClick(upc) {
+    let jsonOutput = {};
+
+    jsonOutput.KrogerUPC = upc;
+    jsonOutput.KrogerAisle = $(`#${upc}-aisle`).text();
+    jsonOutput.KrogerCost = $(`#${upc}-price`).text();
+    jsonOutput.KrogerItemName = $(`#${upc}-name`).text();
+    jsonOutput.KrogerItemSize = $(`#${upc}-size`).text();
+    jsonOutput.RecipeId = @Model.RecipeId;
+    jsonOutput.KrogerImgLink = $(`#${upc}-imgUrl`).attr('src');
+
+    $.ajax(
+      {
+        type: 'POST',
+        dataType: 'JSON',
+        url: '/Cart/SaveToCart',
+        data: { jsonPost: JSON.stringify(jsonOutput) },
+        success:
+          function (response) {
+            // Generate HTML table.
+            alert("sucess");
+          },
+        error:
+          function (response) {
+            console.log("Error: ", response);
+          }
+      });
+
   }
 </script>

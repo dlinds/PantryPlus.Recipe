@@ -15,7 +15,7 @@ namespace PantryPlusRecipe.Models
     public DbSet<Pantry> Pantry { get; set; }
 
 
-    public DbSet<Step> Cart { get; set; }
+    public DbSet<Cart> Carts { get; set; }
     public DbSet<CartRecipe> CartRecipe { get; set; }
 
     // public DbSet<ApplicationUserToken> ApplicationUserTokens { get; set; }

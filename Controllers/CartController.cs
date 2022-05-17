@@ -36,62 +36,108 @@ namespace PantryPlusRecipe.Controllers
       _userManager = userManager;
       _db = db;
     }
-    public ActionResult Index()
+
+    public async Task<ActionResult> Index()
     {
+      var user = await _userManager.GetUserAsync(User);
+      ViewBag.CartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).ToListAsync();
+      List<string> recipeNameList = new List<string> { };
+      List<Recipe> recipeList = new List<Recipe> { };
+      foreach (var item in ViewBag.CartItems)
+      {
+        foreach (var join in item.JoinEntities)
+        {
+          if (!recipeNameList.Contains(join.Recipe.Name))
+          {
+            recipeList.Add(join.Recipe);
+            recipeNameList.Add(join.Recipe.Name);
+          }
+        }
+      }
+      ViewBag.ListOfRecipes = recipeList;
       return View();
-    }
-    [HttpGet("/GetCartAuthorizationCode")]
-    public ActionResult GetCartAuthorizationCode()
-    {
-      return Redirect($"https://api.kroger.com/v1/connect/oauth2/authorize?scope=cart.basic:write&response_type=code&client_id={EnvironmentVariables.client_id}&redirect_uri=https://localhost:6003?getAuth=cart");
     }
 
     [HttpPost]
-    public async Task<JsonResult> PutToCart(string jsonPost)
+    public async Task<JsonResult> SaveToCart(string jsonPost)
     {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
       dynamic posted = JObject.Parse(jsonPost);
+      Cart item = new Cart
+      {
+        KrogerUPC = posted.KrogerUPC,
+        KrogerAisle = posted.KrogerAisle,
+        KrogerCost = posted.KrogerCost,
+        KrogerItemName = posted.KrogerItemName,
+        KrogerItemSize = posted.KrogerItemSize,
+        KrogerImgLink = posted.KrogerImgLink,
+        ItemCount = 1,
+        User = currentUser
+      };
+      _db.Carts.Add(item);
+      await _db.SaveChangesAsync();
+      _db.CartRecipe.Add(new CartRecipe() { RecipeId = posted.RecipeId, CartId = item.CartId });
+      await _db.SaveChangesAsync();
+      return Json("result");
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> AddSubtractTotal(int id, string method)
+    {
+      var user = await _userManager.GetUserAsync(User);
+      Cart item = _db.Carts.Where(x => x.User == user).FirstOrDefault(x => x.CartId == id);
+      if (method == "add")
+      {
+        item.ItemCount++;
+      }
+      else if (method == "subtract")
+      {
+        if (item.ItemCount > 0)
+        {
+          item.ItemCount--;
+        }
+      }
+      await _db.SaveChangesAsync();
+      return Json(new { Count = item.ItemCount, Price = item.KrogerCost });
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> PutToCart(int id)
+    {
+      var user = await _userManager.GetUserAsync(User);
+      var cartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).ToListAsync();
       var body = @"{" + "\n" +
       @"    ""items"": [" + "\n";
       int count = 0;
-      foreach (var item in posted.data.items)
+      foreach (var item in cartItems)
       {
-        body += "        {\n       \"quantity\": " + item.quantity + ",\n       \"upc\": \"" + item.upc + "\"\n      }";
-        if (count != posted.data.items.Count - 1)
+        foreach (var join in item.JoinEntities)
         {
-          body += ",\n";
+          if (join.Recipe.RecipeId == id)
+          {
+            body += "        {\n       \"quantity\": " + item.ItemCount + ",\n       \"upc\": \"" + item.KrogerUPC + "\"\n      }";
+            if (count != cartItems.Count - 1)
+            {
+              body += ",\n";
+            }
+            else
+            {
+              body += "\n";
+            }
+            _db.Carts.Remove(item);
+            await _db.SaveChangesAsync();
+
+          }
+          count++;
         }
-        else
-        {
-          body += "\n";
-        }
-        count++;
       }
       body += @"    ]" + "\n" +
       @"}";
-      var user = await _userManager.GetUserAsync(User);
       var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
-      // currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.TokenAuthType == "cart.basic:write");
       var response = Cart.PutInKrogerCart(currentToken.TokenValue, body);
       return Json(response);
     }
-
-    // public async Task<IActionResult> CartAuthTokenSuccess(string id, string token, string refreshToken)
-    // {
-    //   var user = await _db?.Users?.SingleOrDefaultAsync(x => x.KrogerId == id);
-
-    //   Token newToken = new Token();
-    //   newToken.TokenValue = token;
-    //   newToken.User = user;
-    //   newToken.RefreshToken = refreshToken;
-    //   newToken.TokenAuthType = "cart.basic:write";
-    //   newToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
-    //   newToken.RefreshTokenExpiresAt = DateTime.Now.AddDays(180);
-    //   _db.Tokens.Add(newToken);
-    //   _db.SaveChanges();
-    //   return RedirectToAction("Index");
-
-    // }
-
 
   }
 }
