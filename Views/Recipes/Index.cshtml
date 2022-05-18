@@ -6,28 +6,21 @@
 @await Html.PartialAsync("./Home/CategorySelect.cshtml")
 <div class="my-3">
 </div>
-@await Html.PartialAsync("./Home/RecipeSection.cshtml", new ViewDataDictionary(ViewData) {
-{ "type", "favorites" },
-{ "name", @ViewBag.Favorites.Name },
-{ "url", @ViewBag.Favorites.ImgUrl },
-{ "steps", @ViewBag.Favorites.NumberOfSteps },
-{ "cookTime", (@ViewBag.Favorites.CookMinutes + @ViewBag.Favorites.PrepMinutes) } })
+<div class="p-5 pt-0 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white">
+  <h1 class="text-start fw-light pt-3 ps-3">fast</h1>
+  <div class="d-flex scroll py-3">
+    @await Html.PartialAsync("./Home/RecipeSection.cshtml",
+    new ViewDataDictionary(ViewData) {
+    { "type", "fast" }})
+  </div>
+</div>
 <div class="my-3">
 </div>
-@await Html.PartialAsync("./Home/RecipeSection.cshtml", new ViewDataDictionary(ViewData) {
-{ "type", "budget" },
-{ "name", @ViewBag.Budget.Name },
-{ "url", @ViewBag.Budget.ImgUrl },
-{ "steps", @ViewBag.Budget.NumberOfSteps },
-{ "cookTime", (@ViewBag.Budget.CookMinutes + @ViewBag.Budget.PrepMinutes) }
-})
-<div class="my-3">
+<div class="p-5 pt-0 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white">
+  <h1 class="text-start fw-light pt-3 ps-3">budget</h1>
+  <div class="d-flex scroll py-3">
+    @await Html.PartialAsync("./Home/RecipeSection.cshtml",
+    new ViewDataDictionary(ViewData) {
+    { "type", "budget" }})
+  </div>
 </div>
-@await Html.PartialAsync("./Home/RecipeSection.cshtml",
-new ViewDataDictionary(ViewData) {
-{ "type", "fast" },
-{ "name", @ViewBag.Fast.Name },
-{ "url", @ViewBag.Fast.ImgUrl },
-{ "steps", @ViewBag.Fast.NumberOfSteps },
-{ "cookTime", (@ViewBag.Fast.CookMinutes + @ViewBag.Fast.PrepMinutes) }
-})
