@@ -29,11 +29,13 @@ namespace PantryPlusRecipe.Models
       {
         grantTypeOutput = "grant_type=refresh_token&refresh_token=" + code;
       }
+      Console.WriteLine(grantTypeOutput);
       var client = new RestClient("https://api.kroger.com/v1/connect/oauth2/token");
       var request = new RestRequest(Method.POST);
       request.AddHeader("content-type", "application/x-www-form-urlencoded");
       request.AddParameter("application/x-www-form-urlencoded", $"{grantTypeOutput}&redirect_uri=https://localhost:6003?getAuth=profile&client_id={EnvironmentVariables.client_id}&client_secret={EnvironmentVariables.client_secret}&scope=profile.compact", ParameterType.RequestBody);
       IRestResponse response = await client.ExecuteTaskAsync(request);
+      Console.WriteLine(response.Content);
       return response.Content;
     }
 

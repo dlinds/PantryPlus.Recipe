@@ -35,9 +35,28 @@ namespace PantryPlusRecipe.Controllers
       _db = db;
     }
 
-    public IActionResult Index()
+    private async Task<bool> RefreshToken()
     {
+      var user = await _userManager.GetUserAsync(User);
+      Token currentToken = await _db?.Tokens?.SingleOrDefaultAsync(x => x.User == user);
+      Token newToken = ApplicationUser.CheckIfRefreshNeeded(currentToken);
+      if (newToken.RefreshToken != currentToken.RefreshToken)
+      {
+        currentToken = newToken;
+        _db.Entry(currentToken).State = EntityState.Modified;
+        await _db.SaveChangesAsync();
+      }
+      return false;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+      await RefreshToken();
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
       ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
+      ViewBag.ItemCategories = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerCategory).Distinct().ToListAsync();
+      ViewBag.PantryItems = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).ToListAsync();
       return View();
     }
 
@@ -76,6 +95,31 @@ namespace PantryPlusRecipe.Controllers
       return Json("result");
     }
 
+    [HttpPost]
+    public async Task<JsonResult> AddSubtractTotal(int id, string method)
+    {
+      var user = await _userManager.GetUserAsync(User);
+      Pantry item = _db.Pantry.Where(x => x.User == user).FirstOrDefault(x => x.PantryId == id);
+      if (method == "add")
+      {
+        item.ItemCount++;
+      }
+      else if (method == "subtract")
+      {
+        if (item.ItemCount > 0)
+        {
+          item.ItemCount--;
+          if (item.ItemCount == 0)
+          {
+            _db.Pantry.Remove(item);
+            _db.SaveChanges();
+          }
+
+        }
+      }
+      await _db.SaveChangesAsync();
+      return Json(new { Count = item.ItemCount, Price = item.KrogerCost });
+    }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

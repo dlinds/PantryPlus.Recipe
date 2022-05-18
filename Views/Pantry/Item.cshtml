@@ -1,0 +1,40 @@
+@foreach (var category in ViewBag.ItemCategories)
+{
+  <div class="row border m-3 py-3 shadow rounded">
+    <h2 class="fw-light ms-3">@category</h2>
+    @foreach (Pantry item in ViewBag.PantryItems)
+    {
+      @if (item.KrogerCategory == category)
+      {
+        <div class="col-md-4" id="@item.PantryId-container">
+          <div class="border rounded p-3 pt-1 m-3 shadow-sm bg-white">
+            <div class="row">
+              <div class="col-md-6 ps-0" style="max-height:9em;overflow:hidden;"><img src="@item.KrogerImgLink" alt="Photo of Banana" class="rounded" style="display: block;max-width:230px;max-height:95px; width: auto; height: auto;" id="@item.KrogerUPC-imgUrl">
+              </div>
+              <div class="col-md-6">
+                <div class="text-end">
+                  <div class="overflow-ellipsis">
+                    <span id="@item.KrogerUPC-name" data-bs-toggle="tooltip" data-bs-placement="top" title="@item.KrogerItemName">
+                      @item.KrogerItemName
+                    </span>
+                    <p class="text-primary fs-6 fw-light mb-0 mt-3">
+                      $<span id="@item.KrogerUPC-price">@item.KrogerCost</span>
+                      <span class="text-dark fs-6">/ <span id="@item.KrogerUPC-size">@item.KrogerItemSize</span></span>
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+              <div class="d-flex align-items-center justify-content-center">
+                <button type="button" class="btn btn-light border btn-small py-1 px-2" onclick="addSubtractTotal('@item.PantryId', 'subtract')"><i class=" fas fa-minus"></i></button>
+                <u class="mx-3" id="@item.PantryId-quantity">@item.ItemCount</u>
+                <button type="button" class="btn btn-primary btn-small py-1 px-2" onclick="addSubtractTotal('@item.PantryId', 'add')"><i class="fas fa-plus"></i></button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+}
