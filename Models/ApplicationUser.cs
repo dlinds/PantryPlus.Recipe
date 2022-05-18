@@ -40,28 +40,24 @@ namespace PantryPlusRecipe.Models
       RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
       return requestJson;
     }
+
     public static Token CheckIfRefreshNeeded(Token currentToken)
     {
 
       if (currentToken.TokenValueExpiresAt < DateTime.Now)
       {
         Console.WriteLine("refresh needed");
-        RequestTokenJson refreshedToken = ApplicationUser.RefreshToken(currentToken.RefreshToken);
-        currentToken.TokenValue = refreshedToken.Access_Token;
-        currentToken.RefreshToken = refreshedToken.Refresh_Token;
-        currentToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
-        return currentToken;
+        var token = KrogerAPIHelper.GetProfileToken(currentToken.RefreshToken, "refresh");
+        var result = token.Result;
+        JObject jsonResponse = JObject.Parse(result);
+        Token newToken = new Token();
+        newToken.RefreshToken = jsonResponse["refresh_token"].ToString();
+        newToken.TokenValue = jsonResponse["access_token"].ToString();
+        newToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
+        Console.WriteLine("newToken.RefreshToken line 57: " + newToken.RefreshToken);
+        return newToken;
       }
       return currentToken;
-    }
-    public static RequestTokenJson RefreshToken(string code)
-    {
-      var token = KrogerAPIHelper.GetProfileToken(code, "refresh");
-      var result = token.Result;
-      // Console.WriteLine(result);
-      JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
-      RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
-      return requestJson;
     }
 
 

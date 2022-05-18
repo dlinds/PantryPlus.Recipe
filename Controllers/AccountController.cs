@@ -32,16 +32,11 @@ namespace PantryPlusRecipe.Controllers
       var user = await _userManager.GetUserAsync(User);
       Token currentToken = await _db?.Tokens?.SingleOrDefaultAsync(x => x.User == user);
       Token newToken = ApplicationUser.CheckIfRefreshNeeded(currentToken);
-      // Console.WriteLine("currentToken.RefreshToken  " + currentToken.RefreshToken);
-      // Console.WriteLine("newToken.RefreshToken  " + newToken.RefreshToken);
-      // if (!String.Equals(newToken.RefreshToken, currentToken.RefreshToken))
-      // {
-
-      currentToken = newToken;
-
+      currentToken.RefreshToken = newToken.RefreshToken;
+      currentToken.TokenValue = newToken.TokenValue;
+      currentToken.TokenValueExpiresAt = newToken.TokenValueExpiresAt;
       _db.Entry(currentToken).State = EntityState.Modified;
       await _db.SaveChangesAsync();
-      // }
       return false;
     }
 
