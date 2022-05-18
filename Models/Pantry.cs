@@ -9,6 +9,7 @@ namespace PantryPlusRecipe.Models
     public DateTime PurchaseDate { get; set; }
     public string Category { get; set; }
     public string WeightCount { get; set; }
+    public string KrogerUPC { get; set; }
 
     public virtual ApplicationUser User { get; set; }
   }
