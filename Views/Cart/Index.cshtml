@@ -118,8 +118,8 @@
       {
         type: 'POST',
         dataType: 'JSON',
-        url: '/Cart/RemoveIngredients',
-        data: { id: id },
+        url: '/Cart/RemoveIngredientsFromRecipe',
+        data: { recipeId: id },
         success:
           function (response) {
             location.reload();

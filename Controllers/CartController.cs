@@ -160,5 +160,24 @@ namespace PantryPlusRecipe.Controllers
       return Json(response);
     }
 
+    [HttpPost]
+    public async Task<JsonResult> RemoveIngredientsFromRecipe(int recipeId)
+    {
+      var user = await _userManager.GetUserAsync(User);
+      var cartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).ToListAsync();
+      foreach (var item in cartItems)
+      {
+        foreach (var join in item.JoinEntities)
+        {
+          if (join.Recipe.RecipeId == recipeId)
+          {
+            _db.Carts.Remove(item);
+            await _db.SaveChangesAsync();
+          }
+        }
+      }
+      return Json("test");
+    }
+
   }
 }
