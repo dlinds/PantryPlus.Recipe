@@ -32,30 +32,37 @@ namespace PantryPlusRecipe.Models
       public string id { get; set; }
     }
 
-    // public static string GetProductToken()
-    // {
-    //   var token = KrogerAPIHelper.GetProductToken();
-    //   var result = token.Result;
-    //   JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
-    //   RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
-    //   return requestJson.Access_Token;
-    // }
-    // public static RequestTokenJson GetCartToken(string code)
-    // {
-    //   var token = KrogerAPIHelper.GetCartToken(code);
-    //   var result = token.Result;
-    //   JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
-    //   RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
-    //   return requestJson;
-    // }
     public static RequestTokenJson GetProfileToken(string code)
     {
-      var token = KrogerAPIHelper.GetProfileToken(code);
+      var token = KrogerAPIHelper.GetProfileToken(code, "authorization");
       var result = token.Result;
       JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
       RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
       return requestJson;
     }
+    public static Token CheckIfRefreshNeeded(Token currentToken)
+    {
+
+      if (currentToken.TokenValueExpiresAt < DateTime.Now)
+      {
+        RequestTokenJson refreshedToken = ApplicationUser.RefreshToken(currentToken.RefreshToken);
+        currentToken.TokenValue = refreshedToken.Access_Token;
+        currentToken.RefreshToken = refreshedToken.Refresh_Token;
+        currentToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
+        return currentToken;
+      }
+      return currentToken;
+    }
+    public static RequestTokenJson RefreshToken(string code)
+    {
+      var token = KrogerAPIHelper.GetProfileToken(code, "refresh");
+      var result = token.Result;
+      // Console.WriteLine(result);
+      JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
+      RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
+      return requestJson;
+    }
+
 
     public static string GetProfileId(string token)
     {

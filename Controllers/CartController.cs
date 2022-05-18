@@ -37,6 +37,20 @@ namespace PantryPlusRecipe.Controllers
       _db = db;
     }
 
+    private async Task<bool> RefreshToken()
+    {
+      var user = await _userManager.GetUserAsync(User);
+      Token currentToken = await _db?.Tokens?.SingleOrDefaultAsync(x => x.User == user);
+      Token newToken = ApplicationUser.CheckIfRefreshNeeded(currentToken);
+      if (newToken.RefreshToken != currentToken.RefreshToken)
+      {
+        currentToken = newToken;
+        _db.Entry(currentToken).State = EntityState.Modified;
+        await _db.SaveChangesAsync();
+      }
+      return false;
+    }
+
     public async Task<ActionResult> Index()
     {
       var user = await _userManager.GetUserAsync(User);
@@ -106,6 +120,7 @@ namespace PantryPlusRecipe.Controllers
     [HttpPost]
     public async Task<JsonResult> PutToCart(int id)
     {
+      await RefreshToken();
       var user = await _userManager.GetUserAsync(User);
       var cartItems = await _db.Carts.Where(x => x.User == user && x.ItemCount > 0).Include(x => x.JoinEntities).ToListAsync();
       var body = @"{" + "\n" +
@@ -140,9 +155,9 @@ namespace PantryPlusRecipe.Controllers
       body += @"    ]" + "\n" +
       @"}";
 
-      Console.WriteLine(body);
       var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
       var response = Cart.PutInKrogerCart(currentToken.TokenValue, body);
+
       return Json(response);
     }
 

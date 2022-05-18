@@ -43,6 +43,19 @@ namespace PantryPlusRecipe.Controllers
       public int cookTime { get; set; }
       public int prepTime { get; set; }
     }
+    private async Task<bool> RefreshToken()
+    {
+      var user = await _userManager.GetUserAsync(User);
+      Token currentToken = await _db?.Tokens?.SingleOrDefaultAsync(x => x.User == user);
+      Token newToken = ApplicationUser.CheckIfRefreshNeeded(currentToken);
+      if (newToken.RefreshToken != currentToken.RefreshToken)
+      {
+        currentToken = newToken;
+        _db.Entry(currentToken).State = EntityState.Modified;
+        await _db.SaveChangesAsync();
+      }
+      return false;
+    }
 
     public IActionResult Index()
     {
@@ -153,6 +166,7 @@ namespace PantryPlusRecipe.Controllers
 
     public async Task<JsonResult> GetProductListings(string searchTerm, int page)
     {
+      await RefreshToken();
       var user = await _userManager.GetUserAsync(User);
       var token = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

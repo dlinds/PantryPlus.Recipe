@@ -11,5 +11,8 @@
     @ViewData["steps"] Steps
     <hr class="my-1">
     @ViewData["minutes"] minutes to make
+    <hr class="my-1">
+    Want to remove the ingredients from this recipe from your cart? Tap remove ingredients below
+    <button class="btn btn-primary w-75 mt-2" type="button" onClick="removeIngredients(@ViewData["id"])">Remove Ingredients</button>
   </div>
 </div>

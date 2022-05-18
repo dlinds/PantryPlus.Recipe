@@ -27,6 +27,24 @@ namespace PantryPlusRecipe.Controllers
       _db = db;
     }
 
+    private async Task<bool> RefreshMyToken()
+    {
+      var user = await _userManager.GetUserAsync(User);
+      Token currentToken = await _db?.Tokens?.SingleOrDefaultAsync(x => x.User == user);
+      Token newToken = ApplicationUser.CheckIfRefreshNeeded(currentToken);
+      // Console.WriteLine("currentToken.RefreshToken  " + currentToken.RefreshToken);
+      // Console.WriteLine("newToken.RefreshToken  " + newToken.RefreshToken);
+      // if (!String.Equals(newToken.RefreshToken, currentToken.RefreshToken))
+      // {
+
+      currentToken = newToken;
+
+      _db.Entry(currentToken).State = EntityState.Modified;
+      await _db.SaveChangesAsync();
+      // }
+      return false;
+    }
+
     public async Task<IActionResult> Index(string m = "")
     {
       if (!User.Identity.IsAuthenticated)
@@ -113,6 +131,7 @@ namespace PantryPlusRecipe.Controllers
 
     public async Task<JsonResult> ListKrogerLocations(int zipCode, int miles, string store)
     {
+      await RefreshMyToken();
       if (miles > 30 || miles < 1)
       {
         miles = 30;

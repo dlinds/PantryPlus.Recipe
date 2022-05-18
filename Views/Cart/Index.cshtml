@@ -105,7 +105,24 @@
         data: { id: id },
         success:
           function (response) {
-            console.log(response);
+            location.reload();
+          },
+        error:
+          function (response) {
+            console.log("Error: ", response);
+          }
+      });
+  }
+  const removeIngredients = (id) => {
+    $.ajax(
+      {
+        type: 'POST',
+        dataType: 'JSON',
+        url: '/Cart/RemoveIngredients',
+        data: { id: id },
+        success:
+          function (response) {
+            location.reload();
           },
         error:
           function (response) {
