@@ -6,24 +6,26 @@
 {
   @* if ((recipe.PrepMinutes + recipe.PrepMinutes < 30))
     { *@
-  <div style="min-width:170px; min-height:200px;" class="me-4">
-    <div class="card border me-3 shadow-sm" style="min-width:170px; min-height:200px;     max-height: 275px;">
-      <div class="card text-white shadow-sm">
-        <img src="@recipe.ImgUrl" class="card-img" alt="..." style="width: auto; height: 170px; object-fit: cover;">
-        <div class="overlay rounded"></div>
-        <div class="card-img-overlay py-3 px-2 d-flex align-items-center">
-          <h5 class="card-title multiline fw-normal fs-4" style="text-overflow: ellipsis;">@recipe.Name</h5>
+  <a href="/recipes/recipe?id=@recipe.RecipeId">
+    <div style="min-width:170px; min-height:200px;" class="me-4">
+      <div class="card border me-3 shadow-sm" style="min-width:170px; min-height:200px;     max-height: 275px;">
+        <div class="card text-white shadow-sm">
+          <img src="@recipe.ImgUrl" class="card-img" alt="..." style="width: auto; height: 170px; object-fit: cover;">
+          <div class="overlay rounded"></div>
+          <div class="card-img-overlay py-3 px-2 d-flex align-items-center">
+            <h5 class="card-title multiline fw-normal fs-4" style="text-overflow: ellipsis;">@recipe.Name</h5>
+          </div>
+        </div>
+        <div class="card-body px-3 py-2">
+          STEPS: @recipe.NumberOfSteps
+          <br />
+          TIME: @(recipe.PrepMinutes + recipe.PrepMinutes)
+          <br />
+          @* HAVE: 8 of 12
+            <br /> *@
         </div>
       </div>
-      <div class="card-body px-3 py-2">
-        STEPS: @recipe.NumberOfSteps
-        <br />
-        TIME: @(recipe.PrepMinutes + recipe.PrepMinutes)
-        <br />
-        @* HAVE: 8 of 12
-          <br /> *@
-      </div>
     </div>
-  </div>
+  </a>
   @* } *@
 }

@@ -45,6 +45,7 @@ namespace PantryPlusRecipe.Models
 
       if (currentToken.TokenValueExpiresAt < DateTime.Now)
       {
+        Console.WriteLine("refresh needed");
         RequestTokenJson refreshedToken = ApplicationUser.RefreshToken(currentToken.RefreshToken);
         currentToken.TokenValue = refreshedToken.Access_Token;
         currentToken.RefreshToken = refreshedToken.Refresh_Token;
