@@ -4,23 +4,27 @@
 <a href="recipes/create" class="btn btn-primary my-2 mx-1 mx-md-5">Add Recipe</a>
 
 @await Html.PartialAsync("./Home/CategorySelect.cshtml")
-<div class="my-3">
-</div>
-<div class="p-5 pt-0 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white">
-  <h1 class="text-start fw-light pt-3 ps-3">fast</h1>
-  <div class="d-flex scroll py-3">
-    @await Html.PartialAsync("./Home/RecipeSection.cshtml",
-    new ViewDataDictionary(ViewData) {
-    { "type", "fast" }})
-  </div>
-</div>
-<div class="my-3">
-</div>
-<div class="p-5 pt-0 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white">
-  <h1 class="text-start fw-light pt-3 ps-3">budget</h1>
-  <div class="d-flex scroll py-3">
-    @await Html.PartialAsync("./Home/RecipeSection.cshtml",
-    new ViewDataDictionary(ViewData) {
-    { "type", "budget" }})
-  </div>
-</div>
+
+
+@await Html.PartialAsync("./Home/RecipeSection.cshtml",
+new ViewDataDictionary(ViewData) {
+{ "type", "fast" },
+{ "url", "recipe" },
+{ "recipeList", ViewBag.FastRecipes }
+})
+
+
+@await Html.PartialAsync("./Home/RecipeSection.cshtml",
+new ViewDataDictionary(ViewData) {
+{ "type", "budget" },
+{ "url", "recipe" },
+{ "recipeList", ViewBag.BudgetRecipes }
+})
+
+
+@await Html.PartialAsync("./Home/RecipeSection.cshtml",
+new ViewDataDictionary(ViewData) {
+{ "type", "tasty" },
+{ "url", "tasty" },
+{ "recipeList", ViewBag.Tasty }
+})

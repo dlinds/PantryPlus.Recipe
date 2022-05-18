@@ -16,13 +16,25 @@ namespace PantryPlusRecipe.Models
 
   public class TastyAPIHelper
   {
-    public static async Task<string> GetStoreListings(string ingredient)
+    public static async Task<string> GetTastyRecipes(string ingredient)
     {
-      var client = new RestClient("https://tasty.p.rapidapi.com/recipes/auto-complete?prefix=chicken%20soup");
+      var client = new RestClient($"https://tasty.p.rapidapi.com/recipes/list?from=0&size=10&tags=under_30_minutes&q={ingredient}");
       var request = new RestRequest(Method.GET);
       request.AddHeader("X-RapidAPI-Host", "tasty.p.rapidapi.com");
-      request.AddHeader("X-RapidAPI-Key", "SIGN-UP-FOR-KEY");
+      request.AddHeader("X-RapidAPI-Key", $"{EnvironmentVariables.tasty_api}");
       IRestResponse response = await client.ExecuteTaskAsync(request);
+      // Console.WriteLine(response.Content);
+      return response.Content;
+    }
+
+    public static async Task<string> GetTastyTags()
+    {
+      var client = new RestClient($"https://tasty.p.rapidapi.com/tags/list");
+      var request = new RestRequest(Method.GET);
+      request.AddHeader("X-RapidAPI-Host", "tasty.p.rapidapi.com");
+      request.AddHeader("X-RapidAPI-Key", $"{EnvironmentVariables.tasty_api}");
+      IRestResponse response = await client.ExecuteTaskAsync(request);
+      // Console.WriteLine(response.Content);
       return response.Content;
     }
 

@@ -59,13 +59,24 @@ namespace PantryPlusRecipe.Controllers
     public async Task<IActionResult> Index()
     {
       var user = await _userManager.GetUserAsync(User);
-      // ViewBag.ListOfRecipes = await _db.Recipes.Where(x => x.User == user).OrderBy(x => x.CategoryName).ToListAsync();
-      ViewBag.ListOfRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).ToListAsync();
+      ViewBag.FastRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => (x.PrepMinutes + x.CookMinutes) < 30).ToListAsync();
+      ViewBag.BudgetRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => x.Cost > 10).ToListAsync();
+      ViewBag.Tasty = Recipe.GetTastyRecipes("chicken");
       return View();
+    }
+    public ActionResult ReturnPartial()
+    {
+      ViewBag.Tasty = Recipe.GetTastyRecipes("beef");
+      return PartialView("HolidayPartialView", ViewBag.Tasty);
     }
 
     public IActionResult Create()
     {
+      // ViewBag.Recipes = TastyAPIHelper.GetTastyRecipes("tomato");
+      // Console.WriteLine(ViewBag.Recipes);
+      // var listOfTags = TastyAPIHelper.GetTastyTags();
+
+      // Recipe.GetTastyRecipes();
       return View();
     }
 
@@ -134,7 +145,8 @@ namespace PantryPlusRecipe.Controllers
 
       return Json(new { Message = "message" });
     }
-    public async Task<ActionResult> Recipe(int id)
+    [HttpGet("/recipe")]
+    public async Task<ActionResult> IndividualRecipe(int id)
     {
       Recipe model = await _db.Recipes.Include(r => r.JoinEntitiesSteps).FirstOrDefaultAsync(r => r.RecipeId == id);
 

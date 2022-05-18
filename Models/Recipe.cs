@@ -1,5 +1,12 @@
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using RestSharp.Authenticators;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+using RestSharp;
 using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace PantryPlusRecipe.Models
 {
@@ -26,5 +33,27 @@ namespace PantryPlusRecipe.Models
     public virtual ICollection<IngredientRecipe> JoinEntitiesIngredients { get; }
     public virtual ICollection<CartRecipe> JoinEntitiesCart { get; }
     public virtual ApplicationUser User { get; set; }
+
+    public static List<Recipe> GetTastyRecipes(string searchTerm)
+    {
+      var result = TastyAPIHelper.GetTastyRecipes(searchTerm);
+      List<Recipe> tastyRecipes = new List<Recipe> { };
+      dynamic posted = JObject.Parse(result.Result);
+      foreach (var recipe in posted["results"])
+      {
+        Recipe recipeToAdd = new Recipe();
+        recipeToAdd.Name = recipe["name"];
+        recipeToAdd.Notes = recipe["description"];
+        recipeToAdd.ImgUrl = recipe["thumbnail_url"];
+        recipeToAdd.RecipeId = recipe["id"];
+        recipeToAdd.PrepMinutes = recipe["prep_time_minutes"];
+        recipeToAdd.CookMinutes = recipe["cook_time_minutes"];
+        recipeToAdd.NumberOfSteps = recipe["instructions"].Count;
+        tastyRecipes.Add(recipeToAdd);
+      }
+
+
+      return tastyRecipes;
+    }
   }
 }
