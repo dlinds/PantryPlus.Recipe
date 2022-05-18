@@ -137,7 +137,15 @@ namespace PantryPlusRecipe.Controllers
     public async Task<ActionResult> Recipe(int id)
     {
       Recipe model = await _db.Recipes.Include(r => r.JoinEntitiesSteps).FirstOrDefaultAsync(r => r.RecipeId == id);
+
       ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
+
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+
+      ViewBag.ItemCategories = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerCategory).Distinct().ToListAsync();
+
+      ViewBag.PantryList = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerItemName.ToLower()).ToListAsync();
       return View(model);
     }
 
@@ -153,12 +161,6 @@ namespace PantryPlusRecipe.Controllers
       var result = Ingredient.GetKrogerProduct(token.TokenValue, searchTerm, storeId, page);
       return Json(result);
     }
-
-    // var user = await _userManager.GetUserAsync(User);
-    // var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
-    // var result = ApplicationUser.GetStoreListings(currentToken.TokenValue, zipCode, miles, store);
-    // return Json(result);
-
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
