@@ -1,0 +1,47 @@
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+
+<h3 class="mb-3"><em>Ingredients</em></h3>
+@{
+  int count = 0;
+}
+@foreach (Ingredient ingredient in ViewBag.IngredientList)
+{
+  <div class="d-flex my-2">
+    @{
+      bool found = false;
+    }
+    @foreach (string pantryItem in ViewBag.PantryList)
+    {
+      @if (pantryItem.Contains(ingredient.Name.ToLower()))
+      {
+        found = true;
+      }
+    }
+    @if (found == true)
+    {
+      <i class="fas fa-check me-3" data-bs-placement="right" title="You currently have this ingredient"></i>
+    }
+    else
+    {
+      <i class="fas fa-cart-plus me-3 text-primary" data-bs-placement="right" title="You need this ingredient" id="ingredient-@count" data-mdb-toggle="modal" data-mdb-target="#ingredientModal-@count"></i>
+      @await Html.PartialAsync("./IngredientModal.cshtml", new ViewDataDictionary(ViewData) {{ "id", @count },{ "name", @ingredient.Name }})
+    }
+    <span>
+      @if (@ingredient.CountForTasty != null)
+      {
+        @ingredient.CountForTasty
+      }
+      @if (ingredient.Measurement != null)
+      {
+        @:
+        @ingredient.Measurement
+        @: of
+      }
+      @ingredient.Name
+    </span>
+  </div>
+  {
+
+    count += 1;
+  }
+}

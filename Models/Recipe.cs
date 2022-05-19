@@ -49,12 +49,52 @@ namespace PantryPlusRecipe.Models
         recipeToAdd.RecipeId = (int)recipe["id"];
         recipeToAdd.PrepMinutes = (recipe["prep_time_minutes"] != null) ? recipe["prep_time_minutes"] : 0;
         recipeToAdd.CookMinutes = (recipe["cook_time_minutes"] != null) ? recipe["cook_time_minutes"] : 0;
-        recipeToAdd.NumberOfSteps = recipe["instructions"].Count;
+        recipeToAdd.NumberOfSteps = (recipe["instructions"] != null) ? recipe["instructions"].Count : 0;
         tastyRecipes.Add(recipeToAdd);
       }
-
-
       return tastyRecipes;
+    }
+
+    public static (Recipe, List<string>, List<Ingredient>) GetTastyById(int id)
+    {
+      var result = TastyAPIHelper.GetTastyRecipeDetails(id);
+      Recipe tastyRecipe = new Recipe();
+      dynamic posted = JObject.Parse(result.Result);
+      tastyRecipe.Name = posted["name"];
+      tastyRecipe.Notes = posted["description"];
+      tastyRecipe.ImgUrl = posted["thumbnail_url"];
+      tastyRecipe.PrepMinutes = (posted["prep_time_minutes"] != null) ? posted["prep_time_minutes"] : 0;
+      tastyRecipe.CookMinutes = (posted["cook_time_minutes"] != null) ? posted["cook_time_minutes"] : 0;
+      tastyRecipe.NumberOfSteps = (posted["instructions"] != null) ? posted["instructions"].Count : 0;
+
+      List<string> instructionList = new List<string>();
+      if (posted["instructions"] != null)
+      {
+        foreach (var instruction in posted["instructions"])
+        {
+
+          instructionList.Add(instruction["display_text"].ToString());
+        }
+      }
+
+      List<Ingredient> ingredientList = new List<Ingredient>();
+      if (posted["sections"] != null)
+      {
+        foreach (var ingredient in posted["sections"][0]["components"])
+        {
+          Ingredient ingredientToAdd = new Ingredient();
+          ingredientToAdd.Name = ingredient["ingredient"]["name"].ToString();
+          Console.WriteLine(ingredient["measurements"][0]["quantity"]);
+          // ingredientToAdd.Count = ingredient["measurements"][0]["quantity"];
+          ingredientToAdd.CountForTasty = (ingredient["measurements"][0]["quantity"] != null) ? ingredient["measurements"][0]["quantity"] : "";
+
+          ingredientToAdd.Measurement = (ingredient["measurements"][0]["unit"]["abbreviation"] != null) ? ingredient["measurements"][0]["unit"]["abbreviation"] : "";
+
+          ingredientList.Add(ingredientToAdd);
+        }
+      }
+
+      return (tastyRecipe, instructionList, ingredientList);
     }
   }
 }

@@ -91,8 +91,11 @@ namespace PantryPlusRecipe.Controllers
       };
       _db.Carts.Add(item);
       await _db.SaveChangesAsync();
-      _db.CartRecipe.Add(new CartRecipe() { RecipeId = posted.RecipeId, CartId = item.CartId });
-      await _db.SaveChangesAsync();
+      if (posted.RecipeId != null)
+      {
+        _db.CartRecipe.Add(new CartRecipe() { RecipeId = posted.RecipeId, CartId = item.CartId });
+        await _db.SaveChangesAsync();
+      }
       return Json("result");
     }
 

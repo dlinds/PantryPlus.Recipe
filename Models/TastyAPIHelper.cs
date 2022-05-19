@@ -38,5 +38,16 @@ namespace PantryPlusRecipe.Models
       return response.Content;
     }
 
+    public static async Task<string> GetTastyRecipeDetails(int id)
+    {
+      var client = new RestClient($"https://tasty.p.rapidapi.com/recipes/get-more-info?id={id}");
+      var request = new RestRequest(Method.GET);
+      request.AddHeader("X-RapidAPI-Host", "tasty.p.rapidapi.com");
+      request.AddHeader("X-RapidAPI-Key", $"{EnvironmentVariables.tasty_api}");
+      IRestResponse response = await client.ExecuteTaskAsync(request);
+      // Console.WriteLine(response.Content);
+      return response.Content;
+    }
+
   }
 }

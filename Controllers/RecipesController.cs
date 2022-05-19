@@ -81,10 +81,12 @@ namespace PantryPlusRecipe.Controllers
       return PartialView("~/Views/Recipes/Home/_RecipeSection.cshtml");
     }
 
+
     public IActionResult Create()
     {
       return View();
     }
+
 
     public async Task<JsonResult> Favorite(string route, int recipeId)
     {
@@ -195,6 +197,25 @@ namespace PantryPlusRecipe.Controllers
       ViewBag.ItemCategories = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerCategory).Distinct().ToListAsync();
 
       ViewBag.PantryList = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerItemName.ToLower()).ToListAsync();
+      return View(model);
+    }
+
+    [HttpGet("/tasty")]
+    public async Task<ActionResult> Tasty(int id)
+    {
+      (Recipe model, List<string> instructionList, List<Ingredient> ingredientList) = Recipe.GetTastyById(id);
+
+      ViewBag.InstructionList = instructionList;
+      ViewBag.IngredientList = ingredientList;
+
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+
+      ViewBag.ItemCategories = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerCategory).Distinct().ToListAsync();
+
+      ViewBag.PantryList = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerItemName.ToLower()).ToListAsync();
+
+      ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
       return View(model);
     }
 

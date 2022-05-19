@@ -187,13 +187,23 @@ body {
   transform: translate(-50%, -50%);
 }
 
+
+.centeredOverlayButton {
+  position: absolute;
+  top: 12.5%;
+  left: 11%;
+  width: 20%;
+  transform: translate(-50%, -50%);
+}
+
+
 .wrapperForOverlay {
   position: relative;
   text-align: center;
 }
 
 .headerImgForOverlay {
-  height: 10em;
+  height: 15em;
   filter: brightness(55%);
   object-fit: cover;
 }
