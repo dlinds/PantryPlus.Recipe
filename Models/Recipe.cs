@@ -66,7 +66,7 @@ namespace PantryPlusRecipe.Models
       tastyRecipe.PrepMinutes = (posted["prep_time_minutes"] != null) ? posted["prep_time_minutes"] : 0;
       tastyRecipe.CookMinutes = (posted["cook_time_minutes"] != null) ? posted["cook_time_minutes"] : 0;
       tastyRecipe.NumberOfSteps = (posted["instructions"] != null) ? posted["instructions"].Count : 0;
-
+      tastyRecipe.NumberOfSections = 1;
       List<string> instructionList = new List<string>();
       if (posted["instructions"] != null)
       {

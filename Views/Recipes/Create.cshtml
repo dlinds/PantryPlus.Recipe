@@ -17,6 +17,7 @@
     postJson.notes = $('#notes').val();
     postJson.categoryName = $('#categorySelection').val();
     postJson.recipeName = $('#recipeName').val();
+    postJson.imgUrl = $('#recipeImgUrl').val();
     //first sections
     let sections = [];
     $('#hiddenParams').children().each(function () {
@@ -64,7 +65,7 @@
         success:
           function (response) {
             // Generate HTML table.
-            alert("sucess");
+            alert("success");
           },
         error:
           function (response) {

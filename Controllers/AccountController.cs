@@ -83,6 +83,12 @@ namespace PantryPlusRecipe.Controllers
       {
         string authenticationMethod = null;
         await _signInManager.SignInAsync(user, isPersistent: true, authenticationMethod);
+        var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
+        if (currentToken != null)
+        {
+          _db.Tokens.Remove(currentToken);
+          _db.SaveChanges();
+        }
         Token newToken = new Token();
         newToken.TokenValue = token;
         newToken.User = user;

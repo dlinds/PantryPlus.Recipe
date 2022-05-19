@@ -133,6 +133,7 @@ namespace PantryPlusRecipe.Controllers
       recipe.Cost = posted.cost;
       recipe.Notes = posted.notes;
       recipe.Name = posted.recipeName;
+      recipe.ImgUrl = posted.imgUrl;
       int numOfSections = 0;
       int numOfSteps = 0;
       recipe.User = currentUser;
@@ -238,6 +239,7 @@ namespace PantryPlusRecipe.Controllers
         {
           Details = instructionList[x],
           StepNumber = x - 1,
+          SectionNumber = 1,
           SectionName = "Instructions",
           User = currentUser
         };

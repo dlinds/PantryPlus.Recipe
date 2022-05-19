@@ -22,8 +22,17 @@
           <div class="form-notch-trailing"></div>
         </div>
       </div>
-      <div class="form-outline mx-3 mt-3">
+      @* <div class="form-outline mx-3 mt-3">
         <input type="file" class="form-control rounded shadow-sm" style="border: 1px solid #bdbdbd;" id="customFile" />
+        </div> *@
+      <div class="form-outline mx-3 mt-3">
+        <input type="text" name="recipeImgUrl" id="recipeImgUrl" class="form-control shadow-sm" placeholder="ex: google.com/recipe.jpg">
+        <label for="recipeImgUrl" class="form-label">Link to Recipe Image</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 87.2px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -43,7 +52,7 @@
         </select>
       </div>
       <div class="form-outline m-3">
-        <textarea class="form-control shadow-sm" id="notes" rows="3"></textarea>
+        <textarea class="form-control shadow-sm" id="notes" rows="5"></textarea>
         <label class="form-label" for="notes" style="margin-left: 0px;">Any Notes About the Recipe?</label>
         <div class="form-notch">
           <div class="form-notch-leading" style="width: 9px;"></div>
