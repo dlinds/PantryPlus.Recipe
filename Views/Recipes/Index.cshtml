@@ -38,28 +38,57 @@ new ViewDataDictionary(ViewData) {
   <div class="p-5 pt-0 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3">
     <h1 class="text-start fw-light pt-3 ps-3">Search Tasty</h1>
     <p class="text-start ps-3">Search Tasty.com to expand your recipe ideas, and even save a new favorite or two.</p>
-    <form onSubmit="getTasty()" class="ps-3">
-      <div class="form-outline w-25">
-        <input type="text" name="ingredient" id="ingredient" class="form-control mb-3 shadow-sm" placeholder="ex: Tomato">
-        <label for="ingredient" class="form-label">Type an ingredient</label>
-        <div class="form-notch">
-          <div class="form-notch-leading" style="width: 9px;"></div>
-          <div class="form-notch-middle" style="width: 87.2px;"></div>
-          <div class="form-notch-trailing"></div>
+    <div id="ingredientsToSearch" class="ms-3 mb-3">
+    </div>
+    <form onSubmit="buildSearch()" class="ps-3">
+      <div class="row">
+        <div class="col-3 ">
+          <div class="form-outline">
+            <input type="text" name="ingredient" id="ingredient" class="form-control shadow-sm" placeholder="ex: Tomato">
+            <label for="ingredient" class="form-label">Type an ingredient</label>
+            <div class="form-notch">
+              <div class="form-notch-leading" style="width: 9px;"></div>
+              <div class="form-notch-middle" style="width: 87.2px;"></div>
+              <div class="form-notch-trailing"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col d-flex align-items-center">
+          <button type="button" class="btn btn-sm btn-primary btn-floating" disabled onClick="buildSearch()" id="plusIngredientButton"><i class="fas fa-plus"></i></button>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Search</button>
+      <input type="hidden" id="ingredientListHidden">
+      <button type="button" id="searchTastyButton" disabled class="btn btn-primary mt-3" onClick="getTasty()">Search</button>
     </form>
   </div>
 </div>
 <script>
+  $('#ingredient').on('keyup', function () {
+    if ($(this).val().length >= 3) {
+      $('#plusIngredientButton').prop("disabled", false);
+    } else {
+      $('#plusIngredientButton').prop("disabled", true);
+    }
+  });
+
+
+  function buildSearch() {
+    event.preventDefault();
+    let ingredient = $("#ingredient").val();
+    console.log(ingredient);
+    let value = `<span class="btn btn-success border shadow-sm me-3">${ingredient}</span>`;
+    $("#ingredientListHidden").val($("#ingredientListHidden").val() + ", " + $("#ingredient").val());
+    $("#ingredientsToSearch").html($("#ingredientsToSearch").html() + value);
+    $("#ingredient").val("");
+    $("#searchTastyButton").prop("disabled", false);
+  }
   function getTasty() {
     event.preventDefault();
-
+    let searchString = $("#ingredientListHidden").val().substring(2);
     $.ajax({
       url: "/Recipes/FindTastyByIngredient",
       type: "GET",
-      data: { ingredient: `${this.event.target.ingredient.value}` }
+      data: { ingredient: `${searchString}` }
     })
       .done(function (partialViewResult) {
         $("#tastySection").html(partialViewResult);

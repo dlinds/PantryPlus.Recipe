@@ -150,3 +150,5 @@ Copyright (c) _5-1-2022_ _Daniel Lindsey_
 ## TO-DO
 
 fix img upload
+remove home button
+re-route home to /recipes
