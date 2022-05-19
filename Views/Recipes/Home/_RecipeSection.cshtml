@@ -1,0 +1,40 @@
+@* <div style="width: 100vh?;overflow-x: auto; white-space: nowrap;"> *@
+@using PantryPlusRecipe.Models
+
+<div class="p-5 pt-0 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3">
+  <h1 class="text-start fw-light pt-3 ps-3">@ViewData["type"]</h1>
+  <div class="d-flex scroll py-3">
+    @foreach (Recipe recipe in ViewData["recipeList"] as IEnumerable<PantryPlusRecipe.Models.Recipe>)
+    {
+      <div style="min-width:170px; min-height:200px;" class="me-4">
+
+        <div class="card border me-3 shadow-sm" style="min-width:170px; min-height:200px; max-height: 275px;">
+          <div class="card text-white shadow-sm">
+            <img src="@recipe.ImgUrl" class="card-img" alt="..." style="width: auto; height: 170px; object-fit: cover;">
+            <div class="overlay rounded" style="background-color: rgb(56 59 64 / 60%);"></div>
+            <div class="card-img-overlay py-3 px-2 d-flex align-items-center">
+              <a href="/@ViewData["url"]?id=@recipe.RecipeId" class="link-white">
+                <h5 class="card-title multiline fw-normal fs-4" style="text-overflow: ellipsis;">@recipe.Name</h5>
+              </a>
+              <i class="far fa-star" style="margin-top:-140px; position: absolute;" onClick="handleFavorite('@ViewData["url"]' , @recipe.RecipeId)"></i>
+            </div>
+          </div>
+          <a href="/@ViewData["url"]?id=@recipe.RecipeId" class="link-dark">
+            <div class="card-body px-3 py-2">
+              STEPS: @recipe.NumberOfSteps
+              <br />
+              @{
+                if ((recipe.PrepMinutes + recipe.PrepMinutes) > 0)
+                {
+                  @: TIME : @(recipe.PrepMinutes + recipe.PrepMinutes)
+                }
+              }
+
+              <br />
+            </div>
+          </a>
+        </div>
+      </div>
+    }
+  </div>
+</div>

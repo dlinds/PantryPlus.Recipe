@@ -45,9 +45,9 @@ namespace PantryPlusRecipe.Models
         recipeToAdd.Name = recipe["name"];
         recipeToAdd.Notes = recipe["description"];
         recipeToAdd.ImgUrl = recipe["thumbnail_url"];
-        recipeToAdd.RecipeId = recipe["id"];
-        recipeToAdd.PrepMinutes = recipe["prep_time_minutes"];
-        recipeToAdd.CookMinutes = recipe["cook_time_minutes"];
+        recipeToAdd.RecipeId = (int)recipe["id"];
+        recipeToAdd.PrepMinutes = (recipe["prep_time_minutes"] != null) ? recipe["prep_time_minutes"] : 0;
+        recipeToAdd.CookMinutes = (recipe["cook_time_minutes"] != null) ? recipe["cook_time_minutes"] : 0;
         recipeToAdd.NumberOfSteps = recipe["instructions"].Count;
         tastyRecipes.Add(recipeToAdd);
       }

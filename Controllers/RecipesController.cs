@@ -18,7 +18,7 @@ using RestSharp.Authenticators;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 
 namespace PantryPlusRecipe.Controllers
@@ -61,13 +61,19 @@ namespace PantryPlusRecipe.Controllers
       var user = await _userManager.GetUserAsync(User);
       ViewBag.FastRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => (x.PrepMinutes + x.CookMinutes) < 30).ToListAsync();
       ViewBag.BudgetRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => x.Cost > 10).ToListAsync();
-      ViewBag.Tasty = Recipe.GetTastyRecipes("chicken");
+      // ViewBag.Tasty = Recipe.GetTastyRecipes("chicken");
       return View();
     }
-    public ActionResult ReturnPartial()
+    public ActionResult FindTastyByIngredient(string ingredient)
     {
-      ViewBag.Tasty = Recipe.GetTastyRecipes("beef");
-      return PartialView("HolidayPartialView", ViewBag.Tasty);
+      Console.WriteLine(ingredient);
+      List<Recipe> TastyList = Recipe.GetTastyRecipes(ingredient);
+      // Console.WriteLine(TastyList.Count);
+      // List<Recipe> TastyList = new List<Recipe>();
+      ViewData["type"] = "tasty";
+      ViewData["url"] = "tasty";
+      ViewData["recipeList"] = TastyList;
+      return PartialView("~/Views/Recipes/Home/_RecipeSection.cshtml");
     }
 
     public IActionResult Create()

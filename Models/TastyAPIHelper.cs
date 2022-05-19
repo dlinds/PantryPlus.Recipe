@@ -18,7 +18,7 @@ namespace PantryPlusRecipe.Models
   {
     public static async Task<string> GetTastyRecipes(string ingredient)
     {
-      var client = new RestClient($"https://tasty.p.rapidapi.com/recipes/list?from=0&size=10&tags=under_30_minutes&q={ingredient}");
+      var client = new RestClient($"https://tasty.p.rapidapi.com/recipes/list?from=0&size=10&q={ingredient}");
       var request = new RestRequest(Method.GET);
       request.AddHeader("X-RapidAPI-Host", "tasty.p.rapidapi.com");
       request.AddHeader("X-RapidAPI-Key", $"{EnvironmentVariables.tasty_api}");

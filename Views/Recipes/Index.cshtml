@@ -3,10 +3,10 @@
 
 <a href="recipes/create" class="btn btn-primary my-2 mx-1 mx-md-5">Add Recipe</a>
 
-@await Html.PartialAsync("./Home/CategorySelect.cshtml")
+@* @await Html.PartialAsync("./Home/CategorySelect.cshtml") *@
 
 
-@await Html.PartialAsync("./Home/RecipeSection.cshtml",
+@await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
 { "type", "fast" },
 { "url", "recipe" },
@@ -14,17 +14,46 @@ new ViewDataDictionary(ViewData) {
 })
 
 
-@await Html.PartialAsync("./Home/RecipeSection.cshtml",
+@await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
 { "type", "budget" },
 { "url", "recipe" },
 { "recipeList", ViewBag.BudgetRecipes }
 })
 
+<div id="tastySection">
+  <div class="p-5 pt-0 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3">
+    <h1 class="text-start fw-light pt-3 ps-3">Search Tasty</h1>
+    <p class="text-start ps-3">Search Tasty.com to expand your recipe ideas, and even save a new favorite or two.</p>
+    <form onSubmit="getTasty()" class="ps-3">
+      <div class="form-outline w-25">
+        <input type="text" name="ingredient" id="ingredient" class="form-control mb-3 shadow-sm" placeholder="ex: Tomato">
+        <label for="ingredient" class="form-label">Type an ingredient</label>
+        <div class="form-notch">
+          <div class="form-notch-leading" style="width: 9px;"></div>
+          <div class="form-notch-middle" style="width: 87.2px;"></div>
+          <div class="form-notch-trailing"></div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+</div>
+<script>
+  function getTasty() {
+    event.preventDefault();
 
-@await Html.PartialAsync("./Home/RecipeSection.cshtml",
-new ViewDataDictionary(ViewData) {
-{ "type", "tasty" },
-{ "url", "tasty" },
-{ "recipeList", ViewBag.Tasty }
-})
+    $.ajax({
+      url: "/Recipes/FindTastyByIngredient",
+      type: "GET",
+      data: { ingredient: `"${this.event.target.ingredient.value}"` }
+    })
+      .done(function (partialViewResult) {
+        $("#tastySection").html(partialViewResult);
+      });
+  }
+
+  function handleClear(route, id) {
+
+  }
+</script>
