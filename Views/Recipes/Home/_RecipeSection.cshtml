@@ -2,7 +2,22 @@
 @using PantryPlusRecipe.Models
 
 <div class="p-5 py-1 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3">
-  <h1 class="text-start fw-light pt-3 ps-3">@ViewData["type"]</h1>
+
+  @if (ViewData["url"].ToString() == "tasty")
+  {
+    <div class="row justify-content-between">
+      <div class="col-2">
+        <h1 class="text-start fw-light pt-3 ps-3">@ViewData["type"]</h1>
+      </div>
+      <div class="col-2 d-flex align-items-center  justify-content-end">
+        <button type="button" class="btn btn-light border shadow">Back</button>
+      </div>
+    </div>
+  }
+  else
+  {
+    <h1 class="text-start fw-light pt-3 ps-3">@ViewData["type"]</h1>
+  }
   <div class="d-flex scroll py-3">
     @foreach (Recipe recipe in ViewData["recipeList"] as IEnumerable<PantryPlusRecipe.Models.Recipe>)
     {
@@ -17,13 +32,16 @@
                 <h5 class="card-title multiline fw-normal fs-4" style="text-overflow: ellipsis;">@recipe.Name</h5>
               </a>
               <div id="@recipe.RecipeId-starFavorite-@ViewData["url"]" style="margin-top:-140px; position: absolute;">
-                @if (ViewData["url"].ToString() != "tasty" && ViewBag.ListOfFavoriteIds.Contains(recipe.RecipeId))
+                @if (ViewData["url"].ToString() != "tasty")
                 {
-                  <i class="fas fa-star" onClick="handleFavorite('@ViewData["url"]', @recipe.RecipeId)"></i>
-                }
-                else
-                {
-                  <i class="far fa-star" onClick="handleFavorite('@ViewData["url"]', @recipe.RecipeId)"></i>
+                  @if (ViewBag.ListOfFavoriteIds.Contains(recipe.RecipeId))
+                  {
+                    <i class="fas fa-star" onClick="handleFavorite('@ViewData["url"]', @recipe.RecipeId)"></i>
+                  }
+                  else
+                  {
+                    <i class="far fa-star" onClick="handleFavorite('@ViewData["url"]', @recipe.RecipeId)"></i>
+                  }
                 }
               </div>
             </div>
@@ -33,15 +51,15 @@
               STEPS: @recipe.NumberOfSteps
               <br />
               @{
-                if ((recipe.PrepMinutes + recipe.PrepMinutes) > 0)
+                if ((recipe.PrepMinutes + recipe.CookMinutes) > 0)
                 {
-                  @: TIME : @(recipe.PrepMinutes + recipe.PrepMinutes)
+                  @: TIME : @(recipe.PrepMinutes + recipe.CookMinutes) minutes
                   <br />
                 }
               }
               @if (ViewData["url"].ToString() != "tasty")
               {
-                @:COST: @recipe.Cost
+                @:COST: $@recipe.Cost
               }
 
             </div>

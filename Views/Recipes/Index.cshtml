@@ -14,7 +14,7 @@ new ViewDataDictionary(ViewData) {
 
 @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
-{ "type", "fast" },
+{ "type", "under 20 minutes" },
 { "url", "recipe" },
 { "recipeList", ViewBag.FastRecipes }
 })
@@ -22,9 +22,16 @@ new ViewDataDictionary(ViewData) {
 
 @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
-{ "type", "budget" },
+{ "type", "less than $10" },
 { "url", "recipe" },
 { "recipeList", ViewBag.BudgetRecipes }
+})
+
+@await Html.PartialAsync("./Home/_RecipeSection.cshtml",
+new ViewDataDictionary(ViewData) {
+{ "type", "all" },
+{ "url", "recipe" },
+{ "recipeList", ViewBag.AllRecipes }
 })
 
 <div id="tastySection">

@@ -84,7 +84,6 @@ namespace PantryPlusRecipe.Models
         {
           Ingredient ingredientToAdd = new Ingredient();
           ingredientToAdd.Name = ingredient["ingredient"]["name"].ToString();
-          Console.WriteLine(ingredient["measurements"][0]["quantity"]);
           // ingredientToAdd.Count = ingredient["measurements"][0]["quantity"];
           ingredientToAdd.CountForTasty = (ingredient["measurements"][0]["quantity"] != null) ? ingredient["measurements"][0]["quantity"] : "";
 

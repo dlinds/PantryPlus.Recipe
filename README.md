@@ -149,16 +149,4 @@ Copyright (c) _5-1-2022_ _Daniel Lindsey_
 
 ## TO-DO
 
-fix token refresh
-
-tasty api
-
-develop cart view
-
-allow editing of search term
-
-back next arrows
-
-img upload
-
-back to first button in modal, change text
+fix img upload

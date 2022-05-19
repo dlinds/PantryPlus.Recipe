@@ -60,7 +60,8 @@ namespace PantryPlusRecipe.Controllers
     {
       var user = await _userManager.GetUserAsync(User);
       ViewBag.FastRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => (x.PrepMinutes + x.CookMinutes) < 30).ToListAsync();
-      ViewBag.BudgetRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => x.Cost > 10).ToListAsync();
+      ViewBag.AllRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).ToListAsync();
+      ViewBag.BudgetRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => x.Cost < 10).ToListAsync();
       List<int> favoriteIdList = _db.Favorites.Where(x => x.User == user).Select(x => x.RecipeId).ToList();
       ViewBag.ListOfFavoriteIds = favoriteIdList;
       List<Recipe> favoriteRecipeList = new List<Recipe>();
@@ -204,7 +205,7 @@ namespace PantryPlusRecipe.Controllers
     public async Task<ActionResult> Tasty(int id)
     {
       (Recipe model, List<string> instructionList, List<Ingredient> ingredientList) = Recipe.GetTastyById(id);
-
+      model.RecipeId = id;
       ViewBag.InstructionList = instructionList;
       ViewBag.IngredientList = ingredientList;
 
@@ -217,6 +218,46 @@ namespace PantryPlusRecipe.Controllers
 
       ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
       return View(model);
+    }
+
+
+    [HttpPost]
+    public async Task<JsonResult> SaveNewTasty(int id)
+    {
+      (Recipe recipe, List<string> instructionList, List<Ingredient> ingredientList) = Recipe.GetTastyById(id);
+
+      _db.Recipes.Add(recipe);
+      await _db.SaveChangesAsync();
+
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+
+      for (int x = 0; x < instructionList.Count; x++)
+      {
+        Step step = new Step
+        {
+          Details = instructionList[x],
+          StepNumber = x - 1,
+          SectionName = "Instructions",
+          User = currentUser
+        };
+        _db.Steps.Add(step);
+        await _db.SaveChangesAsync();
+        _db.StepRecipes.Add(new StepRecipe() { RecipeId = recipe.RecipeId, StepId = step.StepId });
+        await _db.SaveChangesAsync();
+      }
+
+      foreach (Ingredient ingredient in ingredientList)
+      {
+        ingredient.User = currentUser;
+        _db.Ingredients.Add(ingredient);
+        await _db.SaveChangesAsync();
+        _db.IngredientRecipes.Add(new IngredientRecipe() { RecipeId = recipe.RecipeId, IngredientId = ingredient.IngredientId });
+        await _db.SaveChangesAsync();
+
+      }
+
+      return Json("success");
     }
 
 
