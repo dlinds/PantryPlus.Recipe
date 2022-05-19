@@ -1,7 +1,7 @@
 @* <div style="width: 100vh?;overflow-x: auto; white-space: nowrap;"> *@
 @using PantryPlusRecipe.Models
 
-<div class="p-5 py-1 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3">
+<div class="p-5 px-2 px-md-5 py-1 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3">
 
   @if (ViewData["url"].ToString() == "tasty")
   {
@@ -10,9 +10,21 @@
         <h1 class="text-start fw-light pt-3 ps-3">@ViewData["type"]</h1>
       </div>
       <div class="col-2 d-flex align-items-center  justify-content-end">
-        <button type="button" class="btn btn-light border shadow">Back</button>
+        <button type="button" class="btn btn-light border shadow" onclick="reloadTastyDiv()">Back</button>
       </div>
     </div>
+    <script>
+      function reloadTastyDiv() {
+        event.preventDefault();
+        $.ajax({
+          url: "/Recipes/ReloadTastyDiv",
+          type: "GET"
+        })
+          .done(function (partialViewResult) {
+            $("#tastySection").html(partialViewResult);
+          });
+      }
+    </script>
   }
   else
   {

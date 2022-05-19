@@ -56,7 +56,7 @@ namespace PantryPlusRecipe.Controllers
     [HttpGet("/GetAuthorizationCode")]
     public ActionResult GetAuthorizationCode()
     {
-      return Redirect($"https://api.kroger.com/v1/connect/oauth2/authorize?scope=profile.compact%20cart.basic:write%20product.compact&response_type=code&client_id={EnvironmentVariables.client_id}&redirect_uri=https://localhost:6003?getAuth=profile");
+      return Redirect($"https://api.kroger.com/v1/connect/oauth2/authorize?scope=profile.compact%20cart.basic:write%20product.compact&redirect_uri={EnvironmentVariables.redirect_uri}&response_type=code&client_id={EnvironmentVariables.client_id}");
     }
 
     public IActionResult Privacy()

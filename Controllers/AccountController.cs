@@ -98,7 +98,7 @@ namespace PantryPlusRecipe.Controllers
         newToken.RefreshTokenExpiresAt = DateTime.Now.AddDays(180);
         _db.Tokens.Add(newToken);
         _db.SaveChanges();
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Recipes");
       }
     }
 

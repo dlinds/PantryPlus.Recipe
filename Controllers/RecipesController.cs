@@ -81,6 +81,10 @@ namespace PantryPlusRecipe.Controllers
       ViewData["recipeList"] = TastyList;
       return PartialView("~/Views/Recipes/Home/_RecipeSection.cshtml");
     }
+    public ActionResult ReloadTastyDiv()
+    {
+      return PartialView("~/Views/Recipes/Home/_TastySection.cshtml");
+    }
 
 
     public IActionResult Create()

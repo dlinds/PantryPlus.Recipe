@@ -2,7 +2,7 @@
   ViewData["Title"] = "Home Page";
 }
 <div class="container py-5">
-  <div class="mx-5 p-5 border rounded shadow-sm bg-white">
+  <div class="mx-lg-5 mx-md-2 p-5 border rounded shadow-sm bg-white">
     @if (!User.Identity.IsAuthenticated)
     {
       @if (ViewBag.HomeView == "Login")

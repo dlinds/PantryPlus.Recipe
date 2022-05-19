@@ -132,16 +132,20 @@
       }
 
       htmlString += `${itemPrice} <span class="text-dark fs-6">/ <span id='${item.upc}-size'>${item.items[0].size}</span></span></p>
+                <div class="d-flex align-items-end justify-content-end">
+                  <div id="${item.upc}-checkmarkAdded" class="me-3" style="display:none;">
+<i class="fas fa-check"></i>
+                  </div>
                   <button type="button" class="btn btn-primary btn-sm" id="${item.upc}-addToCartButton" onClick="handleAddToCartClick('${item.upc}')">
                     Add to Cart
-                  </button>
+                  </button></div>
                   <input type="hidden" id="${item.upc}-krogerCategory" value="${item.categories[0]}">
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
                 `;
     });
 
@@ -173,8 +177,7 @@
         data: { jsonPost: JSON.stringify(jsonOutput) },
         success:
           function (response) {
-            // Generate HTML table.
-            alert("success");
+            $(`#${upc}-checkmarkAdded`).show(300).fadeOut(3000);
           },
         error:
           function (response) {
