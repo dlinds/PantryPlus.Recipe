@@ -190,9 +190,8 @@ body {
 
 .centeredOverlayButton {
   position: absolute;
-  top: 12.5%;
-  left: 11%;
-  width: 20%;
+  top: 9%;
+  left: 3%;
   transform: translate(-50%, -50%);
 }
 
