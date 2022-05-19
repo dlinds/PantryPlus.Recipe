@@ -170,12 +170,20 @@ namespace PantryPlusRecipe.Controllers
       var cartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).ToListAsync();
       foreach (var item in cartItems)
       {
-        foreach (var join in item.JoinEntities)
+        if (item.JoinEntities.Count == 0)
         {
-          if (join.Recipe.RecipeId == recipeId)
+          _db.Carts.Remove(item);
+          await _db.SaveChangesAsync();
+        }
+        else
+        {
+          foreach (var join in item.JoinEntities)
           {
-            _db.Carts.Remove(item);
-            await _db.SaveChangesAsync();
+            if (join.Recipe.RecipeId == recipeId)
+            {
+              _db.Carts.Remove(item);
+              await _db.SaveChangesAsync();
+            }
           }
         }
       }

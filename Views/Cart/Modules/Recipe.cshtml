@@ -16,3 +16,18 @@
     <button class="btn btn-primary w-75 mt-2" type="button" onClick="removeIngredients(@ViewData["id"])">Remove Ingredients</button>
   </div>
 </div>
+
+<div class="card border me-3 shadow-sm p-3 mb-3 hiddenRecipe" id='1000-recipeCard' style="display:none;">
+  <a href="/recipes/recipe?id=@ViewData["id"]" target="_blank">
+    <div class="rounded wrapperForOverlay mb-2 shadow">
+      <img class="rounded w-100 headerImgForOverlay" src="~/assets/img/tastyLogo.png" alt="Photo of Tasty">
+      <div class="centeredOverlayText">
+        <h1 class="fw-normal fs-1 text-white">This is from a Tasty recipe</h1>
+      </div>
+    </div>
+  </a>
+  <div class="card-body px-3 py-2 text-center">
+    Want to remove the ingredients from this recipe from your cart? Tap remove ingredients below
+    <button class="btn btn-primary w-75 mt-2" type="button" onClick="removeIngredients(-1)">Remove Ingredients</button>
+  </div>
+</div>

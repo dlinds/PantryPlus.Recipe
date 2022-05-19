@@ -22,10 +22,29 @@
           </div>
           @foreach (Cart item in ViewBag.CartItems)
           {
-
-            @foreach (var join in item.JoinEntities)
+            if (item.JoinEntities.Count == 0)
             {
               @await Html.PartialAsync("./Modules/Product.cshtml",
+          new ViewDataDictionary(ViewData) {
+          { "cartId", item.CartId },
+          { "imgUrl", item.KrogerImgLink },
+          { "name", item.KrogerItemName},
+          { "itemSize", item.KrogerItemSize},
+          { "quantity", item.ItemCount},
+          { "krogerCartQuantity", item.CountPlacedInCart},
+          { "itemPrice", item.KrogerCost},
+          { "krogerAisle", item.KrogerAisle},
+          { "recipeId", 1000},
+          { "calculatedItemPrice", Math.Round((item.ItemCount * item.KrogerCost + (item.KrogerCost * item.CountPlacedInCart)),2)}
+          })
+            }
+            else
+            {
+
+
+              @foreach (var join in item.JoinEntities)
+              {
+                @await Html.PartialAsync("./Modules/Product.cshtml",
           new ViewDataDictionary(ViewData) {
           { "cartId", join.Cart.CartId },
           { "imgUrl", join.Cart.KrogerImgLink },
@@ -35,10 +54,11 @@
           { "krogerCartQuantity", join.Cart.CountPlacedInCart},
           { "itemPrice", join.Cart.KrogerCost},
           { "krogerAisle", join.Cart.KrogerAisle},
-          { "recipeId", join.RecipeId},
+          { "recipeId", join.Recipe.RecipeId},
           { "calculatedItemPrice", Math.Round((join.Cart.ItemCount * join.Cart.KrogerCost + (join.Cart.KrogerCost * join.Cart.CountPlacedInCart)),2)}
           })
 
+              }
             }
           }
         </div>
@@ -63,6 +83,10 @@
               $('.@recipe.RecipeId-recipe').hover(function () {
                 $('.hiddenRecipe').hide();
                 $('#@recipe.RecipeId-recipeCard').show();
+              });
+              $('.1000-recipe').hover(function () { //this is just here as a placeholder
+                $('.hiddenRecipe').hide();
+                $('#1000-recipeCard').show();
               });
             </script>
           }
