@@ -53,7 +53,7 @@ namespace PantryPlusRecipe.Controllers
     public async Task<ActionResult> Index()
     {
       var user = await _userManager.GetUserAsync(User);
-      ViewBag.CartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).OrderBy(x => x.KrogerAisle).ToListAsync();
+      ViewBag.CartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).OrderBy(x => x.KrogerAisle.Length).ToListAsync();
       List<string> recipeNameList = new List<string> { };
       List<Recipe> recipeList = new List<Recipe> { };
       foreach (var item in ViewBag.CartItems)
@@ -86,6 +86,7 @@ namespace PantryPlusRecipe.Controllers
         KrogerItemName = posted.KrogerItemName,
         KrogerItemSize = posted.KrogerItemSize,
         KrogerImgLink = posted.KrogerImgLink,
+        KrogerCategory = posted.KrogerCategory,
         ItemCount = 1,
         User = currentUser
       };
@@ -168,10 +169,26 @@ namespace PantryPlusRecipe.Controllers
     {
       var user = await _userManager.GetUserAsync(User);
       var cartItems = await _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).ToListAsync();
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
       foreach (var item in cartItems)
       {
         if (item.JoinEntities.Count == 0)
         {
+          Pantry pantryItem = new Pantry
+          {
+            KrogerItemName = item.KrogerItemName,
+            KrogerImgLink = item.KrogerImgLink,
+            KrogerItemSize = item.KrogerItemSize,
+            KrogerUPC = item.KrogerUPC,
+            User = currentUser,
+            ItemCount = item.CountPlacedInCart,
+            KrogerAisle = item.KrogerAisle,
+            KrogerCategory = item.KrogerCategory,
+            KrogerCost = item.KrogerCost
+          };
+          _db.Pantry.Add(pantryItem);
+          await _db.SaveChangesAsync();
           _db.Carts.Remove(item);
           await _db.SaveChangesAsync();
         }
@@ -181,6 +198,20 @@ namespace PantryPlusRecipe.Controllers
           {
             if (join.Recipe.RecipeId == recipeId)
             {
+              Pantry pantryItem = new Pantry
+              {
+                KrogerItemName = item.KrogerItemName,
+                KrogerImgLink = item.KrogerImgLink,
+                KrogerItemSize = item.KrogerItemSize,
+                KrogerUPC = item.KrogerUPC,
+                User = currentUser,
+                ItemCount = item.CountPlacedInCart,
+                KrogerAisle = item.KrogerAisle,
+                KrogerCategory = item.KrogerCategory,
+                KrogerCost = item.KrogerCost
+              };
+              _db.Pantry.Add(pantryItem);
+              await _db.SaveChangesAsync();
               _db.Carts.Remove(item);
               await _db.SaveChangesAsync();
             }

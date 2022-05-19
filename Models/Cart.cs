@@ -20,7 +20,7 @@ namespace PantryPlusRecipe.Models
     public float KrogerCost { get; set; }
     public int ItemCount { get; set; }
     public int CountPlacedInCart { get; set; }
-
+    public string KrogerCategory { get; set; }
     public virtual ICollection<CartRecipe> JoinEntities { get; }
     public virtual ApplicationUser User { get; set; }
 
