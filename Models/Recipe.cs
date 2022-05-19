@@ -28,6 +28,7 @@ namespace PantryPlusRecipe.Models
     public int NumberOfSections { get; set; }
     public int NumberOfSteps { get; set; }
     public string Notes { get; set; }
+    // public int? TastyId { get; set; }
 
     public virtual ICollection<StepRecipe> JoinEntitiesSteps { get; }
     public virtual ICollection<IngredientRecipe> JoinEntitiesIngredients { get; }

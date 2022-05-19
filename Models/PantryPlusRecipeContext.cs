@@ -13,7 +13,7 @@ namespace PantryPlusRecipe.Models
     public DbSet<Step> Steps { get; set; }
     public DbSet<StepRecipe> StepRecipes { get; set; }
     public DbSet<Pantry> Pantry { get; set; }
-
+    public DbSet<Favorite> Favorites { get; set; }
 
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartRecipe> CartRecipe { get; set; }

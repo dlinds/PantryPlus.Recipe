@@ -1,7 +1,7 @@
 @* <div style="width: 100vh?;overflow-x: auto; white-space: nowrap;"> *@
 @using PantryPlusRecipe.Models
 
-<div class="p-5 pt-0 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3">
+<div class="p-5 py-1 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3">
   <h1 class="text-start fw-light pt-3 ps-3">@ViewData["type"]</h1>
   <div class="d-flex scroll py-3">
     @foreach (Recipe recipe in ViewData["recipeList"] as IEnumerable<PantryPlusRecipe.Models.Recipe>)
@@ -16,7 +16,16 @@
               <a href="/@ViewData["url"]?id=@recipe.RecipeId" class="link-white">
                 <h5 class="card-title multiline fw-normal fs-4" style="text-overflow: ellipsis;">@recipe.Name</h5>
               </a>
-              <i class="far fa-star" style="margin-top:-140px; position: absolute;" onClick="handleFavorite('@ViewData["url"]' , @recipe.RecipeId)"></i>
+              <div id="@recipe.RecipeId-starFavorite-@ViewData["url"]" style="margin-top:-140px; position: absolute;">
+                @if (ViewData["url"].ToString() != "tasty" && ViewBag.ListOfFavoriteIds.Contains(recipe.RecipeId))
+                {
+                  <i class="fas fa-star" onClick="handleFavorite('@ViewData["url"]', @recipe.RecipeId)"></i>
+                }
+                else
+                {
+                  <i class="far fa-star" onClick="handleFavorite('@ViewData["url"]', @recipe.RecipeId)"></i>
+                }
+              </div>
             </div>
           </div>
           <a href="/@ViewData["url"]?id=@recipe.RecipeId" class="link-dark">
@@ -27,10 +36,14 @@
                 if ((recipe.PrepMinutes + recipe.PrepMinutes) > 0)
                 {
                   @: TIME : @(recipe.PrepMinutes + recipe.PrepMinutes)
+                  <br />
                 }
               }
+              @if (ViewData["url"].ToString() != "tasty")
+              {
+                @:COST: @recipe.Cost
+              }
 
-              <br />
             </div>
           </a>
         </div>

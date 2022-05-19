@@ -5,6 +5,12 @@
 
 @* @await Html.PartialAsync("./Home/CategorySelect.cshtml") *@
 
+@await Html.PartialAsync("./Home/_RecipeSection.cshtml",
+new ViewDataDictionary(ViewData) {
+{ "type", "favorites" },
+{ "url", "recipe" },
+{ "recipeList", ViewBag.FavoriteRecipeList }
+})
 
 @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
@@ -46,14 +52,32 @@ new ViewDataDictionary(ViewData) {
     $.ajax({
       url: "/Recipes/FindTastyByIngredient",
       type: "GET",
-      data: { ingredient: `"${this.event.target.ingredient.value}"` }
+      data: { ingredient: `${this.event.target.ingredient.value}` }
     })
       .done(function (partialViewResult) {
         $("#tastySection").html(partialViewResult);
       });
   }
 
-  function handleClear(route, id) {
-
+  function handleFavorite(route, id) {
+    $.ajax({
+      type: 'POST',
+      dataType: 'JSON',
+      url: '/Recipes/Favorite',
+      data: { route: route, recipeId: id },
+      success:
+        function (response) {
+          @* if (response === "added") {
+              $(`#${id}-starFavorite-${route}`).html(`<i class="fas fa-star" onClick="handleFavorite('${route}', ${id})"></i>`);
+              } else if (response === "removed") {
+              $(`#${id}-starFavorite-${route}`).html(`<i class="far fa-star" onClick="handleFavorite('${route}', ${id})"></i>`);
+              }*@
+            location.reload();
+        },
+      error:
+        function (response) {
+          console.log("Error: ", response);
+        }
+    });
   }
 </script>

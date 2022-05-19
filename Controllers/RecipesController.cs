@@ -61,15 +61,20 @@ namespace PantryPlusRecipe.Controllers
       var user = await _userManager.GetUserAsync(User);
       ViewBag.FastRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => (x.PrepMinutes + x.CookMinutes) < 30).ToListAsync();
       ViewBag.BudgetRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => x.Cost > 10).ToListAsync();
-      // ViewBag.Tasty = Recipe.GetTastyRecipes("chicken");
+      List<int> favoriteIdList = _db.Favorites.Where(x => x.User == user).Select(x => x.RecipeId).ToList();
+      ViewBag.ListOfFavoriteIds = favoriteIdList;
+      List<Recipe> favoriteRecipeList = new List<Recipe>();
+      foreach (int recipeId in favoriteIdList)
+      {
+        favoriteRecipeList.Add(await _db.Recipes.FirstOrDefaultAsync(x => x.RecipeId == recipeId));
+      }
+      ViewBag.FavoriteRecipeList = favoriteRecipeList;
       return View();
     }
     public ActionResult FindTastyByIngredient(string ingredient)
     {
       Console.WriteLine(ingredient);
       List<Recipe> TastyList = Recipe.GetTastyRecipes(ingredient);
-      // Console.WriteLine(TastyList.Count);
-      // List<Recipe> TastyList = new List<Recipe>();
       ViewData["type"] = "tasty";
       ViewData["url"] = "tasty";
       ViewData["recipeList"] = TastyList;
@@ -78,12 +83,38 @@ namespace PantryPlusRecipe.Controllers
 
     public IActionResult Create()
     {
-      // ViewBag.Recipes = TastyAPIHelper.GetTastyRecipes("tomato");
-      // Console.WriteLine(ViewBag.Recipes);
-      // var listOfTags = TastyAPIHelper.GetTastyTags();
-
-      // Recipe.GetTastyRecipes();
       return View();
+    }
+
+    public async Task<JsonResult> Favorite(string route, int recipeId)
+    {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      if (route == "recipe")
+      {
+        Favorite checkIfExists = _db.Favorites.Where(x => x.RecipeId == recipeId && x.User == currentUser).FirstOrDefault();
+        if (checkIfExists == null)
+        {
+          Favorite favorite = new Favorite();
+          favorite.RecipeId = recipeId;
+          favorite.User = currentUser;
+          _db.Favorites.Add(favorite);
+          _db.SaveChanges();
+          return Json("added");
+        }
+        else
+        {
+          _db.Favorites.Remove(checkIfExists);
+          _db.SaveChanges();
+          return Json("removed");
+        }
+      }
+      else if (route == "tasty")
+      {
+
+      }
+
+      return Json("test");
     }
 
     [HttpPost]
