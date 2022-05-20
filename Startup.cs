@@ -65,6 +65,7 @@ namespace PantryPlusRecipe
       app.UseAuthentication();
       app.UseRouting();
       app.UseAuthorization();
+      app.UseHttpsRedirection();
       app.UseEndpoints(routes =>
       {
         routes.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");

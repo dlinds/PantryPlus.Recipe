@@ -7,6 +7,8 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
 
 
 namespace PantryPlusRecipe.Models
@@ -34,10 +36,14 @@ namespace PantryPlusRecipe.Models
 
     public static RequestTokenJson GetProfileToken(string code)
     {
+      // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken Code: " + code);
       var token = KrogerAPIHelper.GetProfileToken(code, "authorization");
+      // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken token: " + token);
       var result = token.Result;
+      // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken result: " + result);
       JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
       RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
+      // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken requestJson: " + requestJson);
       return requestJson;
     }
 
@@ -46,7 +52,7 @@ namespace PantryPlusRecipe.Models
 
       if (currentToken.TokenValueExpiresAt < DateTime.Now)
       {
-        Console.WriteLine("refresh needed");
+        // Console.WriteLine("refresh needed");
         var token = KrogerAPIHelper.GetProfileToken(currentToken.RefreshToken, "refresh");
         var result = token.Result;
         JObject jsonResponse = JObject.Parse(result);
@@ -54,18 +60,21 @@ namespace PantryPlusRecipe.Models
         newToken.RefreshToken = jsonResponse["refresh_token"].ToString();
         newToken.TokenValue = jsonResponse["access_token"].ToString();
         newToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
-        Console.WriteLine("newToken.RefreshToken line 57: " + newToken.RefreshToken);
+        // Console.WriteLine("newToken.RefreshToken line 57: " + newToken.RefreshToken);
         return newToken;
       }
       return currentToken;
     }
 
 
-    public static string GetProfileId(string token)
+    public static string GetProfileId(string code)
     {
-      var id = KrogerAPIHelper.GetProfileId(token);
+      // File.AppendAllText("LOGGING.txt", "Token in app user: " + code);
+      var id = KrogerAPIHelper.GetProfileId(code);
       // var result = id.Result;
+      // File.AppendAllText("LOGGING.txt", "id.Result: " + id.Result);
       JObject jsonResponse = JObject.Parse(id.Result);
+      // File.AppendAllText("LOGGING.txt", "jsonResponse.ToString(): " + jsonResponse.ToString());
       var results = jsonResponse["data"]["id"];
       return results.ToString();
     }

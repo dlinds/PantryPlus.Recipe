@@ -88,7 +88,7 @@ namespace PantryPlusRecipe.Controllers
     }
     public ActionResult FindTastyByIngredient(string ingredient)
     {
-      Console.WriteLine(ingredient);
+      // Console.WriteLine(ingredient);
       List<Recipe> TastyList = Recipe.GetTastyRecipes(ingredient);
       ViewData["type"] = "tasty";
       ViewData["url"] = "tasty";

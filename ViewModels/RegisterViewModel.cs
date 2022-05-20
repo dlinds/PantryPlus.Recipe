@@ -22,6 +22,11 @@ namespace PantryPlusRecipe.ViewModels
     public string Email { get; set; }
 
     [Required]
+    [EmailAddress]
+    [Display(Name = "RefreshToken")]
+    public string RefreshToken { get; set; }
+
+    [Required]
     [DataType(DataType.Password)]
     [Display(Name = "Password")]
     public string Password { get; set; }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace PantryPlusRecipe.Controllers
 {
@@ -77,23 +78,28 @@ namespace PantryPlusRecipe.Controllers
       if (user == null) // if not registered yet, redirect to home and show finish registration screen
       {
         TempData["krogerId"] = id;
+        TempData["token"] = token;
+        TempData["refreshToken"] = refreshToken;
         return RedirectToAction("Index", "Home");
       }
       else //if they are registered, sign them in and go to home, and add token to DB
       {
         string authenticationMethod = null;
         await _signInManager.SignInAsync(user, isPersistent: true, authenticationMethod);
-        var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);
-        if (currentToken != null)
+        List<Token> currentTokens = await _db.Tokens.Where(x => x.User == user).ToListAsync();
+        if (currentTokens.Count > 0)
         {
-          _db.Tokens.Remove(currentToken);
-          _db.SaveChanges();
+          foreach (Token dbToken in currentTokens)
+          {
+            _db.Tokens.Remove(dbToken);
+            await _db.SaveChangesAsync();
+          }
         }
         Token newToken = new Token();
         newToken.TokenValue = token;
         newToken.User = user;
         newToken.RefreshToken = refreshToken;
-        newToken.TokenAuthType = "profile:compact";
+        newToken.TokenAuthType = EnvironmentVariables.scope;
         newToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(30);
         newToken.RefreshTokenExpiresAt = DateTime.Now.AddDays(180);
         _db.Tokens.Add(newToken);
@@ -175,7 +181,26 @@ namespace PantryPlusRecipe.Controllers
       }
       if (result.Succeeded)
       {
-        return RedirectToAction("Index", "Home", new { v = "login" });
+        if (model.KrogerId != null)
+        {
+          var user = await _db?.Users?.SingleOrDefaultAsync(x => x.KrogerId == model.KrogerId);
+          string authenticationMethod = null;
+          await _signInManager.SignInAsync(user, isPersistent: true, authenticationMethod);
+
+          var newUser = await _db?.Users?.SingleOrDefaultAsync(x => x.KrogerId == model.KrogerId);
+          Token newToken = new Token();
+          newToken.RefreshToken = model.RefreshToken;
+          newToken.User = newUser;
+          newToken.TokenAuthType = EnvironmentVariables.scope;
+          newToken.TokenValueExpiresAt = DateTime.Now.AddMinutes(-5);
+          newToken.RefreshTokenExpiresAt = DateTime.Now.AddDays(180);
+          _db.Tokens.Add(newToken);
+          _db.SaveChanges();
+
+
+
+        }
+        return RedirectToAction("Index", "Recipes");
       }
       else
       {

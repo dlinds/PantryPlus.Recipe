@@ -15,34 +15,45 @@ new ViewDataDictionary(ViewData) {
 })
 }
 
-@await Html.PartialAsync("./Home/_RecipeSection.cshtml",
+@if (ViewBag.FavoriteRecipeList.Count > 0)
+{
+  @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
 { "type", "favorites" },
 { "url", "recipe" },
 { "recipeList", ViewBag.FavoriteRecipeList }
 })
+}
 
-@await Html.PartialAsync("./Home/_RecipeSection.cshtml",
+@if (ViewBag.FastRecipes.Count > 0)
+{
+  @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
 { "type", "under 20 minutes" },
 { "url", "recipe" },
 { "recipeList", ViewBag.FastRecipes }
 })
+}
 
-
-@await Html.PartialAsync("./Home/_RecipeSection.cshtml",
+@if (ViewBag.BudgetRecipes.Count > 0)
+{
+  @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
 { "type", "less than $10" },
 { "url", "recipe" },
 { "recipeList", ViewBag.BudgetRecipes }
 })
+}
 
-@await Html.PartialAsync("./Home/_RecipeSection.cshtml",
+@if (ViewBag.AllRecipes.Count > 0)
+{
+  @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
 { "type", "all" },
 { "url", "recipe" },
 { "recipeList", ViewBag.AllRecipes }
 })
+}
 
 @await Html.PartialAsync("./Home/_TastySection.cshtml")
 

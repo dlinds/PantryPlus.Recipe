@@ -10,7 +10,7 @@ using RestSharp.Authenticators;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PantryPlusRecipe.Models;
-
+using System.IO;
 namespace PantryPlusRecipe.Models
 {
 
@@ -29,13 +29,11 @@ namespace PantryPlusRecipe.Models
       {
         grantTypeOutput = "grant_type=refresh_token&refresh_token=" + code;
       }
-      Console.WriteLine(grantTypeOutput);
       var client = new RestClient("https://api.kroger.com/v1/connect/oauth2/token");
       var request = new RestRequest(Method.POST);
       request.AddHeader("content-type", "application/x-www-form-urlencoded");
-      request.AddParameter("application/x-www-form-urlencoded", $"{grantTypeOutput}&redirect_uri={EnvironmentVariables.redirect_uri}&client_id={EnvironmentVariables.client_id}&client_secret={EnvironmentVariables.client_secret}&scope=profile.compact", ParameterType.RequestBody);
+      request.AddParameter("application/x-www-form-urlencoded", $"{grantTypeOutput}&redirect_uri={EnvironmentVariables.redirect_uri}&client_id={EnvironmentVariables.client_id}&client_secret={EnvironmentVariables.client_secret}&scope={EnvironmentVariables.scope}", ParameterType.RequestBody);
       IRestResponse response = await client.ExecuteTaskAsync(request);
-      Console.WriteLine(response.Content);
       return response.Content;
     }
 

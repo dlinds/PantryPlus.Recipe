@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PantryPlusRecipe.Models;
+using System.IO;
+using Microsoft.AspNetCore.Identity;
+using RestSharp.Authenticators;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
+using System.Data;
 
 namespace PantryPlusRecipe.Controllers
 {
@@ -26,10 +33,11 @@ namespace PantryPlusRecipe.Controllers
     }
 
     [HttpGet("/")]
-    public ActionResult Index(string getAuth, string code, string v)
+    public ActionResult Index(string code, string getAuth, string v)
     {
       if (getAuth == "profile")
       {
+        // System.IO.File.AppendAllText("LOGGING.txt", "Token: " + code.ToString());
         var token = ApplicationUser.GetProfileToken(code);
         var krogerId = ApplicationUser.GetProfileId(token.Access_Token);
         return RedirectToAction("LoginRegisterKrogerId", "Account", new { id = krogerId, token = token.Access_Token, refreshToken = token.Refresh_Token });
@@ -42,21 +50,29 @@ namespace PantryPlusRecipe.Controllers
       {
         ViewBag.HomeView = "Register";
         ViewBag.KrogerId = TempData["krogerId"];
+        ViewBag.Token = TempData["token"];
+        ViewBag.RefreshToken = TempData["RefreshToken"];
+        return View();
       }
       if (v == "register")
       {
         ViewBag.HomeView = "Register";
+        return View();
       }
       else if (v == "login")
       {
         ViewBag.HomeView = "Login";
+        return View();
       }
-      return View();
+
+      return RedirectToAction("Index", "Recipes");
+
+
     }
     [HttpGet("/GetAuthorizationCode")]
     public ActionResult GetAuthorizationCode()
     {
-      return Redirect($"https://api.kroger.com/v1/connect/oauth2/authorize?scope=profile.compact%20cart.basic:write%20product.compact&redirect_uri={EnvironmentVariables.redirect_uri}&response_type=code&client_id={EnvironmentVariables.client_id}");
+      return Redirect($"https://api.kroger.com/v1/connect/oauth2/authorize?scope={EnvironmentVariables.scope}&redirect_uri={EnvironmentVariables.redirect_uri}&response_type=code&client_id={EnvironmentVariables.client_id}");
     }
 
     public IActionResult Privacy()

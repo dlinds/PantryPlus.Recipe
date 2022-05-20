@@ -23,35 +23,35 @@
             <br>
             @User.Identity.Name
           </p>
-          @if (ViewBag.Phone == null)
-          {
+          @* @if (ViewBag.Phone == null)
+            {
             @using (Html.BeginForm("AddPhoneNumber", "Account", FormMethod.Post))
             {
-              <div class="row">
-                <div class="col-sm-8 col-xs-12">
-                  <p>
-                    <strong>Phone</strong>
-                    <br>
-
-                    <input type="tel" placeholder="(Optional) provide phone number" name="phoneNumber" class="form-control">
-
-                  </p>
-                </div>
-                <div class="col-4">
-                  <br class="d-none d-sm-block ">
-                  <button type="submit" class="btn btn-primary">Add</button>
-                </div>
-              </div>
-            }
-          }
-          else
-          {
+            <div class="row">
+            <div class="col-sm-8 col-xs-12">
             <p>
-              <strong>Phone</strong>
-              <br>
-              @ViewBag.Phone
+            <strong>Phone</strong>
+            <br>
+
+            <input type="tel" placeholder="(Optional) provide phone number" name="phoneNumber" class="form-control">
+
             </p>
-          }
+            </div>
+            <div class="col-4">
+            <br class="d-none d-sm-block ">
+            <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+            </div>
+            }
+            }
+            else
+            {
+            <p>
+            <strong>Phone</strong>
+            <br>
+            @ViewBag.Phone
+            </p>
+            } *@
         </div>
         <div class="col-md-4 col-sm-12 text-md-end text-sm-start">
           <br class="d-block d-sm-none">
