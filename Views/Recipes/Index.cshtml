@@ -5,6 +5,16 @@
 
 @* @await Html.PartialAsync("./Home/CategorySelect.cshtml") *@
 
+@if (ViewBag.CardRecipeList.Count > 0)
+{
+  @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
+new ViewDataDictionary(ViewData) {
+{ "type", "cart" },
+{ "url", "recipe" },
+{ "recipeList", ViewBag.CardRecipeList }
+})
+}
+
 @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
 { "type", "favorites" },
@@ -79,11 +89,11 @@ new ViewDataDictionary(ViewData) {
       data: { route: route, recipeId: id },
       success:
         function (response) {
-          @* if (response === "added") {
-              $(`#${id}-starFavorite-${route}`).html(`<i class="fas fa-star" onClick="handleFavorite('${route}', ${id})"></i>`);
-              } else if (response === "removed") {
-              $(`#${id}-starFavorite-${route}`).html(`<i class="far fa-star" onClick="handleFavorite('${route}', ${id})"></i>`);
-              }*@
+  @* if (response === "added") {
+    $(`#${id}-starFavorite-${route}`).html(`<i class="fas fa-star" onClick="handleFavorite('${route}', ${id})"></i>`);
+    } else if (response === "removed") {
+    $(`#${id}-starFavorite-${route}`).html(`<i class="far fa-star" onClick="handleFavorite('${route}', ${id})"></i>`);
+    }*@
             location.reload();
         },
       error:

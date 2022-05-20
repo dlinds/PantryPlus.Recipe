@@ -216,3 +216,11 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+
+
+.collapsed-recipe-list {
+  height: 7vh;
+  overflow: hidden;
+  transition-duration: 3s, 5s;
+}

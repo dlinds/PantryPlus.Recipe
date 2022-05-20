@@ -59,9 +59,11 @@ namespace PantryPlusRecipe.Controllers
     public async Task<IActionResult> Index()
     {
       var user = await _userManager.GetUserAsync(User);
+
       ViewBag.FastRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => (x.PrepMinutes + x.CookMinutes) < 30).ToListAsync();
       ViewBag.AllRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).ToListAsync();
       ViewBag.BudgetRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => x.Cost < 10).ToListAsync();
+
       List<int> favoriteIdList = _db.Favorites.Where(x => x.User == user).Select(x => x.RecipeId).ToList();
       ViewBag.ListOfFavoriteIds = favoriteIdList;
       List<Recipe> favoriteRecipeList = new List<Recipe>();
@@ -70,6 +72,18 @@ namespace PantryPlusRecipe.Controllers
         favoriteRecipeList.Add(await _db.Recipes.FirstOrDefaultAsync(x => x.RecipeId == recipeId));
       }
       ViewBag.FavoriteRecipeList = favoriteRecipeList;
+
+      List<Recipe> cartRecipeList = new List<Recipe>();
+      List<Cart> cartList = _db.Carts.Where(x => x.User == user).Include(x => x.JoinEntities).ToList();
+      foreach (Cart cartItem in cartList)
+      {
+        foreach (var join in cartItem.JoinEntities)
+        {
+          cartRecipeList.Add(join.Recipe);
+        }
+      }
+      ViewBag.CardRecipeList = cartRecipeList;
+
       return View();
     }
     public ActionResult FindTastyByIngredient(string ingredient)

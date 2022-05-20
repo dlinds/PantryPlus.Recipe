@@ -1,8 +1,13 @@
 @* <div style="width: 100vh?;overflow-x: auto; white-space: nowrap;"> *@
 @using PantryPlusRecipe.Models
 
-<div class="p-5 px-2 px-md-5 py-1 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3">
-
+<div class="p-5 px-2 px-md-5 py-1 mx-1 mx-md-5 rounded inset-shadow-sm border bg-white my-3" id='@ViewData["type"]Container'>
+  @* <h1 onClick='collapse("@ViewData["type"]")'>^</h1>
+    <script>
+    function collapse(divName) {
+    $(`#${divName}Container`).addClass("collapsed-recipe-list");
+    }
+    </script> *@
   @if (ViewData["url"].ToString() == "tasty")
   {
     <div class="row justify-content-between">
@@ -69,7 +74,7 @@
                   <br />
                 }
               }
-              @if (ViewData["url"].ToString() != "tasty")
+              @if (ViewData["url"].ToString() != "tasty" && recipe.Cost > 0)
               {
                 @:COST: $@recipe.Cost
               }

@@ -64,8 +64,8 @@ namespace PantryPlusRecipe.Models
     public static string GetProfileId(string token)
     {
       var id = KrogerAPIHelper.GetProfileId(token);
-      var result = id.Result;
-      JObject jsonResponse = JObject.Parse(result);
+      // var result = id.Result;
+      JObject jsonResponse = JObject.Parse(id.Result);
       var results = jsonResponse["data"]["id"];
       return results.ToString();
     }
