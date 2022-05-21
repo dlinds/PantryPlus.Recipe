@@ -78,24 +78,36 @@ namespace PantryPlusRecipe.Controllers
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       var currentUser = await _userManager.FindByIdAsync(userId);
       dynamic posted = JObject.Parse(jsonPost);
-      Cart item = new Cart
+      string UPC = posted.KrogerUPC;
+      Cart itemInDatabase = await _db.Carts.Where(x => x.User == currentUser && x.KrogerUPC == UPC).FirstOrDefaultAsync();
+
+      if (itemInDatabase != null)
       {
-        KrogerUPC = posted.KrogerUPC,
-        KrogerAisle = posted.KrogerAisle,
-        KrogerCost = posted.KrogerCost,
-        KrogerItemName = posted.KrogerItemName,
-        KrogerItemSize = posted.KrogerItemSize,
-        KrogerImgLink = posted.KrogerImgLink,
-        KrogerCategory = posted.KrogerCategory,
-        ItemCount = 1,
-        User = currentUser
-      };
-      _db.Carts.Add(item);
-      await _db.SaveChangesAsync();
-      if (posted.RecipeId != null)
-      {
-        _db.CartRecipe.Add(new CartRecipe() { RecipeId = posted.RecipeId, CartId = item.CartId });
+        itemInDatabase.ItemCount++;
+        _db.Entry(itemInDatabase).State = EntityState.Modified;
         await _db.SaveChangesAsync();
+      }
+      else
+      {
+        Cart item = new Cart
+        {
+          KrogerUPC = posted.KrogerUPC,
+          KrogerAisle = posted.KrogerAisle,
+          KrogerCost = posted.KrogerCost,
+          KrogerItemName = posted.KrogerItemName,
+          KrogerItemSize = posted.KrogerItemSize,
+          KrogerImgLink = posted.KrogerImgLink,
+          KrogerCategory = posted.KrogerCategory,
+          ItemCount = 1,
+          User = currentUser
+        };
+        _db.Carts.Add(item);
+        await _db.SaveChangesAsync();
+        if (posted.RecipeId != null)
+        {
+          _db.CartRecipe.Add(new CartRecipe() { RecipeId = posted.RecipeId, CartId = item.CartId });
+          await _db.SaveChangesAsync();
+        }
       }
       return Json("result");
     }
@@ -175,22 +187,34 @@ namespace PantryPlusRecipe.Controllers
       {
         if (item.JoinEntities.Count == 0)
         {
-          Pantry pantryItem = new Pantry
+          Pantry alreadyInPantry = await _db.Pantry.Where(x => x.User == user && item.KrogerUPC == x.KrogerUPC).FirstOrDefaultAsync();
+          if (alreadyInPantry != null)
           {
-            KrogerItemName = item.KrogerItemName,
-            KrogerImgLink = item.KrogerImgLink,
-            KrogerItemSize = item.KrogerItemSize,
-            KrogerUPC = item.KrogerUPC,
-            User = currentUser,
-            ItemCount = item.CountPlacedInCart,
-            KrogerAisle = item.KrogerAisle,
-            KrogerCategory = item.KrogerCategory,
-            KrogerCost = item.KrogerCost
-          };
-          _db.Pantry.Add(pantryItem);
-          await _db.SaveChangesAsync();
-          _db.Carts.Remove(item);
-          await _db.SaveChangesAsync();
+            alreadyInPantry.ItemCount += item.CountPlacedInCart;
+            _db.Entry(alreadyInPantry).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+            _db.Carts.Remove(item);
+            await _db.SaveChangesAsync();
+          }
+          else
+          {
+            Pantry pantryItem = new Pantry
+            {
+              KrogerItemName = item.KrogerItemName,
+              KrogerImgLink = item.KrogerImgLink,
+              KrogerItemSize = item.KrogerItemSize,
+              KrogerUPC = item.KrogerUPC,
+              User = currentUser,
+              ItemCount = item.CountPlacedInCart,
+              KrogerAisle = item.KrogerAisle,
+              KrogerCategory = item.KrogerCategory,
+              KrogerCost = item.KrogerCost
+            };
+            _db.Pantry.Add(pantryItem);
+            await _db.SaveChangesAsync();
+            _db.Carts.Remove(item);
+            await _db.SaveChangesAsync();
+          }
         }
         else
         {
@@ -198,27 +222,39 @@ namespace PantryPlusRecipe.Controllers
           {
             if (join.Recipe.RecipeId == recipeId)
             {
-              Pantry pantryItem = new Pantry
+              Pantry alreadyInPantry = await _db.Pantry.Where(x => x.User == user && item.KrogerUPC == x.KrogerUPC).FirstOrDefaultAsync();
+              if (alreadyInPantry != null)
               {
-                KrogerItemName = item.KrogerItemName,
-                KrogerImgLink = item.KrogerImgLink,
-                KrogerItemSize = item.KrogerItemSize,
-                KrogerUPC = item.KrogerUPC,
-                User = currentUser,
-                ItemCount = item.CountPlacedInCart,
-                KrogerAisle = item.KrogerAisle,
-                KrogerCategory = item.KrogerCategory,
-                KrogerCost = item.KrogerCost
-              };
-              _db.Pantry.Add(pantryItem);
-              await _db.SaveChangesAsync();
-              _db.Carts.Remove(item);
-              await _db.SaveChangesAsync();
+                alreadyInPantry.ItemCount += item.CountPlacedInCart;
+                _db.Entry(alreadyInPantry).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+                _db.Carts.Remove(item);
+                await _db.SaveChangesAsync();
+              }
+              else
+              {
+                Pantry pantryItem = new Pantry
+                {
+                  KrogerItemName = item.KrogerItemName,
+                  KrogerImgLink = item.KrogerImgLink,
+                  KrogerItemSize = item.KrogerItemSize,
+                  KrogerUPC = item.KrogerUPC,
+                  User = currentUser,
+                  ItemCount = item.CountPlacedInCart,
+                  KrogerAisle = item.KrogerAisle,
+                  KrogerCategory = item.KrogerCategory,
+                  KrogerCost = item.KrogerCost
+                };
+                _db.Pantry.Add(pantryItem);
+                await _db.SaveChangesAsync();
+                _db.Carts.Remove(item);
+                await _db.SaveChangesAsync();
+              }
             }
           }
         }
       }
-      return Json("test");
+      return Json("worked");
     }
 
   }

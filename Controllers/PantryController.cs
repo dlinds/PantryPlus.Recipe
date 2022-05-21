@@ -67,7 +67,7 @@ namespace PantryPlusRecipe.Controllers
       dynamic posted = JObject.Parse(jsonPost);
       string upc = posted.KrogerUPC;
 
-      if (_db.Pantry.Any(x => x.KrogerUPC == upc))
+      if (_db.Pantry.Any(x => x.KrogerUPC == upc && currentUser == x.User))
       {
         Pantry pantryItem = await _db?.Pantry?.SingleOrDefaultAsync(x => x.KrogerUPC == upc);
         pantryItem.ItemCount++;

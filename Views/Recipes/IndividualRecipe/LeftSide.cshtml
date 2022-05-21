@@ -154,6 +154,8 @@
   }
 
   function handleAddToCartClick(upc) {
+    $(`#${upc}-checkmarkAdded`).stop();
+    $(`#${upc}-checkmarkAdded`).hide(50);
     let jsonOutput = {};
     let aisle = $(`#${upc}-aisle`).text();
     if (aisle.includes("aisle")) {
@@ -177,7 +179,7 @@
         data: { jsonPost: JSON.stringify(jsonOutput) },
         success:
           function (response) {
-            $(`#${upc}-checkmarkAdded`).show(300).fadeOut(3000);
+            $(`#${upc}-checkmarkAdded`).show(300).fadeOut(700);
           },
         error:
           function (response) {

@@ -40,7 +40,17 @@
       </div>
       <div class="modal-body mx-2 pb-0 bg-light">
         <div class="text-center">
-          <h4>@ViewBag.KrogerStoreName</h4>
+          @if (ViewBag.KrogerStoreName == null)
+          {
+            <h4 class="text-danger">Heads up!</h4>
+            <p>It doesn't look like you've yet selected a Kroger store. Until you do, all prices will come back as unknown, and adding to your pantry will not work.
+              <br /> <br />To pick a store, navigate to the Account Info page, located in the right side of the site's menu bar.
+            </p>
+          }
+          else
+          {
+            <h4>Searching @ViewBag.KrogerStoreName</h4>
+          }
           <div>
             <div class="text-center d-none">
               <button type="button" id="searchIngredientButton-@ViewData["id"]" class="btn btn-primary my-3 w-25">Search</button>
