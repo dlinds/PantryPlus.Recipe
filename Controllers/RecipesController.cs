@@ -79,7 +79,10 @@ namespace PantryPlusRecipe.Controllers
       {
         foreach (var join in cartItem.JoinEntities)
         {
-          cartRecipeList.Add(join.Recipe);
+          if (!cartRecipeList.Contains(join.Recipe))
+          {
+            cartRecipeList.Add(join.Recipe);
+          }
         }
       }
       ViewBag.CardRecipeList = cartRecipeList;
@@ -215,8 +218,9 @@ namespace PantryPlusRecipe.Controllers
       var currentUser = await _userManager.FindByIdAsync(userId);
 
       ViewBag.ItemCategories = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerCategory).Distinct().ToListAsync();
-
-      ViewBag.PantryList = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerItemName.ToLower()).ToListAsync();
+      ViewBag.CartList = await _db.Carts.Where(x => x.User == currentUser).ToListAsync();
+      // ViewBag.PantryList = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerItemName.ToLower()).ToListAsync();
+      ViewBag.PantryList = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).ToListAsync();
       return View(model);
     }
 

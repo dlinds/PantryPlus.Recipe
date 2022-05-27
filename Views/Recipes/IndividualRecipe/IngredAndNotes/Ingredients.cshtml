@@ -9,21 +9,34 @@
   <div class="d-flex my-2">
     @{
       bool found = false;
+      int itemCount = 0;
     }
-    @foreach (string pantryItem in ViewBag.PantryList)
+    @foreach (Pantry pantryItem in ViewBag.PantryList)
     {
-      @if (pantryItem.Contains(join.Ingredient.Name.ToLower()))
+      @if (pantryItem.KrogerItemName.Contains(join.Ingredient.Name.ToLower()))
       {
+        itemCount = pantryItem.ItemCount;
         found = true;
       }
     }
     @if (found == true)
     {
-      <i class="fas fa-check me-3" data-bs-placement="right" title="You currently have this ingredient"></i>
+      <i class="fas fa-check me-3" data-bs-placement="right" title="You currently have this @itemCount of this ingredient"></i>
     }
     else
     {
-      <i class="fas fa-cart-plus me-3 text-primary" data-bs-placement="right" title="You need this ingredient" id="ingredient-@join.Ingredient.IngredientId" data-mdb-toggle="modal" data-mdb-target="#ingredientModal-@join.Ingredient.IngredientId"></i>
+      string classColor = "text-primary";
+      string hoverText = "You need this ingredient";
+      foreach (Cart cartItem in ViewBag.CartList)
+      {
+        @if (cartItem.KrogerItemName.ToLower().Contains(join.Ingredient.Name.ToLower()))
+        {
+          classColor = "text-success";
+          hoverText = "You aleady have this item in your cart";
+        }
+      }
+
+      <i class="fas fa-cart-plus me-3 @classColor" data-bs-placement="right" title="@hoverText" id="ingredient-@join.Ingredient.IngredientId" data-mdb-toggle="modal" data-mdb-target="#ingredientModal-@join.Ingredient.IngredientId"></i>
       @await Html.PartialAsync("./IngredientModal.cshtml", new ViewDataDictionary(ViewData) {{ "id", @join.Ingredient.IngredientId },{ "name", @join.Ingredient.Name }})
     }
     <span>

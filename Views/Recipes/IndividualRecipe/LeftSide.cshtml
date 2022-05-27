@@ -136,7 +136,7 @@
                   <div id="${item.upc}-checkmarkAdded" class="me-3" style="display:none;">
 <i class="fas fa-check"></i>
                   </div>
-                  <button type="button" class="btn btn-primary btn-sm" id="${item.upc}-addToCartButton" onClick="handleAddToCartClick('${item.upc}')">
+                  <button type="button" class="btn btn-primary btn-sm" id="${item.upc}-addToCartButton" onClick="handleAddToCartClick('${item.upc}', '${ingredientId}' )">
                     Add to Cart
                   </button></div>
                   <input type="hidden" id="${item.upc}-krogerCategory" value="${item.categories[0]}">
@@ -153,7 +153,7 @@
 
   }
 
-  function handleAddToCartClick(upc) {
+  function handleAddToCartClick(upc, ingredientId) {
     $(`#${upc}-checkmarkAdded`).stop();
     $(`#${upc}-checkmarkAdded`).hide(50);
     let jsonOutput = {};
@@ -179,6 +179,8 @@
         data: { jsonPost: JSON.stringify(jsonOutput) },
         success:
           function (response) {
+            $(`#ingredient-${ingredientId}`).removeClass('text-primary');
+            $(`#ingredient-${ingredientId}`).addClass('text-success');
             $(`#${upc}-checkmarkAdded`).show(300).fadeOut(700);
           },
         error:
