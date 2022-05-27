@@ -24,6 +24,10 @@ For styling, this project will utilize MDBootstrap, a library combining the best
 
 <br>
 
+## Viewing The Live Site
+
+This application is currently hosted at [https://pantryplus.recipes](https://pantryplus.recipes). At this time, most of all the features rely on the use of a Kroger account (Fred Meyer, Fry's, etc) but I plan on adding in functionality as time allows for non-Kroger authenticated accounts.
+
 # Setup/Installation Requirements
 
 ## Cloning the repository
@@ -144,11 +148,3 @@ Copyright (c) _5-1-2022_ _Daniel Lindsey_
 <img src="./ProjectInfoAssets/CartTemplateView.PNG"
      alt="Item Search Modal.PNG"
      style="margin-right: 10px;" />
-
-
-
-## TO-DO
-
-fix img upload
-remove home button
-re-route home to /recipes
