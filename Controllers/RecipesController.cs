@@ -35,6 +35,27 @@ namespace PantryPlusRecipe.Controllers
       _db = db;
     }
 
+    public async Task<bool> GetHelloFreshToken()
+    {
+      var user = await _userManager.GetUserAsync(User);
+      HelloFreshToken currentHFToken = await _db?.HelloFreshTokens?.SingleOrDefaultAsync(x => x.User == user);
+      if (currentHFToken == null)
+      {
+        HelloFreshToken newToken = HelloFreshToken.GetToken();
+        newToken.User = user;
+        _db.HelloFreshTokens.Add(newToken);
+        await _db.SaveChangesAsync();
+      } else if (currentHFToken.ExpirationDate < DateTime.Now)
+      {
+        _db.HelloFreshTokens.Remove(currentHFToken);
+        await _db.SaveChangesAsync();
+        HelloFreshToken newToken = HelloFreshToken.GetToken();
+        newToken.User = user;
+        _db.HelloFreshTokens.Add(newToken);
+        await _db.SaveChangesAsync();
+      }
+      return true;
+    }
 
     public class PostRecipeJson
     {
@@ -58,6 +79,7 @@ namespace PantryPlusRecipe.Controllers
 
     public async Task<IActionResult> Index()
     {
+      await GetHelloFreshToken();
       var user = await _userManager.GetUserAsync(User);
 
       ViewBag.FastRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => (x.PrepMinutes + x.CookMinutes) < 30).ToListAsync();

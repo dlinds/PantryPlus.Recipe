@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PantryPlusRecipe.Models;
 
 namespace PantryPlusRecipe.Migrations
 {
     [DbContext(typeof(PantryPlusRecipeContext))]
-    partial class PantryPlusRecipeContextModelSnapshot : ModelSnapshot
+    [Migration("20220530155516_ADDHelloFreshAPI")]
+    partial class ADDHelloFreshAPI
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,12 +315,6 @@ namespace PantryPlusRecipe.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("HelloFreshTokenValue")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
@@ -326,7 +322,7 @@ namespace PantryPlusRecipe.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("HelloFreshTokens");
+                    b.ToTable("HelloFreshToken");
                 });
 
             modelBuilder.Entity("PantryPlusRecipe.Models.Ingredient", b =>
