@@ -35,7 +35,7 @@ namespace PantryPlusRecipe.Controllers
       _db = db;
     }
 
-    public async Task<bool> GetHelloFreshToken()
+    public async Task<string> GetHelloFreshToken()
     {
       var user = await _userManager.GetUserAsync(User);
       HelloFreshToken currentHFToken = await _db?.HelloFreshTokens?.SingleOrDefaultAsync(x => x.User == user);
@@ -45,6 +45,7 @@ namespace PantryPlusRecipe.Controllers
         newToken.User = user;
         _db.HelloFreshTokens.Add(newToken);
         await _db.SaveChangesAsync();
+        return newToken.HelloFreshTokenValue;
       } else if (currentHFToken.ExpirationDate < DateTime.Now)
       {
         _db.HelloFreshTokens.Remove(currentHFToken);
@@ -53,8 +54,9 @@ namespace PantryPlusRecipe.Controllers
         newToken.User = user;
         _db.HelloFreshTokens.Add(newToken);
         await _db.SaveChangesAsync();
+        return newToken.HelloFreshTokenValue;
       }
-      return true;
+      return currentHFToken.HelloFreshTokenValue;
     }
 
     public class PostRecipeJson
@@ -79,7 +81,6 @@ namespace PantryPlusRecipe.Controllers
 
     public async Task<IActionResult> Index()
     {
-      await GetHelloFreshToken();
       var user = await _userManager.GetUserAsync(User);
 
       ViewBag.FastRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => (x.PrepMinutes + x.CookMinutes) < 30).ToListAsync();
@@ -107,7 +108,7 @@ namespace PantryPlusRecipe.Controllers
           }
         }
       }
-      ViewBag.CardRecipeList = cartRecipeList;
+      ViewBag.CartRecipeList = cartRecipeList;
 
       return View();
     }
@@ -123,6 +124,21 @@ namespace PantryPlusRecipe.Controllers
     public ActionResult ReloadTastyDiv()
     {
       return PartialView("~/Views/Recipes/Home/_TastySection.cshtml");
+    }
+
+    public async Task<ActionResult> FindHelloFreshByIngredient(string ingredient)
+    {
+      string bearerToken = await GetHelloFreshToken();
+      List<Recipe> helloFreshList = Recipe.GetHelloFreshRecipes(ingredient,bearerToken);
+      ViewData["type"] = "HelloFresh";
+      ViewData["url"] = "HelloFresh";
+      ViewData["recipeList"] = helloFreshList;
+      //view here: https://192.168.0.31:6003/Recipes/FindHelloFreshByIngredient?ingredient=chicken
+      return PartialView("~/Views/Recipes/Home/_RecipeSection.cshtml");
+    }
+    public ActionResult ReloadHelloFreshDiv()
+    {
+      return PartialView("~/Views/Recipes/Home/_HelloFreshSection.cshtml");
     }
 
 

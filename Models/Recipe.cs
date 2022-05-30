@@ -95,5 +95,30 @@ namespace PantryPlusRecipe.Models
 
       return (tastyRecipe, instructionList, ingredientList);
     }
+
+
+    //HELLO FRESH SECTION
+
+    public static List<Recipe> GetHelloFreshRecipes(string searchTerm, string bearerToken)
+    {
+      var result = HelloFreshAPIHelper.GetHelloFreshRecipes(searchTerm, bearerToken);
+      List<Recipe> helloFreshRecipes = new List<Recipe> { };
+      dynamic posted = JObject.Parse(result.Result);
+      Console.WriteLine(posted);
+      foreach (var recipe in posted["items"][0]["items"])
+      {
+        Recipe recipeToAdd = new Recipe();
+        recipeToAdd.Name = recipe["title"];
+        recipeToAdd.Notes = recipe["headline"];
+        string cloudFrontURL = recipe["image"];
+        string[] imgPath = cloudFrontURL.Split(new string[] { "/image/" }, StringSplitOptions.None);
+        // recipeToAdd.ImgUrl = recipe["image"];
+        recipeToAdd.ImgUrl = "https://img.hellofresh.com/c_fit,f_auto,fl_lossy,h_400,q_auto,w_400/hellofresh_s3/image/" + imgPath[1];
+        helloFreshRecipes.Add(recipeToAdd);
+      }
+      return helloFreshRecipes;
+    }
+
+
   }
 }

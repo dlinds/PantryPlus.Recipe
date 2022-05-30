@@ -5,15 +5,18 @@
 
 @* @await Html.PartialAsync("./Home/CategorySelect.cshtml") *@
 
-@if (ViewBag.CardRecipeList.Count > 0)
+@if (ViewBag.CartRecipeList.Count > 0)
 {
   @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
 new ViewDataDictionary(ViewData) {
 { "type", "cart" },
 { "url", "recipe" },
-{ "recipeList", ViewBag.CardRecipeList }
+{ "recipeList", ViewBag.CartRecipeList }
 })
 }
+
+
+@await Html.PartialAsync("./Home/_HelloFreshSection.cshtml")
 
 @if (ViewBag.FavoriteRecipeList.Count > 0)
 {
@@ -57,6 +60,7 @@ new ViewDataDictionary(ViewData) {
 
 @await Html.PartialAsync("./Home/_TastySection.cshtml")
 
+
 <script>
   $('#ingredient').on('keyup', function () {
     if ($(this).val().length >= 3) {
@@ -67,7 +71,7 @@ new ViewDataDictionary(ViewData) {
   });
 
 
-  function buildSearch() {
+  function buildTastySearch() {
     event.preventDefault();
     let ingredient = $("#ingredient").val();
     console.log(ingredient);
@@ -91,6 +95,43 @@ new ViewDataDictionary(ViewData) {
         $("#tastySection").html(partialViewResult);
       });
   }
+
+
+  $('#ingredientHelloFresh').on('keyup', function () {
+    if ($(this).val().length >= 3) {
+      $('#plusHelloFreshIngredientButton').prop("disabled", false);
+    } else {
+      $('#plusHelloFreshIngredientButton').prop("disabled", true);
+    }
+  });
+
+  function buildHelloFreshSearch() {
+    event.preventDefault();
+    let ingredient = $("#ingredientHelloFresh").val();
+    console.log(ingredient);
+    if (ingredient.length > 0) {
+      let value = `<span class="btn btn-success border shadow-sm me-3">${ingredient}</span>`;
+      $("#ingredientHelloFreshListHidden").val($("#ingredientHelloFreshListHidden").val() + ", " + $("#ingredientHelloFresh").val());
+      $("#ingredientsHelloFreshToSearch").html($("#ingredientsHelloFreshToSearch").html() + value);
+      $("#ingredientHelloFresh").val("");
+      $("#searchHelloFreshButton").prop("disabled", false);
+    }
+  }
+  function getHelloFresh() {
+    event.preventDefault();
+    let searchString = $("#ingredientHelloFreshListHidden").val().substring(2);
+    $.ajax({
+      url: "/Recipes/FindHelloFreshByIngredient",
+      type: "GET",
+      data: { ingredient: `${searchString}` }
+    })
+      .done(function (partialViewResult) {
+        $("#helloFreshSection").html(partialViewResult);
+      });
+  }
+
+
+
 
   function handleFavorite(route, id) {
     $.ajax({

@@ -34,9 +34,15 @@ namespace PantryPlusRecipe.Models
       return secondSplitStr[0];
     }
 
-    // public static async Task<string> SearchRecipes(string input)
-    // {
-    //   return "fdd";
-    // }
+    public static async Task<string> GetHelloFreshRecipes(string ingredient, string bearerToken)
+    {
+      var client = new RestClient($"https://www.hellofresh.com/gw/api/recipes/search/suggestions?country=US&locale=en-US&take=10&q={ingredient}");
+      client.Timeout = -1;
+      var request = new RestRequest(Method.GET);
+      request.AddHeader("referer", "https://www.hellofresh.com/recipes");
+      request.AddHeader("Authorization", $"Bearer {bearerToken}");
+      IRestResponse response = await client.ExecuteTaskAsync(request);
+      return response.Content;
+    }
   }
 }

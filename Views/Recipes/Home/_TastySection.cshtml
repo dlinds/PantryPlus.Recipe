@@ -4,7 +4,7 @@
     <p class="text-start ps-3">Search Tasty.com to expand your recipe ideas, and even save a new favorite or two.</p>
     <div id="ingredientsToSearch" class="ms-3 mb-3">
     </div>
-    <form onSubmit="buildSearch()" class="ps-3">
+    <form onSubmit="buildTastySearch()" class="ps-3">
       <div class="row">
         <div class="col-lg-3 col-9">
           <div class="form-outline">
@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="col-lg-3 col-3 d-flex align-items-center">
-          <button type="button" class="btn btn-sm btn-primary btn-floating" disabled onClick="buildSearch()" id="plusIngredientButton"><i class="fas fa-plus"></i></button>
+          <button type="button" class="btn btn-sm btn-primary btn-floating" disabled onClick="buildTastySearch()" id="plusIngredientButton"><i class="fas fa-plus"></i></button>
         </div>
       </div>
       <input type="hidden" id="ingredientListHidden">

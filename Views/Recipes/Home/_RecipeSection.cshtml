@@ -31,6 +31,29 @@
       }
     </script>
   }
+  else if (ViewData["url"].ToString() == "HelloFresh")
+  {
+    <div class="row justify-content-between">
+      <div class="col-2">
+        <h1 class="text-start fw-light pt-3 ps-3">@ViewData["type"]</h1>
+      </div>
+      <div class="col-2 d-flex align-items-center  justify-content-end">
+        <button type="button" class="btn btn-light border shadow" onclick="reloadHelloFreshDiv()">Back</button>
+      </div>
+    </div>
+    <script>
+      function reloadHelloFreshDiv() {
+        event.preventDefault();
+        $.ajax({
+          url: "/Recipes/ReloadHelloFreshDiv",
+          type: "GET"
+        })
+          .done(function (partialViewResult) {
+            $("#helloFreshSection").html(partialViewResult);
+          });
+      }
+    </script>
+  }
   else
   {
     <h1 class="text-start fw-light pt-3 ps-3">@ViewData["type"]</h1>
@@ -49,7 +72,7 @@
                 <h5 class="card-title multiline fw-normal fs-4" style="text-overflow: ellipsis;">@recipe.Name</h5>
               </a>
               <div id="@recipe.RecipeId-starFavorite-@ViewData["url"]" style="margin-top:-140px; position: absolute;">
-                @if (ViewData["url"].ToString() != "tasty")
+                @if (ViewData["url"].ToString() != "tasty" && ViewData["url"].ToString() != "HelloFresh")
                 {
                   @if (ViewBag.ListOfFavoriteIds.Contains(recipe.RecipeId))
                   {
@@ -64,8 +87,15 @@
             </div>
           </div>
           <a href="/@ViewData["url"]?id=@recipe.RecipeId" class="link-dark">
-            <div class="card-body px-3 py-2">
-              STEPS: @recipe.NumberOfSteps
+            <div class="card-body px-3 py-2" style="white-space: normal;">
+              @if (ViewData["url"].ToString() != "HelloFresh")
+              {
+                @:STEPS: @recipe.NumberOfSteps
+              }
+              else
+              {
+                @recipe.Notes
+              }
               <br />
               @{
                 if ((recipe.PrepMinutes + recipe.CookMinutes) > 0)
