@@ -1,0 +1,11 @@
+<div style="max-height:60vh;overflow-y: auto;">
+  <h3><em>Instructions</em></h3>
+  <ol class="list-group list-group-light list-group-numbered me-3">
+    @foreach (var instruction in ViewBag.InstructionList)
+    {
+      <li class="list-group-item py-2">@instruction</li>
+
+    }
+  </ol>
+
+</div>

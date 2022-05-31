@@ -1,0 +1,27 @@
+<div class="rounded wrapperForOverlay mb-4 shadow">
+  <img class="rounded w-100 headerImgForOverlay" src="@Model.ImgUrl" alt="Photo of @Model.Name">
+  <button class="btn btn-success btn-floating shadow centeredOverlayButton" onClick="saveTasty(@Model.RecipeId)"><i class="far fa-save"></i></button>
+  <div class="centeredOverlayText">
+    <h1 class="fw-normal fs-1 text-white">@Model.Name</h1>
+  </div>
+</div>
+<script>
+  function saveTasty(id) {
+    $.ajax(
+      {
+        type: 'POST',
+        dataType: 'JSON',
+        url: '/Recipes/SaveNewTasty',
+        data: { id: id },
+        success:
+          function (response) {
+            // Generate HTML table.
+            window.location.href = "/Recipes";
+          },
+        error:
+          function (response) {
+            console.log("Error: ", response);
+          }
+});
+  }
+</script>

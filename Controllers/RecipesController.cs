@@ -141,6 +141,27 @@ namespace PantryPlusRecipe.Controllers
       return PartialView("~/Views/Recipes/Home/_HelloFreshSection.cshtml");
     }
 
+    [HttpGet("/HelloFresh")]
+    public async Task<ActionResult> HelloFresh(string id)
+    {
+      string bearerToken = await GetHelloFreshToken();
+      // Recipe.GetHelloFreshById(id, bearerToken);
+      (Recipe model, List<string> instructionList, List<Ingredient> ingredientList) = Recipe.GetHelloFreshById(id, bearerToken);
+      // model.RecipeId = id;
+      ViewBag.InstructionList = instructionList;
+      ViewBag.IngredientList = ingredientList;
+
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+
+      ViewBag.ItemCategories = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerCategory).Distinct().ToListAsync();
+
+      ViewBag.PantryList = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerItemName.ToLower()).ToListAsync();
+
+      ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
+      return View(model);
+    }
+
 
     public IActionResult Create()
     {

@@ -44,5 +44,16 @@ namespace PantryPlusRecipe.Models
       IRestResponse response = await client.ExecuteTaskAsync(request);
       return response.Content;
     }
+
+    public static async Task<string> GetHelloFreshRecipeById(string recipeId, string bearerToken)
+    {
+      var client = new RestClient($"https://www.hellofresh.com/gw/api/recipes/{recipeId}");
+      client.Timeout = -1;
+      var request = new RestRequest(Method.GET);
+      request.AddHeader("referer", "https://www.hellofresh.com/recipes");
+      request.AddHeader("Authorization", $"Bearer {bearerToken}");
+      IRestResponse response = await client.ExecuteTaskAsync(request);
+      return response.Content;
+    }
   }
 }

@@ -7,6 +7,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text.RegularExpressions;
 
 namespace PantryPlusRecipe.Models
 {
@@ -29,6 +30,7 @@ namespace PantryPlusRecipe.Models
     public int NumberOfSteps { get; set; }
     public string Notes { get; set; }
     // public int? TastyId { get; set; }
+    public string HelloFreshId {get; set;}
 
     public virtual ICollection<StepRecipe> JoinEntitiesSteps { get; }
     public virtual ICollection<IngredientRecipe> JoinEntitiesIngredients { get; }
@@ -104,12 +106,13 @@ namespace PantryPlusRecipe.Models
       var result = HelloFreshAPIHelper.GetHelloFreshRecipes(searchTerm, bearerToken);
       List<Recipe> helloFreshRecipes = new List<Recipe> { };
       dynamic posted = JObject.Parse(result.Result);
-      Console.WriteLine(posted);
+      // Console.WriteLine(posted);
       foreach (var recipe in posted["items"][0]["items"])
       {
         Recipe recipeToAdd = new Recipe();
         recipeToAdd.Name = recipe["title"];
         recipeToAdd.Notes = recipe["headline"];
+        recipeToAdd.HelloFreshId = recipe["recipeId"];
         string cloudFrontURL = recipe["image"];
         string[] imgPath = cloudFrontURL.Split(new string[] { "/image/" }, StringSplitOptions.None);
         // recipeToAdd.ImgUrl = recipe["image"];
@@ -117,6 +120,62 @@ namespace PantryPlusRecipe.Models
         helloFreshRecipes.Add(recipeToAdd);
       }
       return helloFreshRecipes;
+    }
+
+    public static (Recipe, List<string>, List<Ingredient>) GetHelloFreshById(string id, string bearerToken)
+    // public static void GetHelloFreshById(string id, string bearerToken)
+    {
+      var result = HelloFreshAPIHelper.GetHelloFreshRecipeById(id, bearerToken);
+      Recipe helloFreshRecipe = new Recipe();
+      dynamic posted = JObject.Parse(result.Result);
+
+      helloFreshRecipe.Name = posted["name"];
+      helloFreshRecipe.Notes = posted["description"];
+      helloFreshRecipe.HelloFreshId = posted["id"];
+      //When total time = 25m and prep time = 10m, HF returns PT10M for Total Minutes, and PT25M for Prep.
+      string cookMinutes =  (posted["prepTime"] != null) ? (Regex.Replace(posted["prepTime"].ToString(),  "[^.0-9]", "")) : "0";
+
+      string prepMinutes =  (posted["totalTime"] != null) ? (Regex.Replace(posted["totalTime"].ToString(),  "[^.0-9]", "")) : "0";
+
+      helloFreshRecipe.CookMinutes = int.Parse(cookMinutes) - int.Parse(prepMinutes);
+      helloFreshRecipe.PrepMinutes = int.Parse(prepMinutes);
+
+
+      helloFreshRecipe.ImgUrl = "https://img.hellofresh.com/c_fit,f_auto,fl_lossy,h_600,q_auto,w_800/hellofresh_s3/" + posted["imagePath"];
+
+      List<Ingredient> ingredientList = new List<Ingredient>();
+      foreach (var ingredient in posted["ingredients"])
+      {
+        Ingredient newIngredient = new Ingredient();
+        newIngredient.Name = ingredient["name"];
+        string HFIngredientId = ingredient["id"];
+        foreach (var measurement in posted["yields"][0]["ingredients"])
+        {
+          if (HFIngredientId == measurement["id"].ToString())
+          {
+
+            if (measurement["amount"].ToString() != null && measurement["amount"].ToString().Length > 0)
+            {
+              newIngredient.Count = float.Parse(measurement["amount"].ToString());
+            } else {
+              newIngredient.Count = 0;
+            }
+
+            newIngredient.Measurement = (measurement["unit"] == "unit") ? null : measurement["unit"];
+          }
+        }
+        ingredientList.Add(newIngredient);
+      }
+
+      List<string> stepList = new List<string>();
+
+      foreach (var instruction in posted["steps"])
+      {
+        stepList.Add(instruction["instructions"].ToString());
+      }
+
+      return (helloFreshRecipe, stepList, ingredientList);
+
     }
 
 
