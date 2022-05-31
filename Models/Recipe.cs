@@ -30,7 +30,7 @@ namespace PantryPlusRecipe.Models
     public int NumberOfSteps { get; set; }
     public string Notes { get; set; }
     // public int? TastyId { get; set; }
-    public string HelloFreshId {get; set;}
+    public string APIRecipeId {get; set;}
 
     public virtual ICollection<StepRecipe> JoinEntitiesSteps { get; }
     public virtual ICollection<IngredientRecipe> JoinEntitiesIngredients { get; }
@@ -57,7 +57,7 @@ namespace PantryPlusRecipe.Models
       return tastyRecipes;
     }
 
-    public static (Recipe, List<string>, List<Ingredient>) GetTastyById(int id)
+    public static (Recipe, List<string>, List<Ingredient>) GetTastyById(string id)
     {
       var result = TastyAPIHelper.GetTastyRecipeDetails(id);
       Recipe tastyRecipe = new Recipe();
@@ -87,7 +87,7 @@ namespace PantryPlusRecipe.Models
           Ingredient ingredientToAdd = new Ingredient();
           ingredientToAdd.Name = ingredient["ingredient"]["name"].ToString();
           // ingredientToAdd.Count = ingredient["measurements"][0]["quantity"];
-          ingredientToAdd.CountForTasty = (ingredient["measurements"][0]["quantity"] != null) ? ingredient["measurements"][0]["quantity"] : "";
+          ingredientToAdd.CountForAPIRecipe = (ingredient["measurements"][0]["quantity"] != null) ? ingredient["measurements"][0]["quantity"] : "";
 
           ingredientToAdd.Measurement = (ingredient["measurements"][0]["unit"]["abbreviation"] != null) ? ingredient["measurements"][0]["unit"]["abbreviation"] : "";
 
@@ -112,11 +112,11 @@ namespace PantryPlusRecipe.Models
         Recipe recipeToAdd = new Recipe();
         recipeToAdd.Name = recipe["title"];
         recipeToAdd.Notes = recipe["headline"];
-        recipeToAdd.HelloFreshId = recipe["recipeId"];
+        recipeToAdd.APIRecipeId = recipe["recipeId"];
         string cloudFrontURL = recipe["image"];
         string[] imgPath = cloudFrontURL.Split(new string[] { "/image/" }, StringSplitOptions.None);
         // recipeToAdd.ImgUrl = recipe["image"];
-        recipeToAdd.ImgUrl = "https://img.hellofresh.com/c_fit,f_auto,fl_lossy,h_400,q_auto,w_400/hellofresh_s3/image/" + imgPath[1];
+        recipeToAdd.ImgUrl = "https://img.hellofresh.com/c_fit,f_auto,h_400,q_25,w_400/hellofresh_s3/image/" + imgPath[1];
         helloFreshRecipes.Add(recipeToAdd);
       }
       return helloFreshRecipes;
@@ -131,7 +131,7 @@ namespace PantryPlusRecipe.Models
 
       helloFreshRecipe.Name = posted["name"];
       helloFreshRecipe.Notes = posted["description"];
-      helloFreshRecipe.HelloFreshId = posted["id"];
+      helloFreshRecipe.APIRecipeId = posted["id"];
       //When total time = 25m and prep time = 10m, HF returns PT10M for Total Minutes, and PT25M for Prep.
       string cookMinutes =  (posted["prepTime"] != null) ? (Regex.Replace(posted["prepTime"].ToString(),  "[^.0-9]", "")) : "0";
 
@@ -141,7 +141,7 @@ namespace PantryPlusRecipe.Models
       helloFreshRecipe.PrepMinutes = int.Parse(prepMinutes);
 
 
-      helloFreshRecipe.ImgUrl = "https://img.hellofresh.com/c_fit,f_auto,fl_lossy,h_600,q_auto,w_800/hellofresh_s3/" + posted["imagePath"];
+      helloFreshRecipe.ImgUrl = "https://img.hellofresh.com/c_fit,f_auto,h_600,q_80,w_800/hellofresh_s3" + posted["imagePath"];
 
       List<Ingredient> ingredientList = new List<Ingredient>();
       foreach (var ingredient in posted["ingredients"])
@@ -156,9 +156,9 @@ namespace PantryPlusRecipe.Models
 
             if (measurement["amount"].ToString() != null && measurement["amount"].ToString().Length > 0)
             {
-              newIngredient.Count = float.Parse(measurement["amount"].ToString());
+              newIngredient.CountForAPIRecipe = measurement["amount"].ToString();
             } else {
-              newIngredient.Count = 0;
+              newIngredient.CountForAPIRecipe = "0";
             }
 
             newIngredient.Measurement = (measurement["unit"] == "unit") ? null : measurement["unit"];
@@ -173,7 +173,8 @@ namespace PantryPlusRecipe.Models
       {
         stepList.Add(instruction["instructions"].ToString());
       }
-
+      helloFreshRecipe.NumberOfSteps = stepList.Count;
+      helloFreshRecipe.NumberOfSections = 1;
       return (helloFreshRecipe, stepList, ingredientList);
 
     }

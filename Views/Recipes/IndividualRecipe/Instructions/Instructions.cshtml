@@ -22,4 +22,13 @@
       }
     </ol>
   }
+  @if (ViewBag.InstructionList != null)
+  {
+    <ol class="list-group list-group-light list-group-numbered me-3">
+      @foreach (var instruction in ViewBag.InstructionList)
+      {
+        <li class="list-group-item py-2">@instruction</li>
+      }
+    </ol>
+  }
 </div>

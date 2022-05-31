@@ -1,18 +1,18 @@
 <div class="pt-3">
-  @if (Model.PrepMinutes == 0 || Model.PrepMinutes == null)
+  @if (Model.CookMinutes == 0 || Model.CookMinutes == null)
   {
     <h3><em>No Cook Times Listed</em></h3>
   }
   else
   {
-    @await Html.PartialAsync("./IngredAndNotes/PrepTimes.cshtml")
+    @await Html.PartialAsync("../IndividualRecipe/IngredAndNotes/PrepTimes.cshtml")
   }
 </div>
 <div class="pt-3">
   @await Html.PartialAsync("./IngredAndNotes/Ingredients.cshtml")
 </div>
 <div class="pt-3">
-  @await Html.PartialAsync("./IngredAndNotes/Notes.cshtml")
+  @await Html.PartialAsync("../IndividualRecipe/IngredAndNotes/Notes.cshtml")
 </div>
 
 

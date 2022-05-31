@@ -69,11 +69,11 @@
             <div class="overlay rounded" style="background-color: rgb(56 59 64 / 60%);"></div>
             <div class="card-img-overlay py-3 px-2 d-flex align-items-center">
               <a href="/@ViewData["url"]?id=@{
-                  if (recipe.HelloFreshId == null)
+                  if (@ViewData["url"].ToString() != "recipe")
                   {
-                          @recipe.RecipeId;
+                              @recipe.APIRecipeId;
                   } else {
-                          @recipe.HelloFreshId;
+                              @recipe.RecipeId;
                   }
                 }" class="link-white">
                 <h5 class="card-title multiline fw-normal fs-4" style="text-overflow: ellipsis;">@recipe.Name</h5>
@@ -94,11 +94,11 @@
             </div>
           </div>
           <a href="/@ViewData["url"]?id=@{
-                  if (recipe.HelloFreshId == null)
+                  if (ViewData["url"].ToString() != "recipe")
                   {
-                        @recipe.RecipeId;
+                                        @recipe.APIRecipeId;
                   } else {
-                        @recipe.HelloFreshId;
+                                        @recipe.RecipeId;
                   }
                 }" class="link-dark">
             <div class="card-body px-3 py-2" style="white-space: normal;">

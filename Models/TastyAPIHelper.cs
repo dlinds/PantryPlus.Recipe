@@ -38,7 +38,7 @@ namespace PantryPlusRecipe.Models
       return response.Content;
     }
 
-    public static async Task<string> GetTastyRecipeDetails(int id)
+    public static async Task<string> GetTastyRecipeDetails(string id)
     {
       var client = new RestClient($"https://tasty.p.rapidapi.com/recipes/get-more-info?id={id}");
       var request = new RestRequest(Method.GET);

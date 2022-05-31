@@ -157,7 +157,7 @@ namespace PantryPlusRecipe.Controllers
       ViewBag.ItemCategories = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerCategory).Distinct().ToListAsync();
 
       ViewBag.PantryList = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerItemName.ToLower()).ToListAsync();
-
+      ViewBag.CartList = await _db.Carts.Where(x => x.User == currentUser).ToListAsync();
       ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
       return View(model);
     }
@@ -284,10 +284,10 @@ namespace PantryPlusRecipe.Controllers
     }
 
     [HttpGet("/tasty")]
-    public async Task<ActionResult> Tasty(int id)
+    public async Task<ActionResult> Tasty(string id)
     {
       (Recipe model, List<string> instructionList, List<Ingredient> ingredientList) = Recipe.GetTastyById(id);
-      model.RecipeId = id;
+      model.APIRecipeId = id;
       ViewBag.InstructionList = instructionList;
       ViewBag.IngredientList = ingredientList;
 
@@ -304,7 +304,7 @@ namespace PantryPlusRecipe.Controllers
 
 
     [HttpPost]
-    public async Task<JsonResult> SaveNewTasty(int id)
+    public async Task<JsonResult> SaveNewTasty(string id)
     {
       (Recipe recipe, List<string> instructionList, List<Ingredient> ingredientList) = Recipe.GetTastyById(id);
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

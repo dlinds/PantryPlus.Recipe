@@ -3,12 +3,15 @@
 <div class="row m-3">
   <div class="col-sm-12 col-md-5 col-lg-4 px-2">
     <div class="mt-3 p-4 border rounded inset-shadow-sm bg-white">
-      @await Html.PartialAsync("./TastyRecipe/LeftSide.cshtml")
+      @await Html.PartialAsync("./APIRecipe/LeftSide.cshtml")
     </div>
   </div>
   <div class="col-sm-12 col-md-7 col-lg-8 px-2">
     <div class="mt-3 p-4 border rounded inset-shadow-sm bg-white">
-      @await Html.PartialAsync("./TastyRecipe/RightSide.cshtml")
+      @await Html.PartialAsync("./IndividualRecipe/RightSide.cshtml",
+      new ViewDataDictionary(ViewData) {
+      { "url", "Tasty" }
+      })
     </div>
   </div>
 </div>

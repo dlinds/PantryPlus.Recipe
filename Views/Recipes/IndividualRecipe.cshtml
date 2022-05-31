@@ -1,4 +1,6 @@
 @model PantryPlusRecipe.Models.Recipe
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+
 
 <div class="row m-3">
   <div class="col-sm-12 col-md-5 col-lg-4 px-2">
@@ -8,7 +10,10 @@
   </div>
   <div class="col-sm-12 col-md-7 col-lg-8 px-2">
     <div class="mt-3 p-4 border rounded inset-shadow-sm bg-white">
-      @await Html.PartialAsync("./IndividualRecipe/RightSide.cshtml")
+      @await Html.PartialAsync("./IndividualRecipe/RightSide.cshtml",
+      new ViewDataDictionary(ViewData) {
+      { "url", "Standard" }
+      })
     </div>
   </div>
 </div>

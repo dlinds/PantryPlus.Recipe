@@ -15,7 +15,7 @@ namespace PantryPlusRecipe.Models
     public string Name { get; set; }
     public string Measurement { get; set; }
     public float Count { get; set; }
-    public string CountForTasty { get; set; }
+    public string CountForAPIRecipe { get; set; }
 
     public virtual ApplicationUser User { get; set; }
     public virtual ICollection<IngredientRecipe> JoinEntities { get; }
