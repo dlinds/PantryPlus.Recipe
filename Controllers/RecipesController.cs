@@ -307,12 +307,53 @@ namespace PantryPlusRecipe.Controllers
     public async Task<JsonResult> SaveNewTasty(int id)
     {
       (Recipe recipe, List<string> instructionList, List<Ingredient> ingredientList) = Recipe.GetTastyById(id);
-
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      recipe.User = currentUser;
       _db.Recipes.Add(recipe);
       await _db.SaveChangesAsync();
 
+      for (int x = 0; x < instructionList.Count; x++)
+      {
+        Step step = new Step
+        {
+          Details = instructionList[x],
+          StepNumber = x - 1,
+          SectionNumber = 1,
+          SectionName = "Instructions",
+          User = currentUser
+        };
+        _db.Steps.Add(step);
+        await _db.SaveChangesAsync();
+        _db.StepRecipes.Add(new StepRecipe() { RecipeId = recipe.RecipeId, StepId = step.StepId });
+        await _db.SaveChangesAsync();
+      }
+
+      foreach (Ingredient ingredient in ingredientList)
+      {
+        ingredient.User = currentUser;
+        _db.Ingredients.Add(ingredient);
+        await _db.SaveChangesAsync();
+        _db.IngredientRecipes.Add(new IngredientRecipe() { RecipeId = recipe.RecipeId, IngredientId = ingredient.IngredientId });
+        await _db.SaveChangesAsync();
+
+      }
+
+      return Json("success");
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> SaveNewHelloFresh(string id)
+    {
+      string bearerToken = await GetHelloFreshToken();
+      (Recipe recipe, List<string> instructionList, List<Ingredient> ingredientList) = Recipe.GetHelloFreshById(id, bearerToken);
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       var currentUser = await _userManager.FindByIdAsync(userId);
+      recipe.User = currentUser;
+      _db.Recipes.Add(recipe);
+      await _db.SaveChangesAsync();
+
+
 
       for (int x = 0; x < instructionList.Count; x++)
       {

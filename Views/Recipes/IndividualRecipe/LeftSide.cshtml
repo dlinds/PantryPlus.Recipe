@@ -2,7 +2,14 @@
 <button class="btn btn-primary shadow-sm">Edit</button>
 
 <div class="pt-3">
-  @await Html.PartialAsync("./IngredAndNotes/PrepTimes.cshtml")
+  @if (Model.PrepMinutes == null || Model.PrepMinutes == 0)
+  {
+    <h3><em>No Cook Times Listed</em></h3>
+  }
+  else
+  {
+    @await Html.PartialAsync("./IngredAndNotes/PrepTimes.cshtml")
+  }
 </div>
 <div class="pt-3">
   @await Html.PartialAsync("./IngredAndNotes/Ingredients.cshtml")
