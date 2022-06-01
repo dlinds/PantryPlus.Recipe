@@ -2,6 +2,6 @@
 /bin
 /node_modules
 .vs
-EnviornmentVariables.cs
+EnvironmentVariables.cs
 appsettings.json
 .vscode
