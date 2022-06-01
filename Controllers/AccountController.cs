@@ -139,13 +139,17 @@ namespace PantryPlusRecipe.Controllers
     public async Task<JsonResult> ListKrogerLocations(int zipCode, int miles, string store)
     {
       await RefreshMyToken();
-      if (miles > 30 || miles < 1)
+      if (miles < 1)
       {
-        miles = 30;
+        miles = 10;
       }
-      if (store == null)
+      if (store == null && zipCode.ToString()[0] == '9')
       {
         store = "FRED";
+      }
+      if (store == null && zipCode.ToString()[0] == '8')
+      {
+        store = "FRYS";
       }
       var user = await _userManager.GetUserAsync(User);
       var currentToken = await _db.Tokens.FirstOrDefaultAsync(x => x.User == user);

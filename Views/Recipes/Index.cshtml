@@ -18,6 +18,17 @@ new ViewDataDictionary(ViewData) {
 
 @await Html.PartialAsync("./Home/_HelloFreshSection.cshtml")
 
+@if (ViewBag.UserSavedRecipes.Count > 0)
+{
+  @await Html.PartialAsync("./Home/_RecipeSection.cshtml",
+new ViewDataDictionary(ViewData) {
+{ "type", "recipes I've saved or created" },
+{ "url", "recipe" },
+{ "recipeList", ViewBag.UserSavedRecipes }
+})
+}
+
+
 @if (ViewBag.FavoriteRecipeList.Count > 0)
 {
   @await Html.PartialAsync("./Home/_RecipeSection.cshtml",

@@ -45,6 +45,9 @@ else
               <option value="select" disabled selected>Select a store chain</option>
               <option value="FRED">Fred Meyer</option>
               <option value="FRYS">Fry's Marketplace</option>
+              <option value="RALPHS">Ralph's</option>
+              <option value="SMITHS">Smith's</option>
+              <option value="CITYMARKET">City Market</option>
               <option value="QFC">QFC</option>
             </select>
 
@@ -78,7 +81,7 @@ else
                                   <br />
                                   ${location.address.zipCode}
                                 </div>`;
-                outputHtml += `<div class="col-sm-4 col-xs-12 text-md-end d-flex d-md-block">
+                outputHtml += `<div class="col-sm-4 col-xs-12 text-sm-end d-flex d-sm-block justify-content-between">
                                   <p>
                                     <a href="https://www.google.com/maps/search/?api=1&query=${location.geolocation.latLng}" target="_blank">
                                       <img src="../../assets/img/Google_Maps_icon.png" class="w-25 rounded shadow-sm" alt="Google Maps Icon">

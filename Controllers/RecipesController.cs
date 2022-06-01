@@ -84,10 +84,10 @@ namespace PantryPlusRecipe.Controllers
     {
       var user = await _userManager.GetUserAsync(User);
 
-      ViewBag.FastRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => (x.PrepMinutes + x.CookMinutes) < 30).ToListAsync();
+      ViewBag.FastRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => (x.PrepMinutes + x.CookMinutes) < 30 && (x.PrepMinutes + x.CookMinutes) > 0).ToListAsync();
       ViewBag.AllRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).ToListAsync();
       ViewBag.BudgetRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => x.Cost < 10).ToListAsync();
-
+      ViewBag.UserSavedRecipes = await _db.Recipes.OrderBy(x => x.CategoryName).Where(x => x.User == user).ToListAsync();
       List<int> favoriteIdList = _db.Favorites.Where(x => x.User == user).Select(x => x.RecipeId).ToList();
       ViewBag.ListOfFavoriteIds = favoriteIdList;
       List<Recipe> favoriteRecipeList = new List<Recipe>();
