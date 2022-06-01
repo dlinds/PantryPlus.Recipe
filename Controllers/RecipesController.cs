@@ -46,7 +46,8 @@ namespace PantryPlusRecipe.Controllers
         _db.HelloFreshTokens.Add(newToken);
         await _db.SaveChangesAsync();
         return newToken.HelloFreshTokenValue;
-      } else if (currentHFToken.ExpirationDate < DateTime.Now)
+      }
+      else if (currentHFToken.ExpirationDate < DateTime.Now)
       {
         _db.HelloFreshTokens.Remove(currentHFToken);
         await _db.SaveChangesAsync();
@@ -129,7 +130,7 @@ namespace PantryPlusRecipe.Controllers
     public async Task<ActionResult> FindHelloFreshByIngredient(string ingredient)
     {
       string bearerToken = await GetHelloFreshToken();
-      List<Recipe> helloFreshList = Recipe.GetHelloFreshRecipes(ingredient,bearerToken);
+      List<Recipe> helloFreshList = Recipe.GetHelloFreshRecipes(ingredient, bearerToken);
       ViewData["type"] = "HelloFresh";
       ViewData["url"] = "HelloFresh";
       ViewData["recipeList"] = helloFreshList;
@@ -341,6 +342,26 @@ namespace PantryPlusRecipe.Controllers
 
       return Json("success");
     }
+
+    [HttpPost]
+    public async Task<ActionResult> DeleteRecipe(int id)
+    {
+      Recipe recipeToDelete = await _db.Recipes.Include(r => r.JoinEntitiesSteps).Include(r => r.JoinEntitiesIngredients).Include(r => r.JoinEntitiesCart).FirstOrDefaultAsync(r => r.RecipeId == id);
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      if (recipeToDelete.User != currentUser)
+      {
+        return Json("You do not have permission to delete this recipe.");
+      }
+      foreach (var joinStep in recipeToDelete.JoinEntitiesSteps)
+      {
+
+      }
+
+
+      return RedirectToAction("Index");
+    }
+
 
     [HttpPost]
     public async Task<JsonResult> SaveNewHelloFresh(string id)

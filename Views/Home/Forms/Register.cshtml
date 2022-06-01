@@ -8,7 +8,8 @@
 
 <div class="row">
   <div class="d-sm-block d-md-none col-sm-12">
-    <p>Use the form to the left to register an account with PantryPlus Recipes</p>
+    @* <p>Use the form to the left to register an account with PantryPlus Recipes</p> *@
+    <p>At this time, PantryPlus only supports authentication with Kroger. In the future, we will support non-Kroger accounts.</p>
     <p class="text-dark">Already have an account? Login <a href="/?v=login" class="link-dark text-decoration-underline">here</a></p>
   </div>
   <div class="col-sm-12 col-md-7">
@@ -72,7 +73,7 @@
         <input data-val="true" data-val-required="The Kroger Id field is required." id="Token" name="Token" type="hidden" value="@ViewBag.Token">
         <input data-val="true" data-val-required="The Kroger Id field is required." id="RefreshToken" name="RefreshToken" type="hidden" value="@ViewBag.RefreshToken">
       }
-      <input type="submit" value="Register" class="btn btn-primary mb-3 shadow-sm text-white" />
+      <input type="submit" disabled value="Register" class="btn btn-primary mb-3 shadow-sm text-white" />
 
     }
     @if (ViewBag.KrogerId == null)
