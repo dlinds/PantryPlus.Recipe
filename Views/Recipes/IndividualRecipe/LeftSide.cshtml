@@ -40,7 +40,7 @@
         success:
           function (response) {
             let jsonOut = JSON.parse(response);
-            printResults(ingredientId, jsonOut.data.sort(function (a, b) {
+            printResults(searchTerm, ingredientId, jsonOut.data.sort(function (a, b) {
               return a.productId - b.productId;
             }));
             $(`#searchIngredientButton-${ingredientId}`).hide();
@@ -90,7 +90,7 @@
     $(`#pagination-${id}`).removeClass('d-none');
   }
 
-  function printResults(ingredientId, jsonResult) {
+  function printResults(searchTerm, ingredientId, jsonResult) {
     console.log("left side: ", jsonResult);
     let htmlString = `<div class="row">`;
     jsonResult.forEach((item) => {
@@ -140,7 +140,7 @@
                   <div id="${item.upc}-checkmarkAdded" class="me-3" style="display:none;">
 <i class="fas fa-check"></i>
                   </div>
-                  <button type="button" class="btn btn-primary btn-sm" id="${item.upc}-addToCartButton" onClick="handleAddToCartClick('${item.upc}', '${ingredientId}' )">
+                  <button type="button" class="btn btn-primary btn-sm" id="${item.upc}-addToCartButton" onClick="handleAddToCartClick('${searchTerm}','${item.upc}', '${ingredientId}' )">
                     Add to Cart
                   </button></div>
                   <input type="hidden" id="${item.upc}-krogerCategory" value="${item.categories[0]}">
@@ -157,7 +157,7 @@
 
   }
 
-  function handleAddToCartClick(upc, ingredientId) {
+  function handleAddToCartClick(searchTerm, upc, ingredientId) {
     $(`#${upc}-checkmarkAdded`).stop();
     $(`#${upc}-checkmarkAdded`).hide(50);
     let jsonOutput = {};
@@ -168,6 +168,7 @@
     }
     jsonOutput.KrogerUPC = upc;
     jsonOutput.KrogerAisle = aisle;
+    jsonOutput.SearchTermWhenAdded = searchTerm;
     jsonOutput.KrogerCost = $(`#${upc}-price`).text();
     jsonOutput.KrogerItemName = $(`#${upc}-name`).text();
     jsonOutput.KrogerItemSize = $(`#${upc}-size`).text();

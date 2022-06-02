@@ -23,6 +23,7 @@ namespace PantryPlusRecipe.Models
     public string KrogerCategory { get; set; }
     public virtual ICollection<CartRecipe> JoinEntities { get; }
     public virtual ApplicationUser User { get; set; }
+    public string SearchTermWhenAdded { get; set; }
 
     public static string PutInKrogerCart(string token, string body)
     {

@@ -85,16 +85,16 @@
           { "sections", recipe.NumberOfSections },
           { "minutes", (recipe.PrepMinutes + recipe.CookMinutes) }
           })
-              @* <script>
+              <script>
                 $('.@recipe.RecipeId-recipe').hover(function () {
-                $('.hiddenRecipe').hide();
-                $('#@recipe.RecipeId-recipeCard').show();
+                  $('.hiddenRecipe').hide();
+                  $('#@recipe.RecipeId-recipeCard').show();
                 });
                 $('.1000-recipe').hover(function () { //this is just here as a placeholder
-                $('.hiddenRecipe').hide();
-                $('#1000-recipeCard').show();
+                  $('.hiddenRecipe').hide();
+                  $('#1000-recipeCard').show();
                 });
-                </script> *@
+              </script>
             }
             @await Html.PartialAsync("./Modules/AddAllToCart.cshtml")
           </div>

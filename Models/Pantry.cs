@@ -13,6 +13,7 @@ namespace PantryPlusRecipe.Models
     public string KrogerImgLink { get; set; }
     public float KrogerCost { get; set; }
     public int ItemCount { get; set; }
+    public string SearchTermWhenAdded { get; set; }
 
     public virtual ApplicationUser User { get; set; }
   }

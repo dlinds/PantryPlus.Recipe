@@ -13,7 +13,9 @@
     }
     @foreach (Pantry pantryItem in ViewBag.PantryList)
     {
-      @if (pantryItem.KrogerItemName.Contains(join.Ingredient.Name.ToLower()))
+      @if (pantryItem.KrogerItemName.ToLower().Contains(join.Ingredient.Name.ToLower()) ||
+     join.Ingredient.Name.ToLower().Contains(pantryItem.KrogerItemName.ToLower()) ||
+     join.Ingredient.Name.ToLower().Contains("water"))
       {
         itemCount = pantryItem.ItemCount;
         found = true;
@@ -29,7 +31,9 @@
       string hoverText = "You need this ingredient";
       foreach (Cart cartItem in ViewBag.CartList)
       {
-        @if (cartItem.KrogerItemName.ToLower().Contains(join.Ingredient.Name.ToLower()))
+        @if (cartItem.KrogerItemName.ToLower().Contains(join.Ingredient.Name.ToLower()) || cartItem.SearchTermWhenAdded.ToLower().Contains(join.Ingredient.Name.ToLower()) ||
+       join.Ingredient.Name.ToLower().Contains(cartItem.KrogerItemName.ToLower()) ||
+       join.Ingredient.Name.ToLower().Contains(cartItem.SearchTermWhenAdded.ToLower()))
         {
           classColor = "text-success";
           hoverText = "You aleady have this item in your cart";
@@ -44,9 +48,13 @@
       {
         @join.Ingredient.Count
       }
-      else
+      else if ((@join.Ingredient.CountForAPIRecipe != null))
       {
         @join.Ingredient.CountForAPIRecipe
+      }
+      else
+      {
+        @:&nbsp;
       }
       @if (join.Ingredient.Measurement != null)
       {

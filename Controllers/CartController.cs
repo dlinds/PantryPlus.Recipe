@@ -98,6 +98,7 @@ namespace PantryPlusRecipe.Controllers
           KrogerItemSize = posted.KrogerItemSize,
           KrogerImgLink = posted.KrogerImgLink,
           KrogerCategory = posted.KrogerCategory,
+          SearchTermWhenAdded = posted.SearchTermWhenAdded,
           ItemCount = 1,
           User = currentUser
         };
