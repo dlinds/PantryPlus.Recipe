@@ -73,7 +73,14 @@
         <input data-val="true" data-val-required="The Kroger Id field is required." id="Token" name="Token" type="hidden" value="@ViewBag.Token">
         <input data-val="true" data-val-required="The Kroger Id field is required." id="RefreshToken" name="RefreshToken" type="hidden" value="@ViewBag.RefreshToken">
       }
-      <input type="submit" disabled value="Register" class="btn btn-primary mb-3 shadow-sm text-white" />
+      @if (ViewBag.KrogerId == null)
+      {
+        <input type="submit" value="Register" disabled class="btn btn-primary mb-3 shadow-sm text-white" />
+      }
+      else
+      {
+        <input type="submit" value="Register" class="btn btn-primary mb-3 shadow-sm text-white" />
+      }
 
     }
     @if (ViewBag.KrogerId == null)

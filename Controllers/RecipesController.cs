@@ -405,6 +405,28 @@ namespace PantryPlusRecipe.Controllers
       return Json("success");
     }
 
+    [HttpPost]
+    public async Task<JsonResult> EditIngredient(Ingredient ingredient)
+    {
+      if (ingredient.Measurement == "Unit")
+      {
+        ingredient.Measurement = null;
+      }
+      _db.Entry(ingredient).State = EntityState.Modified;
+      try
+      {
+        await _db.SaveChangesAsync();
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        Ingredient findIngred = await _db.Ingredients.FirstOrDefaultAsync(x => x.IngredientId == ingredient.IngredientId);
+        if (findIngred != null)
+        {
+          return Json("Ingredient was not found");
+        }
+      }
+      return Json("works");
+    }
 
     public async Task<JsonResult> GetProductListings(string searchTerm, int page)
     {

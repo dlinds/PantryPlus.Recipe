@@ -31,9 +31,7 @@
       string hoverText = "You need this ingredient";
       foreach (Cart cartItem in ViewBag.CartList)
       {
-        @if (cartItem.KrogerItemName.ToLower().Contains(join.Ingredient.Name.ToLower()) || cartItem.SearchTermWhenAdded.ToLower().Contains(join.Ingredient.Name.ToLower()) ||
-       join.Ingredient.Name.ToLower().Contains(cartItem.KrogerItemName.ToLower()) ||
-       join.Ingredient.Name.ToLower().Contains(cartItem.SearchTermWhenAdded.ToLower()))
+        @if (cartItem.KrogerItemName.ToLower().Contains(join.Ingredient.Name.ToLower()) || cartItem.SearchTermWhenAdded.ToLower().Contains(join.Ingredient.Name.ToLower()) || join.Ingredient.Name.ToLower().Contains(cartItem.KrogerItemName.ToLower()) || join.Ingredient.Name.ToLower().Contains(cartItem.SearchTermWhenAdded.ToLower()))
         {
           classColor = "text-success";
           hoverText = "You aleady have this item in your cart";
@@ -46,11 +44,11 @@
     <span>
       @if (@join.Ingredient.Count > 0)
       {
-        @join.Ingredient.Count
+        <span id='listCount-@join.Ingredient.IngredientId'>@join.Ingredient.Count</span>
       }
       else if ((@join.Ingredient.CountForAPIRecipe != null && @join.Ingredient.CountForAPIRecipe != "0"))
       {
-        @join.Ingredient.CountForAPIRecipe
+        <span id='listCountForAPIRecipe-@join.Ingredient.IngredientId'>@join.Ingredient.CountForAPIRecipe</span>
       }
       else
       {
@@ -59,15 +57,14 @@
       @if (join.Ingredient.Measurement != null)
       {
         @:
-        @join.Ingredient.Measurement
-        @: of
+        <span id='listMeasurement-@join.Ingredient.IngredientId'>@join.Ingredient.Measurement of</span>
       }
-      <span>@join.Ingredient.Name</span> <span class="d-none" style="cursor: pointer;" id="menu-@join.Ingredient.IngredientId">
+      <span id='listName-@join.Ingredient.IngredientId'>@join.Ingredient.Name</span> <span class="d-none" style="cursor: pointer;" id="menu-@join.Ingredient.IngredientId">
 
         <i class="fas fa-ellipsis-h" type="button" style="font-size: 1.3em;" id="dropdownMenuButton-@join.Ingredient.IngredientId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-@join.Ingredient.IngredientId">
-          <a class="dropdown-item" data-mdb-toggle="modal" data-mdb-target="#exampleModal-@join.Ingredient.IngredientId">Edit</a>
+          <a class="dropdown-item" data-mdb-toggle="modal" data-mdb-target="#editModal-@join.Ingredient.IngredientId">Edit</a>
           <a class="dropdown-item" href="#">Delete</a>
           <a class="dropdown-item" href="#">Associate With Pantry</a>
           <a class="dropdown-item" href="#">Associate With Cart</a>
@@ -84,58 +81,68 @@
       </script>
     </span>
   </div>
-  <div class="modal fade" id="exampleModal-@join.Ingredient.IngredientId" tabindex="-1" aria-labelledby="exampleModalLabel-@join.Ingredient.IngredientId" aria-hidden="true">
+
+  @await Html.PartialAsync("./_EditIngredientModal.cshtml",
+new ViewDataDictionary(ViewData) {
+{ "IngredientId", join.Ingredient.IngredientId },
+{ "IngredientName", join.Ingredient.Name },
+{ "IngredientCount", join.Ingredient.Count },
+{ "IngredientAPICount", join.Ingredient.CountForAPIRecipe },
+{ "IngredientMeasurement", join.Ingredient.Measurement }
+})
+  @* <div class="modal fade" id="exampleModal-@join.Ingredient.IngredientId" tabindex="-1" aria-labelledby="exampleModalLabel-@join.Ingredient.IngredientId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel-@join.Ingredient.IngredientId">Edit @join.Ingredient.Name</h5>
-          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body px-3">Please fill out the form to edit @join.Ingredient.Name<br><br><small>This isn't actually working yet</small>
-          <div class="my-3">
-            <div class="row">
-              <div class="col">
-                <div class="form-outline">
-                  <input type="number" name="ingredientCount" value="@join.Ingredient.Count" id="ingredientCount" class="form-control mb-3 shadow-sm" placeholder="ex 0.25">
-                  <label for="ingredientCount" class="form-label">Count</label>
-                  <div class="form-notch">
-                    <div class="form-notch-leading" style="width: 9px;"></div>
-                    <div class="form-notch-middle" style="width: 87.2px;"></div>
-                    <div class="form-notch-trailing"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <select class="form-select form-control shadow-sm" id="unitSelection" style="color:rgba(0,0,0,.6)!important" aria-label="Default select example">
-                  @(join.Ingredient.Measurement == null ? Html.Raw("<option selected disabled value='default'>Unit of Measurement</option>") : Html.Raw("<option disabled value='default'>Unit of Measurement</option>"))
-                  @(join.Ingredient.Measurement != null && join.Ingredient.Measurement.ToLower() == "cup" ? Html.Raw("<option selected value=\"cup\">Cup</option>") : Html.Raw("<option value=\"cup\">Cup</option>"))
-                  @(join.Ingredient.Measurement != null && (join.Ingredient.Measurement.ToLower() == "tbsp" || join.Ingredient.Measurement.ToLower() == "tablespoon") ? Html.Raw("<option selected value=\"tbsp\">TBSP</option>") : Html.Raw("<option value=\"tbsp\">TBSP</option>"))
-                  @(join.Ingredient.Measurement != null && (join.Ingredient.Measurement.ToLower() == "tsp" || join.Ingredient.Measurement.ToLower() == "teaspoon") ? Html.Raw("<option selected value=\"tsp\">TSP</option>") : Html.Raw("<option value=\"tsp\">TSP</option>"))
-                  @(join.Ingredient.Measurement != null && join.Ingredient.Measurement.ToLower() == "lb" ? Html.Raw("<option selected value=\"lb\">LB</option>") : Html.Raw("<option value=\"lb\">LB</option>"))
-                  @(join.Ingredient.Measurement != null && (join.Ingredient.Measurement.ToLower() == "oz" || join.Ingredient.Measurement.ToLower() == "ounce") ? Html.Raw("<option selected value=\"oz\">OZ</option>") : Html.Raw("<option value=\"oz\">OZ</option>"))
-                  @(join.Ingredient.Measurement != null && join.Ingredient.Measurement.ToLower() == "pinch" ? Html.Raw("<option selected value=\"pinch\">Pinch</option>") : Html.Raw("<option value=\"pinch\">Pinch</option>"))
-                </select>
-              </div>
-            </div>
-            <div class="form-outline">
-              <input type="text" name="ingredientInput" id="ingredientInput-@join.Ingredient.IngredientId" class="form-control mb-3 shadow-sm" value="@join.Ingredient.Name">
-              <label for="ingredientInput" class="form-label">Ingredient</label>
-              <div class="form-notch">
-                <div class="form-notch-leading" style="width: 9px;"></div>
-                <div class="form-notch-middle" style="width: 87.2px;"></div>
-                <div class="form-notch-trailing"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-light" data-mdb-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
+    <div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel-@join.Ingredient.IngredientId">Edit @join.Ingredient.Name</h5>
+    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
     </div>
-  </div>
+    <div class="modal-body px-3">Please fill out the form to edit @join.Ingredient.Name<br><br><small>This isn't actually working yet</small>
+    <div class="my-3">
+    <div class="row">
+    <div class="col">
+    <div class="form-outline">
+    <input type="number" name="ingredientCount" value="@join.Ingredient.Count" id="ingredientCount" class="form-control mb-3 shadow-sm" placeholder="ex 0.25">
+    <label for="ingredientCount" class="form-label">Count</label>
+    <div class="form-notch">
+    <div class="form-notch-leading" style="width: 9px;"></div>
+    <div class="form-notch-middle" style="width: 87.2px;"></div>
+    <div class="form-notch-trailing"></div>
+    </div>
+    </div>
+    </div>
+    <div class="col">
+    <select class="form-select form-control shadow-sm" id="unitSelection" style="color:rgba(0,0,0,.6)!important" aria-label="Default select example">
+    @(join.Ingredient.Measurement == null ? Html.Raw("<option selected disabled value='default'>Unit of Measurement</option>") : Html.Raw("<option disabled value='default'>Unit of Measurement</option>"))
+    @(join.Ingredient.Measurement != null && join.Ingredient.Measurement.ToLower() == "cup" ? Html.Raw("<option selected value=\"cup\">Cup</option>") : Html.Raw("<option value=\"cup\">Cup</option>"))
+    @(join.Ingredient.Measurement != null && (join.Ingredient.Measurement.ToLower() == "tbsp" || join.Ingredient.Measurement.ToLower() == "tablespoon") ? Html.Raw("<option selected value=\"tbsp\">TBSP</option>") : Html.Raw("<option value=\"tbsp\">TBSP</option>"))
+    @(join.Ingredient.Measurement != null && (join.Ingredient.Measurement.ToLower() == "tsp" || join.Ingredient.Measurement.ToLower() == "teaspoon") ? Html.Raw("<option selected value=\"tsp\">TSP</option>") : Html.Raw("<option value=\"tsp\">TSP</option>"))
+    @(join.Ingredient.Measurement != null && join.Ingredient.Measurement.ToLower() == "lb" ? Html.Raw("<option selected value=\"lb\">LB</option>") : Html.Raw("<option value=\"lb\">LB</option>"))
+    @(join.Ingredient.Measurement != null && (join.Ingredient.Measurement.ToLower() == "oz" || join.Ingredient.Measurement.ToLower() == "ounce") ? Html.Raw("<option selected value=\"oz\">OZ</option>") : Html.Raw("<option value=\"oz\">OZ</option>"))
+    @(join.Ingredient.Measurement != null && join.Ingredient.Measurement.ToLower() == "pinch" ? Html.Raw("<option selected value=\"pinch\">Pinch</option>") : Html.Raw("<option value=\"pinch\">Pinch</option>"))
+    </select>
+    </div>
+    </div>
+    <div class="form-outline">
+    <input type="text" name="ingredientInput" id="ingredientInput-@join.Ingredient.IngredientId" class="form-control mb-3 shadow-sm" value="@join.Ingredient.Name">
+    <label for="ingredientInput" class="form-label">Ingredient</label>
+    <div class="form-notch">
+    <div class="form-notch-leading" style="width: 9px;"></div>
+    <div class="form-notch-middle" style="width: 87.2px;"></div>
+    <div class="form-notch-trailing"></div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-light" data-mdb-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary">Save changes</button>
+    </div>
+    </div>
+    </div>
+    </div> *@
   {
     count += 1;
   }
+
 }
