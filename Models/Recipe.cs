@@ -30,7 +30,7 @@ namespace PantryPlusRecipe.Models
     public int NumberOfSteps { get; set; }
     public string Notes { get; set; }
     // public int? TastyId { get; set; }
-    public string APIRecipeId {get; set;}
+    public string APIRecipeId { get; set; }
 
     public virtual ICollection<StepRecipe> JoinEntitiesSteps { get; }
     public virtual ICollection<IngredientRecipe> JoinEntitiesIngredients { get; }
@@ -49,6 +49,7 @@ namespace PantryPlusRecipe.Models
         recipeToAdd.Notes = recipe["description"];
         recipeToAdd.ImgUrl = recipe["thumbnail_url"];
         recipeToAdd.RecipeId = (int)recipe["id"];
+        recipeToAdd.APIRecipeId = recipe["id"].ToString();
         recipeToAdd.PrepMinutes = (recipe["prep_time_minutes"] != null) ? recipe["prep_time_minutes"] : 0;
         recipeToAdd.CookMinutes = (recipe["cook_time_minutes"] != null) ? recipe["cook_time_minutes"] : 0;
         recipeToAdd.NumberOfSteps = (recipe["instructions"] != null) ? recipe["instructions"].Count : 0;
@@ -133,9 +134,9 @@ namespace PantryPlusRecipe.Models
       helloFreshRecipe.Notes = posted["description"];
       helloFreshRecipe.APIRecipeId = posted["id"];
       //When total time = 25m and prep time = 10m, HF returns PT10M for Total Minutes, and PT25M for Prep.
-      string cookMinutes =  (posted["prepTime"] != null) ? (Regex.Replace(posted["prepTime"].ToString(),  "[^.0-9]", "")) : "0";
+      string cookMinutes = (posted["prepTime"] != null) ? (Regex.Replace(posted["prepTime"].ToString(), "[^.0-9]", "")) : "0";
 
-      string prepMinutes =  (posted["totalTime"] != null) ? (Regex.Replace(posted["totalTime"].ToString(),  "[^.0-9]", "")) : "0";
+      string prepMinutes = (posted["totalTime"] != null) ? (Regex.Replace(posted["totalTime"].ToString(), "[^.0-9]", "")) : "0";
 
       helloFreshRecipe.CookMinutes = int.Parse(cookMinutes) - int.Parse(prepMinutes);
       helloFreshRecipe.PrepMinutes = int.Parse(prepMinutes);
@@ -157,7 +158,9 @@ namespace PantryPlusRecipe.Models
             if (measurement["amount"].ToString() != null && measurement["amount"].ToString().Length > 0)
             {
               newIngredient.CountForAPIRecipe = measurement["amount"].ToString();
-            } else {
+            }
+            else
+            {
               newIngredient.CountForAPIRecipe = "0";
             }
 
