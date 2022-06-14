@@ -12,18 +12,34 @@
     }
     @foreach (string pantryItem in ViewBag.PantryList)
     {
-      @if (pantryItem.Contains(ingredient.Name.ToLower()))
+      @if (pantryItem.ToLower().Contains(ingredient.Name.ToLower())
+     || ingredient.Name.ToLower().Contains(pantryItem.ToLower())
+     || ingredient.Name.ToLower().Contains("water"))
       {
         found = true;
       }
     }
     @if (found == true)
     {
-      <i class="fas fa-check me-3" data-bs-placement="right" title="You currently have this ingredient"></i>
+      <i class="fas fa-check me-3" data-bs-placement="right" title="You currently have this this ingredient"></i>
     }
     else
     {
-      <i class="fas fa-cart-plus me-3 text-primary" data-bs-placement="right" title="You need this ingredient" id="ingredient-@count" data-mdb-toggle="modal" data-mdb-target="#ingredientModal-@count"></i>
+      string classColor = "text-primary";
+      string hoverText = "You need this ingredient";
+      foreach (Cart cartItem in ViewBag.CartList)
+      {
+        @if (cartItem.KrogerItemName.ToLower().Contains(ingredient.Name.ToLower())
+       || cartItem.SearchTermWhenAdded.ToLower().Contains(ingredient.Name.ToLower())
+       || ingredient.Name.ToLower().Contains(cartItem.KrogerItemName.ToLower())
+       || ingredient.Name.ToLower().Contains(cartItem.SearchTermWhenAdded.ToLower()))
+        {
+          classColor = "text-success";
+          hoverText = "You aleady have this item in your cart";
+        }
+      }
+      <i class="fas fa-cart-plus me-3 @classColor" data-bs-placement="right" title="@hoverText" id="ingredient-@count" data-mdb-toggle="modal" data-mdb-target="#ingredientModal-@count">
+      </i>
       @await Html.PartialAsync("../../IndividualRecipe/IngredAndNotes/IngredientModal.cshtml", new ViewDataDictionary(ViewData) {{ "id", @count },{ "name", @ingredient.Name }})
     }
     <span>

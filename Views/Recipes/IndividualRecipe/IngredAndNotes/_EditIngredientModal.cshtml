@@ -92,15 +92,19 @@
         data: { ingredient: ingredient },
         success:
           function (response) {
-            if (countType = "Count") {
-              $(`#list${countType}-${ingredient.IngredientId}`).text(ingredient.Count);
-            } else if (countType = "CountForAPIRecipe") {
-              $(`#list${countType}-${ingredient.IngredientId}`).text(ingredient.CountForAPIRecipe);
+            if (response === "Not authorized") {
+              alert("You do not have permission to edit this ingredient");
+            } else {
+              if (countType = "Count") {
+                $(`#list${countType}-${ingredient.IngredientId}`).text(ingredient.Count);
+              } else if (countType = "CountForAPIRecipe") {
+                $(`#list${countType}-${ingredient.IngredientId}`).text(ingredient.CountForAPIRecipe);
+              }
+              let measurement = (ingredient.Measurement.toLowerCase() === "unit") ? "" : ingredient.Measurement + " of";
+              $(`#listMeasurement-${ingredient.IngredientId}`).text(measurement);
+              $(`#listName-${ingredient.IngredientId}`).text(ingredient.Name);
+              $(`#editModal-${ingredient.IngredientId}`).modal('toggle');
             }
-            let measurement = (ingredient.Measurement.toLowerCase() === "unit") ? "" : ingredient.Measurement + " of";
-            $(`#listMeasurement-${ingredient.IngredientId}`).text(measurement.ToUpperCase());
-            $(`#listName-${ingredient.IngredientId}`).text(ingredient.Name);
-            $(`#editModal-${ingredient.IngredientId}`).modal('toggle');
           },
         error:
           function (response) {

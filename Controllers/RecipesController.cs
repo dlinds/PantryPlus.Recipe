@@ -408,7 +408,7 @@ namespace PantryPlusRecipe.Controllers
     [HttpPost]
     public async Task<JsonResult> EditIngredient(Ingredient ingredient)
     {
-      if (ingredient.Measurement == "Unit")
+      if (ingredient.Measurement.ToLower() == "unit")
       {
         ingredient.Measurement = null;
       }
