@@ -36,16 +36,16 @@ namespace PantryPlusRecipe.Models
 
     public static RequestTokenJson GetProfileToken(string code)
     {
-      Console.WriteLine(code);
-      File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken Code: " + code);
+      // Console.WriteLine(code);
+      // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken Code: " + code);
       var token = KrogerAPIHelper.GetProfileToken(code, "authorization");
-      File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken token: " + token);
+      // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken token: " + token);
       var result = token.Result;
-      Console.WriteLine("result " + result);
-      File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken result: " + result);
+      // Console.WriteLine("result " + result);
+      // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken result: " + result);
       JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
       RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());
-      File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken requestJson: " + requestJson);
+      // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken requestJson: " + requestJson);
       return requestJson;
     }
 

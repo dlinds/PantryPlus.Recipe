@@ -17,7 +17,8 @@ namespace PantryPlusRecipe.Models
     public DbSet<HelloFreshToken> HelloFreshTokens { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartRecipe> CartRecipe { get; set; }
-
+    public DbSet<HelloFreshSpiceBlend> HelloFreshSpiceBlends { get; set; }
+    public DbSet<HelloFreshSpiceBlendIngredient> HelloFreshSpiceBlendIngredients { get; set; }
     // public DbSet<ApplicationUserToken> ApplicationUserTokens { get; set; }
     public PantryPlusRecipeContext(DbContextOptions options) : base(options) { }
 

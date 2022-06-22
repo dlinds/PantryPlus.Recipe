@@ -351,13 +351,21 @@ namespace PantryPlusRecipe.Controllers
       var currentUser = await _userManager.FindByIdAsync(userId);
       if (recipeToDelete.User != currentUser)
       {
-        return Json("You do not have permission to delete this recipe.");
+        throw new InvalidOperationException("You do not have permission to delete this recipe.");
       }
       foreach (var joinStep in recipeToDelete.JoinEntitiesSteps)
       {
-
+        _db.Steps.Remove(joinStep.Step);
+        await _db.SaveChangesAsync();
+      }
+      foreach (var joinIngredient in recipeToDelete.JoinEntitiesIngredients)
+      {
+        _db.Ingredients.Remove(joinIngredient.Ingredient);
+        await _db.SaveChangesAsync();
       }
 
+      _db.Recipes.Remove(recipeToDelete);
+      await _db.SaveChangesAsync();
 
       return RedirectToAction("Index");
     }

@@ -34,7 +34,7 @@ namespace PantryPlusRecipe.Models
       request.AddHeader("content-type", "application/x-www-form-urlencoded");
       request.AddParameter("application/x-www-form-urlencoded", $"{grantTypeOutput}&redirect_uri={EnvironmentVariables.redirect_uri}&client_id={EnvironmentVariables.client_id}&client_secret={EnvironmentVariables.client_secret}&scope={EnvironmentVariables.scope}", ParameterType.RequestBody);
       IRestResponse response = await client.ExecuteTaskAsync(request);
-      File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken result: " + response);
+      // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken result: " + response);
       return response.Content;
     }
 

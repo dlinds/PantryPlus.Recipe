@@ -1,4 +1,5 @@
 @model PantryPlusRecipe.Models.Recipe
+<button id="delete" class="btn btn-primary mb-3" onClick='deleteThisRecipe(@Model.RecipeId)'>Delete</button>
 <h3><em>Cook Times</em></h3>
 <p>
   @if (Model.PrepMinutes > 0)
@@ -13,3 +14,23 @@
     <span>@total</span>
   } minutes
 </p>
+<script>
+  function deleteThisRecipe(idToDelete) {
+    $.ajax(
+      {
+        type: 'POST',
+        dataType: 'JSON',
+        url: '/Recipes/DeleteRecipe',
+        data: { id: idToDelete },
+        success:
+          function (response) {
+            window.location.href = "/Recipes";
+          },
+        error:
+          function (response) {
+            const errorText = response.responseText.split("\r\n")
+            alert("Error: " + errorText[0]);
+          }
+      });
+  }
+</script>
