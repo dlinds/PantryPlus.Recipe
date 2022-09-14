@@ -15,7 +15,8 @@
     {
       @if (pantryItem.KrogerItemName.ToLower().Contains(join.Ingredient.Name.ToLower()) ||
      join.Ingredient.Name.ToLower().Contains(pantryItem.KrogerItemName.ToLower()) ||
-     join.Ingredient.Name.ToLower().Contains("water"))
+     join.Ingredient.Name.ToLower().Contains("water") ||
+     (pantryItem.SearchTermWhenAdded != null && pantryItem.SearchTermWhenAdded.ToLower().Contains(join.Ingredient.Name.ToLower())))
       {
         itemCount = pantryItem.ItemCount;
         found = true;
