@@ -12,7 +12,7 @@ Provide easy way to find recipes based on what you currently have. Allow you to 
 ### List the absolute minimum features the project requires to meet this purpose or goal:
 
  - Kroger authentication/PUT to cart
- - Add personal recipes, mark as private or public to hide or share with site
+ - Add personal recipes
  - Save current pantry items to your account
 <hr />
 
@@ -29,9 +29,9 @@ Provide easy way to find recipes based on what you currently have. Allow you to 
  - Integrate it with a recipe API to get auto suggestions
  - Add an expiration date to items when they’ve been added to the cart, and a pickup has been placed. For example, if a vegetable was added to the cart, it might have an estimated 5 days of shelf life in the fridge. I know that we often buy chicken and can’t always remember when we actually bought it – is it still good then?
  - Recipe suggester based on the minimum amount of work required to make something
-•	Recipe suggester based on the minimum price something will cost
-•	Mobile friendly interface (this is something that will come naturally with Bootstrap – but I don’t know if I will have time to for sure make everything perfect)
-•	On mobile site – get access to camera and scan items from your actual pantry into the site with a barcode reader (super stretch goal). Would make adding 35 spices a lot easier
+ -	Recipe suggester based on the minimum price something will cost
+ -	Mobile friendly interface (this is something that will come naturally with Bootstrap – but I don’t know if I will have time to for sure make everything perfect)
+ -	On mobile site – get access to camera and scan items from your actual pantry into the site with a barcode reader (super stretch goal). Would make adding 35 spices a lot easier
 
 
 
