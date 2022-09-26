@@ -224,5 +224,12 @@ The below are screenshots of some of the templates I created when planning the a
 ### Template for cart view
 <hr>
 <img src="./ProjectInfoAssets/CartTemplateView.PNG"
-     alt="Item Search Modal.PNG"
+     alt="CartTemplateView.PNG"
+     style="margin-right: 10px;" />
+
+
+### Template for new recipe view
+<hr>
+<img src="./ProjectInfoAssets/new-recipe-view.PNG"
+     alt="new recipe view.PNG"
      style="margin-right: 10px;" />
