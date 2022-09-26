@@ -7,13 +7,13 @@
       </div>
       <div class="modal-body">
         <span class="fs-5">It doesn't look like you currently have any <strong>@ViewData["name"]</strong> in your pantry. You've got a couple options below.</span>
-        <p class="mt-4 p-4 bg-light bg-gradient border rounded shadow fw-normal">
+        @* <p class="mt-4 p-4 bg-light bg-gradient border rounded shadow fw-normal">
           I already have it in my pantry!
           <br />
           <button type="button" class="btn btn-primary btn-sm mt-3">Add to Pantry</button>
-        </p>
+          </p> *@
         <p class="mt-4 p-4 bg-light bg-gradient border rounded shadow fw-normal">
-          Add it to my PantryPlus shopping list! <em>(recommended)</em>
+          Add it to my PantryPlus shopping list!@* <em>(recommended)</em> *@
           <small>From there, you can add it to your Kroger account</small>
           <br />
           <button class="btn btn-primary btn-sm mt-3" id='openKrogerSearch-@ViewData["id"]' data-mdb-target="#ingredientSecondModal-@ViewData["id"]" data-mdb-toggle="modal" data-mdb-dismiss="modal">

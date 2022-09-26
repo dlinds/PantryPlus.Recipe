@@ -11,8 +11,8 @@ namespace PantryPlusRecipe.Models
     {
       this.JoinEntities = new HashSet<HelloFreshSpiceBlendIngredient>();
     }
-    public int SpiceBlendId { get; set; }
-    public string SpiceBlendName { get; set; }
+    public int HelloFreshSpiceBlendId { get; set; }
+    public string HelloFreshSpiceBlendName { get; set; }
 
 
     public virtual ICollection<HelloFreshSpiceBlendIngredient> JoinEntities { get; }

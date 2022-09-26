@@ -15,7 +15,8 @@
     {
       @if (pantryItem.KrogerItemName.ToLower().Contains(join.Ingredient.Name.ToLower()) ||
      join.Ingredient.Name.ToLower().Contains(pantryItem.KrogerItemName.ToLower()) ||
-     join.Ingredient.Name.ToLower().Contains("water"))
+     join.Ingredient.Name.ToLower().Contains("water") ||
+     (pantryItem.SearchTermWhenAdded != null && pantryItem.SearchTermWhenAdded.ToLower().Contains(join.Ingredient.Name.ToLower())))
       {
         itemCount = pantryItem.ItemCount;
         found = true;
@@ -65,9 +66,6 @@
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-@join.Ingredient.IngredientId">
           <a class="dropdown-item" data-mdb-toggle="modal" data-mdb-target="#editModal-@join.Ingredient.IngredientId">Edit</a>
-          <a class="dropdown-item" href="#">Delete</a>
-          <a class="dropdown-item" href="#">Associate With Pantry</a>
-          <a class="dropdown-item" href="#">Associate With Cart</a>
         </div>
 
       </span>

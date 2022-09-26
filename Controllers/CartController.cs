@@ -206,7 +206,7 @@ namespace PantryPlusRecipe.Controllers
               KrogerItemSize = item.KrogerItemSize,
               KrogerUPC = item.KrogerUPC,
               User = currentUser,
-              ItemCount = item.CountPlacedInCart,
+              ItemCount = item.CountPlacedInCart > 0 ? item.CountPlacedInCart : item.ItemCount,
               KrogerAisle = item.KrogerAisle,
               KrogerCategory = item.KrogerCategory,
               KrogerCost = item.KrogerCost

@@ -216,7 +216,9 @@ body {
   white-space: nowrap;
 }
 
-
+.empty-cart {
+  padding: 3em;
+}
 
 .collapsed-recipe-list {
   height: 7vh;
