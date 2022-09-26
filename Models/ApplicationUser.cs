@@ -41,7 +41,7 @@ namespace PantryPlusRecipe.Models
       var token = KrogerAPIHelper.GetProfileToken(code, "authorization");
       // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken token: " + token);
       var result = token.Result;
-      Console.WriteLine("result " + result);
+      // Console.WriteLine("result " + result);
       // File.AppendAllText("LOGGING.txt", Environment.NewLine + "GetProfileToken result: " + result);
       JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
       RequestTokenJson requestJson = JsonConvert.DeserializeObject<RequestTokenJson>(jsonResponse.ToString());

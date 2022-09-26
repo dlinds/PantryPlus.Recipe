@@ -9,11 +9,14 @@
     <div class="mt-3 py-4 border rounded inset-shadow-sm bg-white">
       @if (ViewBag.CartItems.Count <= 0)
       {
-        @:<span>It looks like you haven't yet added anything to your cart. Get started</span>
+        @:<div class="empty-cart">
+        @:<h3>Your cart is currently empty!</h3>
+        @:<span>Find a recipe by clicking the RECIPES button up above
+        @:</div>
       }
       else
       {
-        <div class="row  ps-4">
+        <div class="row ps-4">
           <div class="col-md-8">
             <div class="row">
               <div class="col-6 text-center">

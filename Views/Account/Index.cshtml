@@ -58,12 +58,12 @@
           <strong>Kroger Store</strong><br />
           @if (ViewBag.KrogerStoreName == null)
           {
-            @await Html.PartialAsync("./Views/KrogerStoreFinder.cshtml")
+            @await Html.PartialAsync("./KrogerStoreFinder.cshtml")
           }
           else
           {
             @ViewBag.KrogerStoreName
-            @await Html.PartialAsync("./Views/KrogerStoreFinder.cshtml")
+            @await Html.PartialAsync("./KrogerStoreFinder.cshtml")
           }
         </div>
       </div>

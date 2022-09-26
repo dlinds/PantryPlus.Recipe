@@ -298,7 +298,7 @@ namespace PantryPlusRecipe.Controllers
       ViewBag.ItemCategories = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerCategory).Distinct().ToListAsync();
 
       ViewBag.PantryList = await _db.Pantry.Where(x => x.User == currentUser).OrderBy(x => x.KrogerCategory).Select(x => x.KrogerItemName.ToLower()).ToListAsync();
-
+      ViewBag.CartList = await _db.Carts.Where(x => x.User == currentUser).ToListAsync();
       ViewBag.KrogerStoreName = _userManager.GetUserAsync(User).Result?.KrogerStoreName;
       return View(model);
     }
